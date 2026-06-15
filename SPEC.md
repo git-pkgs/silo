@@ -350,3 +350,14 @@ R2: no. `internal/tuf/tuf.go:84` `Principal` interface has `Keys() []*signerveri
 R3: no. `go-git/v5@v5.19.1 plumbing/transport/server/server.go:238-264` `rpSession.ReceivePack` calls `writePackfile` then immediately `updateReferences` with no callback between (and a `//TODO: Implement 'atomic' update` comment at :252). Confirmed: silo owns receive-pack.
 
 R4: yes. `plumbing/protocol/packp/capability/list.go:127-129` — `validate` for an unknown `Capability` only checks for empty arg strings, then `Add` stores it. `advrefs.go:36` `Capabilities *capability.List` is exported. `caps.Add(capability.Capability("bundle-uri"), uri)` will encode into the advertisement.
+
+receive-pack milestone deviations:
+
+- `Advertise(repo, w)` is split from `ReceivePack(ctx, repo, r, w, hooks, limits)` rather than one function doing both, so the same code serves SSH (caller does both on one conn) and smart-HTTP (two separate handlers). Spec step 1 belongs to `Advertise`.
+- No `proto.go`: pkt-line, command parsing, and report-status encoding are taken wholesale from `packp.{AdvRefs,ReferenceUpdateRequest,ReportStatus}` and `sideband.Muxer`, leaving nothing for a separate file.
+- No `testdata/fixtures/push-single-ref.bin`: tests generate wire bytes in-process via `packp.ReferenceUpdateRequest.Encode` + `packfile.NewEncoder`, which exercises the same `Decode` path and avoids a binary blob in the repo. Real-git interop is covered by `02_push.txtar` in the SSH milestone.
+- `TestReceive_Atomic` exercises `applyUpdates` against a minimal `storer.ReferenceStorer` mock rather than a wrapped `*git.Repository`, since `storage.Storer` embeds eight interfaces and wrapping it for one method is more code than the function under test.
+- `packp.ReferenceUpdateRequest.Decode` always sets `Packfile` to the remaining reader (`updreq_decode.go:198`), so `ReceivePack` gates `unpack` on whether any command has a non-zero `New` rather than on `Packfile != nil`.
+- Security checklist for `internal/receive`: pkt-line length validated by go-git's `pktline.Scanner` (rejects len > 65520); `capReader` bounds packfile bytes; object count read from the 12-byte header before parsing; no `io.ReadAll` on the client stream (packfile streams through `packfile.UpdateObjectStorage`).
+- `.golangci.yml` excludes `goconst`, `dupl`, `mnd`, `ireturn` from `_test.go` files: test tables and interface mocks trip these without indicating a real problem. Production code is held to the full set.
+- capcheck deferred to the next milestone since there is no `cmd/silo` binary yet.
