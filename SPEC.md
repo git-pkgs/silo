@@ -361,3 +361,9 @@ receive-pack milestone deviations:
 - Security checklist for `internal/receive`: pkt-line length validated by go-git's `pktline.Scanner` (rejects len > 65520); `capReader` bounds packfile bytes; object count read from the 12-byte header before parsing; no `io.ReadAll` on the client stream (packfile streams through `packfile.UpdateObjectStorage`).
 - `.golangci.yml` excludes `goconst`, `dupl`, `mnd`, `ireturn` from `_test.go` files: test tables and interface mocks trip these without indicating a real problem. Production code is held to the full set.
 - capcheck deferred to the next milestone since there is no `cmd/silo` binary yet.
+
+serve-and-HTTP-clone milestone deviations:
+
+- testscript scaffolding builds the `silo` binary once at repo root and prepends its dir to PATH in `Setup`, rather than using `testscript.RunMain`: the RunMain re-exec runs from `$WORK` where there is no `go.mod`, so `go build` inside it fails. `gittuf` will be built the same way for the verification milestone.
+- `01_clone.txtar` asserts `'only git-upload-pack'` for the HTTP push refusal, since git first issues `GET info/refs?service=git-receive-pack` and that handler's message is what surfaces.
+- capcheck invocation is `go run github.com/git-pkgs/capcheck/cmd/capcheck@latest` (binary lives under `cmd/`). Baseline at this milestone (capcheck.lock.json): NETWORK (HTTP listener), FILES (`$SILO_DATA`), READ_SYSTEM_STATE/OPERATING_SYSTEM (os/signal, env), REFLECT/UNSAFE_POINTER/RUNTIME/SYSTEM_CALLS (transitive via go-git and stdlib net), ARBITRARY_EXECUTION and MODIFY_SYSTEM_STATE (transitive via go-git's ssh transport which can exec ssh-agent; not reachable from silo's code paths yet). No exec from silo itself; no cgo.

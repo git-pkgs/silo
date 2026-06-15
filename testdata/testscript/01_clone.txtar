@@ -1,0 +1,21 @@
+# 01_clone: anonymous HTTP clone of a pre-seeded bare repo
+silo-test-seed $SILO_DATA/repos/alice/demo.git
+exec silo serve --data $SILO_DATA --http $SILO_HTTP &
+waitfor $SILO_HTTP
+
+exec git clone http://$SILO_HTTP/alice/demo.git out
+exists out/README.md
+
+exec git -C out log --oneline
+stdout 'seed'
+
+# unknown repo is 404
+! exec git clone http://$SILO_HTTP/alice/missing.git nope
+stderr 'not found|404'
+
+# receive-pack over HTTP must refuse
+! exec git -C out push origin HEAD:refs/heads/x
+stderr 'only git-upload-pack'
+
+# info/refs without service param refuses
+! exec curl -fsS http://$SILO_HTTP/alice/demo.git/info/refs
