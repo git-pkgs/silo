@@ -14,7 +14,7 @@ v6 ships a `backend` package — `Backend.Serve` / `ServeConn` / `ServeHTTP` ove
 
 **Suggested change.** A `Hooks` field on `ReceivePackRequest` with `PreReceive(ctx, []*packp.Command) error` called after unpack and before `updateReferences`; non-nil error fills `cmdStatus` with `ng <ref> <err>` and skips the update. A `PostReceive` after ref apply rounds it out. Possibly tracked under #2185.
 
-**What silo would do once this lands.** `internal/receive` shrinks to a `Hooks` adapter; `internal/http/git` and `internal/ssh` become thin wrappers over `backend.Backend`. The `git-pkgs/gitserve` extraction in `EXTRACT.md` becomes "contribute the hook upstream" instead.
+**What silo would do once this lands.** `internal/receive` shrinks to a `Hooks` adapter; `internal/http/git` and `internal/ssh` become thin wrappers over `backend.Backend`.
 
 ---
 

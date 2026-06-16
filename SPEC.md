@@ -105,7 +105,7 @@ These hold for the whole run.
   - `Setup`: set `GIT_CONFIG_NOSYSTEM=1`, `GIT_AUTHOR_NAME=test`, `GIT_AUTHOR_EMAIL=test@test`, `GIT_COMMITTER_*` likewise; allocate two `:0` TCP listeners, export `SILO_HTTP`/`SILO_HTTP_PORT`/`SILO_SSH`/`SILO_SSH_PORT`, close the listeners (silo reopens them); `SILO_DATA=$WORK/data`; generate ed25519 keypairs `alice`, `bob`, `mallory` into `$WORK` (private + `.pub`).
   - `Cmds`: `silo` (built once into a temp dir), `gittuf` (built from the pinned module), `waitfor <addr>` (dial tcp every 50ms, fail after 5s), `silo-test-seed <bare-path>` (init bare, add one commit with `README.md`).
   - Background `exec ... &` processes are tracked and killed in `t.Cleanup`.
-- Extraction candidates: when a package under `internal/` turns out to have no silo-specific imports and a clean boundary, append it to `EXTRACT.md` with the proposed `git-pkgs/*` name, the public surface, and who else would use it. Do not actually extract; `internal/` is fine. Expected candidates from the design doc: `internal/receive` + `internal/http/git` + `internal/ssh` → `git-pkgs/gitserve`, `internal/cache` → `git-pkgs/oidcache`, plus anything new that emerges.
+- Extraction candidates: when a package under `internal/` turns out to have no silo-specific imports and a clean boundary, append it to `EXTRACT.md` with the proposed `git-pkgs/*` name, the public surface, and who else would use it. Do not actually extract; `internal/` is fine.
 
 ## Pre-work: research tasks
 

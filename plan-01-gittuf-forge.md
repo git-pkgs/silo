@@ -245,8 +245,6 @@ SSH via `gliderlabs/ssh`: the public-key callback looks up the key in `silo.db` 
 
 Pieces of this pass that are generic enough to live as standalone `git-pkgs/*` libraries.
 
-`git-pkgs/gitserve` — go-git's `transport/server` wired to `net/http` and `gliderlabs/ssh` behind a `Loader` interface plus pre/post-receive callbacks. Every small Go forge hand-rolls this. The bundle-uri advertisement, `refStateHash` ETag, dumb-protocol static handler, and upload-pack response cache are generic to any go-git host and live here, not in silo proper. Biggest extraction, most likely to get outside adoption.
-
 `git-pkgs/codeowners` — parser for GitHub/GitLab/Gitea CODEOWNERS dialects → `[]{Pattern, Owners}`, plus `ToGittufRules(principals map[string]tuf.Principal)` that drafts `file:` delegations. silo's import flow and any standalone gittuf onboarding tool.
 
 `git-pkgs/oidcache` — disk memoisation of `func(oids ...Hash) []byte` keyed on `(kind, oid...)`. silo's diff/RSL-table renders, proxy's version-diff UI, any go-git tool that renders from immutable objects. Same fifty lines everywhere.
@@ -255,7 +253,7 @@ Not extracted: the `Verdict` struct and matcher belong upstream in gittuf; the s
 
 ## Build order
 
-0. Spike: own receive-pack. Read pkt-line ref-update commands and the packfile off the wire, unpack objects into go-git storage, hold the proposed updates in memory, run a callback, apply refs on success. Do not rely on go-git's `transport/server` having a clean intercept point; assume it doesn't and treat any later discovery that it does as a simplification. Week-one work because the whole architecture sits on it. Becomes the core of `git-pkgs/gitserve`.
+0. Spike: own receive-pack. Read pkt-line ref-update commands and the packfile off the wire, unpack objects into go-git storage, hold the proposed updates in memory, run a callback, apply refs on success. Do not rely on go-git's `transport/server` having a clean intercept point; assume it doesn't and treat any later discovery that it does as a simplification. Week-one work because the whole architecture sits on it.
 1. `cmd/silo serve` + `internal/gitstore` + smart HTTP upload-pack. Can clone a manually-placed bare repo.
 2. `internal/store` (silo.db), `silo admin user create`, SSH transport with pubkey auth, the owned receive-pack with no verification. Can push.
 3. `internal/signer` (ed25519-file only) + `internal/gittuf`: repo create writes the unsigned policy skeleton; owner signs root; receive verifies under per-repo `flock`; post-receive witnesses via signer. `silo keygen`, `silo pubkey`. Push-rejection error rendering (`internal/receive/errors.go`).
