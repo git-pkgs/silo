@@ -23,11 +23,7 @@ func (h *handler) policyHistory(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	var names map[string]string
-	if gtr, err := gt.Open(fsPath); err == nil {
-		ps, _ := gtr.Policy(r.Context())
-		names = h.signerNames(ps)
-	}
+	names := h.cached(r.Context(), gr, fsPath).names
 	var changes []policyChange
 	ref, err := gr.Reference(plumbing.ReferenceName(gt.PolicyRef), true)
 	if err == nil {

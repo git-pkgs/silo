@@ -158,6 +158,9 @@ func (r *Repo) RuleFor(ctx context.Context, refName string) (*Rule, error) {
 	return nil, nil
 }
 
+// MatchPattern does fnmatch-style matching for gittuf rule patterns.
+func MatchPattern(pattern, name string) bool { return matchPattern(pattern, name) }
+
 // matchPattern does fnmatch-style matching for gittuf rule patterns.
 func matchPattern(pattern, name string) bool {
 	if ok, _ := path.Match(pattern, name); ok {

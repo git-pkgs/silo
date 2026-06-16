@@ -49,7 +49,12 @@ func (h *handler) tags(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) refDetails(ctx context.Context, gr *git.Repository, fsPath, prefix, def string) []refDetail {
-	gtr, _ := gt.Open(fsPath)
+	ce := h.cached(ctx, gr, fsPath)
+	verify := map[string]verifyRow{}
+	for _, v := range ce.rows {
+		verify[v.Ref] = v
+	}
+	ps := ce.policy
 	var defHash plumbing.Hash
 	if def != "" {
 		if hh, err := gr.ResolveRevision(plumbing.Revision(def)); err == nil {
@@ -67,29 +72,38 @@ func (h *handler) refDetails(ctx context.Context, gr *git.Repository, fsPath, pr
 			Hash:    r.Hash,
 			Default: r.Name == def,
 		}
-		h := plumbing.NewHash(r.Hash)
-		if c, err := commitFor(gr, h); err == nil {
+		hh := plumbing.NewHash(r.Hash)
+		if c, err := commitFor(gr, hh); err == nil {
 			d.Subject = firstLine(c.Message)
 			d.When = c.Committer.When.Format(time.DateOnly)
-			h = c.Hash
+			hh = c.Hash
 		}
 		if !defHash.IsZero() {
-			d.Ahead = countAhead(gr, defHash, h)
-			d.Behind = countAhead(gr, h, defHash)
+			d.Ahead = countAhead(gr, defHash, hh)
+			d.Behind = countAhead(gr, hh, defHash)
 		}
-		if gtr != nil {
-			if rule, _ := gtr.RuleFor(ctx, r.Name); rule != nil {
-				d.RuleName = rule.Name
-			}
-			if err := gtr.VerifyRef(ctx, r.Name); err == nil {
-				d.Verified = true
-			} else {
-				d.VerifyErr = err.Error()
-			}
+		d.RuleName = ruleNameFor(ps, r.Name)
+		if v, ok := verify[r.Name]; ok {
+			d.Verified, d.VerifyErr = v.Err == "", v.Err
 		}
 		rows = append(rows, d)
 	}
 	return rows
+}
+
+func ruleNameFor(ps *gt.PolicySummary, ref string) string {
+	if ps == nil {
+		return ""
+	}
+	target := "git:" + ref
+	for _, rule := range ps.Rules {
+		for _, pat := range rule.Patterns {
+			if gt.MatchPattern(pat, target) {
+				return rule.Name
+			}
+		}
+	}
+	return ""
 }
 
 // commitFor dereferences annotated tags to their target commit.

@@ -280,7 +280,7 @@ func seedCommit(t *testing.T, repo *git.Repository) string {
 	return c2.String()
 }
 
-func writeBlob(t *testing.T, st storer.EncodedObjectStorer, s string) plumbing.Hash {
+func writeBlob(t testing.TB, st storer.EncodedObjectStorer, s string) plumbing.Hash {
 	return writeEnc(t, st, &plumbing.MemoryObject{}, func(o plumbing.EncodedObject) {
 		o.SetType(plumbing.BlobObject)
 		w, _ := o.Writer()
@@ -289,22 +289,22 @@ func writeBlob(t *testing.T, st storer.EncodedObjectStorer, s string) plumbing.H
 	})
 }
 
-func writeTree(t *testing.T, st storer.EncodedObjectStorer, e []object.TreeEntry) plumbing.Hash {
+func writeTree(t testing.TB, st storer.EncodedObjectStorer, e []object.TreeEntry) plumbing.Hash {
 	return writeEnc(t, st, st.NewEncodedObject(), func(o plumbing.EncodedObject) { _ = (&object.Tree{Entries: e}).Encode(o) })
 }
 
-func writeCommit(t *testing.T, st storer.EncodedObjectStorer, c *object.Commit) plumbing.Hash {
+func writeCommit(t testing.TB, st storer.EncodedObjectStorer, c *object.Commit) plumbing.Hash {
 	return writeEnc(t, st, st.NewEncodedObject(), func(o plumbing.EncodedObject) { _ = c.Encode(o) })
 }
 
-func setRef(t *testing.T, st storer.ReferenceStorer, name string, h plumbing.Hash) {
+func setRef(t testing.TB, st storer.ReferenceStorer, name string, h plumbing.Hash) {
 	t.Helper()
 	if err := st.SetReference(plumbing.NewHashReference(plumbing.ReferenceName(name), h)); err != nil {
 		t.Fatal(err)
 	}
 }
 
-func writeEnc(t *testing.T, st storer.EncodedObjectStorer, o plumbing.EncodedObject, fill func(plumbing.EncodedObject)) plumbing.Hash {
+func writeEnc(t testing.TB, st storer.EncodedObjectStorer, o plumbing.EncodedObject, fill func(plumbing.EncodedObject)) plumbing.Hash {
 	t.Helper()
 	fill(o)
 	h, err := st.SetEncodedObject(o)

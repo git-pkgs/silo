@@ -56,20 +56,17 @@ func (h *handler) verify(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	gtr, _ := gt.Open(fsPath)
-	rows, bad := verifyRefs(r.Context(), gr, gtr)
+	e := h.cached(r.Context(), gr, fsPath)
 	h.render(w, r, "verify", struct {
 		page
 		Rows []verifyRow
 		Bad  int
-	}{h.page(r, gr, repoPath, fsPath, "verify", ""), rows, bad})
+	}{h.page(r, gr, repoPath, fsPath, "verify", ""), e.rows, e.bad})
 }
 
-// verifyBadge returns the number of failing refs for the header tab. It's
-// computed on demand for the page being rendered, so other handlers call it
-// when building their page struct.
-func (h *handler) verifyBadge(ctx context.Context, gr *git.Repository, fsPath string) int {
-	gtr, _ := gt.Open(fsPath)
-	_, bad := verifyRefs(ctx, gr, gtr)
-	return bad
+// cached returns the verify+policy snapshot for a repo, computed once per
+// distinct ref state and shared across handlers so page renders don't shell
+// to gittuf when nothing has moved.
+func (h *handler) cached(ctx context.Context, gr *git.Repository, fsPath string) verifyCacheEntry {
+	return h.vc.entry(ctx, h, gr, fsPath)
 }

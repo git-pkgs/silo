@@ -23,17 +23,17 @@ func (h *handler) rslRef(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	gtr, _ := gt.Open(fsPath)
-	var names map[string]string
-	if gtr != nil {
-		ps, _ := gtr.Policy(r.Context())
-		names = h.signerNames(ps)
-	}
+	ce := h.cached(r.Context(), gr, fsPath)
+	names := ce.names
 	keepIDs := map[string]bool{}
 	for _, e := range entries {
 		if e.Kind == gt.KindReference && e.Ref == want {
 			keepIDs[e.ID] = true
 		}
+	}
+	verified, verifyErr := false, ""
+	if !gt.IsGittufRef(want) {
+		verified, verifyErr = ce.verifyOf(want)
 	}
 	var rows []rslRow
 	for _, e := range entries {
@@ -43,12 +43,8 @@ func (h *handler) rslRef(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		row := rslRow{RSLEntry: e, Age: ago(e.Timestamp), SignerName: names[e.SignerKeyID]}
-		if e.Kind == gt.KindReference && gtr != nil && !gt.IsGittufRef(e.Ref) {
-			if verr := gtr.VerifyRef(r.Context(), e.Ref); verr == nil {
-				row.Verified = true
-			} else {
-				row.VerifyErr = verr.Error()
-			}
+		if e.Kind == gt.KindReference {
+			row.Verified, row.VerifyErr = verified, verifyErr
 		}
 		rows = append(rows, row)
 	}
@@ -67,13 +63,9 @@ func (h *handler) principal(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	id := r.PathValue("id")
-	gtr, err := gt.Open(fsPath)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	ps, _ := gtr.Policy(r.Context())
-	names := h.signerNames(ps)
+	ce := h.cached(r.Context(), gr, fsPath)
+	ps := ce.policy
+	names := ce.names
 	keys := map[string]bool{}
 	if ps != nil {
 		for _, k := range ps.Principals[id] {
@@ -186,11 +178,7 @@ func (h *handler) activity(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		fsPath, _ := h.gst.Path(rp.Owner, rp.Name)
-		var names map[string]string
-		if gtr, err := gt.Open(fsPath); err == nil {
-			ps, _ := gtr.Policy(r.Context())
-			names = h.signerNames(ps)
-		}
+		names := h.cached(r.Context(), gr, fsPath).names
 		entries, _ := gt.WalkRSL(r.Context(), gr)
 		for _, e := range entries {
 			rows = append(rows, activityRow{

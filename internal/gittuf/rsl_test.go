@@ -116,7 +116,7 @@ type encodable interface {
 	Encode(plumbing.EncodedObject) error
 }
 
-func writeObj(t *testing.T, repo *git.Repository, o encodable) plumbing.Hash {
+func writeObj(t testing.TB, repo *git.Repository, o encodable) plumbing.Hash {
 	t.Helper()
 	enc := repo.Storer.NewEncodedObject()
 	if err := o.Encode(enc); err != nil {

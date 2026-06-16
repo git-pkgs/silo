@@ -69,6 +69,7 @@ type handler struct {
 	baseURL    string
 	forgeKeyID string
 	t          map[string]*template.Template
+	vc         verifyCache
 }
 
 type navLink struct{ Label, Href, Icon string }
@@ -97,7 +98,7 @@ func (h *handler) page(r *http.Request, gr *git.Repository, repoPath, fsPath, ac
 		Ref:       ref,
 		Refs:      refs,
 		RefGroups: groupRefs(refs),
-		VerifyBad: h.verifyBadge(r.Context(), gr, fsPath),
+		VerifyBad: h.cached(r.Context(), gr, fsPath).bad,
 	}
 }
 
@@ -183,15 +184,14 @@ func (h *handler) repoRow(r *http.Request, owner, name string) repoRow {
 		row.LastSigner = entries[0].SignerKeyID
 	}
 	fsPath, _ := h.gst.Path(owner, name)
-	if gtr, err := gt.Open(fsPath); err == nil {
-		if ps, _ := gtr.Policy(r.Context()); ps != nil {
-			row.Rules = len(ps.Rules)
-			if n := h.signerNames(ps)[row.LastSigner]; n != "" {
-				row.LastSigner = n
-			}
-		}
-		_, row.VerifyBad = verifyRefs(r.Context(), gr, gtr)
+	ce := h.cached(r.Context(), gr, fsPath)
+	if ce.policy != nil {
+		row.Rules = len(ce.policy.Rules)
 	}
+	if n := ce.names[row.LastSigner]; n != "" {
+		row.LastSigner = n
+	}
+	row.VerifyBad = ce.bad
 	row.Description = readmeDescription(gr)
 	return row
 }
@@ -413,24 +413,16 @@ func (h *handler) rslForCommit(r *http.Request, gr *git.Repository, fsPath, sha 
 			annot[e.AnnotatesID] = append(annot[e.AnnotatesID], e)
 		}
 	}
-	gtr, _ := gt.Open(fsPath)
-	var names map[string]string
-	if gtr != nil {
-		ps, _ := gtr.Policy(r.Context())
-		names = h.signerNames(ps)
-	}
+	ce := h.cached(r.Context(), gr, fsPath)
+	names := ce.names
 	var rows []rslRow
 	for _, e := range entries {
 		if e.Kind != gt.KindReference || e.TargetID != sha {
 			continue
 		}
 		row := rslRow{RSLEntry: e, Age: ago(e.Timestamp), SignerName: names[e.SignerKeyID]}
-		if gtr != nil && !gt.IsGittufRef(e.Ref) {
-			if verr := gtr.VerifyRef(r.Context(), e.Ref); verr == nil {
-				row.Verified = true
-			} else {
-				row.VerifyErr = verr.Error()
-			}
+		if !gt.IsGittufRef(e.Ref) {
+			row.Verified, row.VerifyErr = ce.verifyOf(e.Ref)
 		}
 		rows = append(rows, row)
 		for _, a := range annot[e.ID] {
@@ -478,27 +470,13 @@ func (h *handler) rsl(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	gtr, _ := gt.Open(fsPath)
-	var names map[string]string
-	if gtr != nil {
-		ps, _ := gtr.Policy(r.Context())
-		names = h.signerNames(ps)
-	}
-	verified := map[string]error{}
+	ce := h.cached(r.Context(), gr, fsPath)
+	names := ce.names
 	rows := make([]rslRow, 0, len(entries))
 	for _, e := range entries {
 		row := rslRow{RSLEntry: e, Age: ago(e.Timestamp), SignerName: names[e.SignerKeyID]}
-		if e.Kind == gt.KindReference && e.Ref != "" && !gt.IsGittufRef(e.Ref) && gtr != nil {
-			verr, seen := verified[e.Ref]
-			if !seen {
-				verr = gtr.VerifyRef(r.Context(), e.Ref)
-				verified[e.Ref] = verr
-			}
-			if verr == nil {
-				row.Verified = true
-			} else {
-				row.VerifyErr = verr.Error()
-			}
+		if e.Kind == gt.KindReference && e.Ref != "" && !gt.IsGittufRef(e.Ref) {
+			row.Verified, row.VerifyErr = ce.verifyOf(e.Ref)
 		}
 		rows = append(rows, row)
 	}
@@ -514,13 +492,9 @@ func (h *handler) policy(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	gtr, err := gt.Open(fsPath)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	ps, err := gtr.Policy(r.Context())
-	if err != nil {
+	ce := h.cached(r.Context(), gr, fsPath)
+	ps := ce.policy
+	if ps == nil {
 		ps = &gt.PolicySummary{}
 	}
 	h.render(w, r, "policy", struct {
