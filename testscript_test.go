@@ -16,12 +16,10 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-const gittufPin = "github.com/gittuf/gittuf@v0.14.2-0.20260614183827-6f382ee5c029"
-
 func TestScript(t *testing.T) {
 	binDir := t.TempDir()
 	build(t, filepath.Join(binDir, "silo"), "./cmd/silo")
-	install(t, binDir, gittufPin)
+	buildIn(t, filepath.Join(binDir, "gittuf"), "../gittuf-fork", ".")
 
 	testscript.Run(t, testscript.Params{
 		Dir:                 "testdata/testscript",
@@ -39,21 +37,20 @@ func TestScript(t *testing.T) {
 
 func build(t *testing.T, out, pkg string) {
 	t.Helper()
-	cmd := exec.Command("go", "build", "-o", out, pkg)
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		t.Fatalf("build %s: %v", pkg, err)
-	}
+	buildIn(t, out, ".", pkg)
 }
 
-func install(t *testing.T, binDir, mod string) {
+func buildIn(t *testing.T, out, dir, pkg string) {
 	t.Helper()
-	cmd := exec.Command("go", "install", mod)
-	cmd.Env = append(os.Environ(), "GOBIN="+binDir)
-	cmd.Dir = binDir
+	abs, err := filepath.Abs(out)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.Command("go", "build", "-o", abs, pkg)
+	cmd.Dir = dir
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		t.Fatalf("install %s: %v", mod, err)
+		t.Fatalf("build %s in %s: %v", pkg, dir, err)
 	}
 }
 

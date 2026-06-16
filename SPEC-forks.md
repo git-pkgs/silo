@@ -6,18 +6,21 @@ Conventions, quality bar, and commit rules are inherited from `SPEC.md`. Finding
 
 ## Bootstrap
 
+Forks live at `github.com/git-pkgs/gittuf` and `github.com/git-pkgs/go-git`. Local checkouts sit alongside silo:
+
 ```sh
-git clone https://github.com/gittuf/gittuf ../gittuf-fork
+git clone git@github.com:git-pkgs/gittuf.git ../gittuf-fork
+git -C ../gittuf-fork remote add upstream https://github.com/gittuf/gittuf
 git -C ../gittuf-fork checkout 6f382ee5c02943dee0195af6bee751a2d24a6533 -b silo
 ```
 
-Add to silo's `go.mod`:
+silo's `go.mod`:
 
 ```
 replace github.com/gittuf/gittuf => ../gittuf-fork
 ```
 
-go-git fork comes later (milestone "v6 port"); don't clone it yet.
+go-git fork is cloned at the v6-port milestone. Commits go on the `silo` branch in each fork; don't push without asking.
 
 ---
 

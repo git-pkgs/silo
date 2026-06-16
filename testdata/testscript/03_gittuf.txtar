@@ -46,6 +46,9 @@ cd verify
 exec gittuf verify-ref main
 cd ..
 
+# the bare repo has no .git gitfile workaround
+! exists $SILO_DATA/repos/alice/demo.git/.git
+
 # bob is not in policy: push to main is rejected with the multi-line format
 env 'GIT_SSH_COMMAND=ssh -i '$WORK'/bob -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
 exec git -C repo commit --allow-empty -m two

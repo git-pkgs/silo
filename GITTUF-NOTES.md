@@ -10,9 +10,7 @@ Four items. The first is a one-line fix. The second subsumes what were three sep
 
 `pkg/gitinterface/repository.go:39` opens with `git.PlainOpenWithOptions(r.gitDirPath, &git.PlainOpenOptions{DetectDotGit: true})`. `gitDirPath` is already the resolved git dir; `DetectDotGit: true` makes go-git look for a `.git` entry inside it, which a bare repo doesn't have, so it returns `ErrRepositoryNotExists`. Every caller (`verifyCommitSignature`, tag verification) then fails on bare repos with the generic `verifying Git namespace policies failed`.
 
-**Fix:** change `true` to `false`. The path is always already the git dir; `false` opens both layouts. Still present in go-git v6 (see `GOGIT-NOTES.md`), but irrelevant once `false`.
-
-**silo workaround:** writes a `.git` file containing `gitdir: .` inside each bare repo so go-git's gitfile resolver finds it.
+**Fix:** change `true` to `false`. The path is always already the git dir; `false` opens both layouts. Applied on `git-pkgs/gittuf@silo`.
 
 ---
 

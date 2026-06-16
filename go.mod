@@ -2,6 +2,8 @@ module github.com/git-pkgs/silo
 
 go 1.26.0
 
+replace github.com/gittuf/gittuf => ../gittuf-fork
+
 require (
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
 	github.com/gliderlabs/ssh v0.3.8
