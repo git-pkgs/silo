@@ -8,6 +8,8 @@ This is a prototype of [GAP-2](https://github.com/gittuf/gittuf/blob/main/docs/g
 
 ## See it running
 
+Needs Go 1.26+, `git`, and `ssh-keygen` on PATH (gittuf still shells to `git` for some reads).
+
 ```sh
 git clone https://github.com/git-pkgs/silo
 cd silo
