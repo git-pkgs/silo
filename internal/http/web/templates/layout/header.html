@@ -17,9 +17,20 @@
         </button>
         <div data-popover aria-hidden="true">
           <div role="menu" id="ref-menu-list" aria-labelledby="ref-menu-trigger" class="mono small">
-            {{range .Refs}}
-            <a role="menuitem" href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a>
-            {{end}}
+            {{with .RefGroups.Heads}}
+            <div role="group"><div role="heading">branches</div>
+              {{range .}}<a role="menuitem" href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a>{{end}}
+            </div>{{end}}
+            {{with .RefGroups.Tags}}
+            <hr role="separator">
+            <div role="group"><div role="heading">tags</div>
+              {{range .}}<a role="menuitem" href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a>{{end}}
+            </div>{{end}}
+            {{with .RefGroups.Gittuf}}
+            <hr role="separator">
+            <div role="group"><div role="heading">gittuf</div>
+              {{range .}}<a role="menuitem" href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a>{{end}}
+            </div>{{end}}
           </div>
         </div>
       </div>
@@ -31,6 +42,8 @@
         <a role="tab" href="/{{.Repo}}/rsl" aria-selected="{{if eq .Active "rsl"}}true{{else}}false{{end}}"><i data-lucide="scroll-text"></i>rsl</a>
         <a role="tab" href="/{{.Repo}}/policy" aria-selected="{{if eq .Active "policy"}}true{{else}}false{{end}}"><i data-lucide="shield"></i>policy</a>
         <a role="tab" href="/{{.Repo}}/log/HEAD" aria-selected="{{if eq .Active "log"}}true{{else}}false{{end}}"><i data-lucide="history"></i>log</a>
+        <a role="tab" href="/{{.Repo}}/branches" aria-selected="{{if eq .Active "branches"}}true{{else}}false{{end}}"><i data-lucide="git-branch"></i>branches</a>
+        <a role="tab" href="/{{.Repo}}/tags" aria-selected="{{if eq .Active "tags"}}true{{else}}false{{end}}"><i data-lucide="tag"></i>tags</a>
         <a role="tab" href="/{{.Repo}}/verify" aria-selected="{{if eq .Active "verify"}}true{{else}}false{{end}}"><i data-lucide="badge-check"></i>verify{{if gt .VerifyBad 0}}<span class="badge-destructive">{{.VerifyBad}}</span>{{end}}</a>
       </nav>
     </div>

@@ -44,6 +44,8 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{owner}/{repo}/rsl", h.rsl)
 	mux.HandleFunc("GET /{owner}/{repo}/policy", h.policy)
 	mux.HandleFunc("GET /{owner}/{repo}/verify", h.verify)
+	mux.HandleFunc("GET /{owner}/{repo}/branches", h.branches)
+	mux.HandleFunc("GET /{owner}/{repo}/tags", h.tags)
 	return mux
 }
 
@@ -61,16 +63,19 @@ type page struct {
 	Active    string
 	Ref       string
 	Refs      []refRow
+	RefGroups refGroups
 	VerifyBad int
 }
 
 func (h *handler) page(r *http.Request, gr *git.Repository, repoPath, fsPath, active, ref string) page {
+	refs := listRefs(gr)
 	return page{
 		Repo:      repoPath,
 		BaseURL:   h.baseURL,
 		Active:    active,
 		Ref:       ref,
-		Refs:      listRefs(gr),
+		Refs:      refs,
+		RefGroups: groupRefs(refs),
 		VerifyBad: h.verifyBadge(r.Context(), gr, fsPath),
 	}
 }

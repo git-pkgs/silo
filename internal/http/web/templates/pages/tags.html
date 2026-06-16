@@ -1,0 +1,24 @@
+{{template "base" .}}
+{{define "title"}}tags · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Tags</h1>
+<p class="subhead">{{len .Rows}}</p>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>tag</th><th>commit</th><th>date</th><th>rule</th><th>verify</th></tr></thead>
+  <tbody>
+  {{range .Rows}}
+    <tr class="{{if .Verified}}rsl-pass{{else}}rsl-fail{{end}}">
+      <td><a href="/{{$.Repo}}/tree/{{.Name}}">{{.Short}}</a></td>
+      <td><a href="/{{$.Repo}}/commit/{{.Hash}}">{{slice .Hash 0 12}}</a> <span class="muted">{{.Subject}}</span></td>
+      <td class="muted">{{.When}}</td>
+      <td>{{if .RuleName}}<a href="/{{$.Repo}}/policy#{{.RuleName}}">{{.RuleName}}</a>{{else}}<span class="muted">unprotected</span>{{end}}</td>
+      <td>{{if .Verified}}ok{{else}}<span style="color:var(--destructive)" title="{{.VerifyErr}}">fail</span>{{end}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="5" class="muted">no tags</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

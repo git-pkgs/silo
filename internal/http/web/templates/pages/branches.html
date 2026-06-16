@@ -1,0 +1,25 @@
+{{template "base" .}}
+{{define "title"}}branches · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Branches</h1>
+<p class="subhead">{{len .Rows}} · default <span class="mono">{{.Default}}</span></p>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>branch</th><th>tip</th><th>vs default</th><th>rule</th><th>verify</th><th></th></tr></thead>
+  <tbody>
+  {{range .Rows}}
+    <tr class="{{if .Verified}}rsl-pass{{else}}rsl-fail{{end}}">
+      <td><a href="/{{$.Repo}}/log/{{.Name}}">{{.Short}}</a>{{if .Default}} <span class="badge-secondary">default</span>{{end}}</td>
+      <td><a href="/{{$.Repo}}/commit/{{.Hash}}" title="{{.Subject}}">{{slice .Hash 0 12}}</a> <span class="muted xsmall">{{.When}}</span></td>
+      <td>{{if .Default}}—{{else}}<span class="diff-add">+{{.Ahead}}</span> <span class="diff-del">-{{.Behind}}</span>{{end}}</td>
+      <td>{{if .RuleName}}<a href="/{{$.Repo}}/policy#{{.RuleName}}">{{.RuleName}}</a>{{else}}<span class="muted">unprotected</span>{{end}}</td>
+      <td>{{if .Verified}}ok{{else}}<span style="color:var(--destructive)" title="{{.VerifyErr}}">fail</span>{{end}}</td>
+      <td>{{if not .Default}}<a class="btn-sm-ghost" href="/{{$.Repo}}/compare/{{$.Default}}...{{.Name}}">compare</a>{{end}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="6" class="muted">no branches</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}
