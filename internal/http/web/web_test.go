@@ -62,19 +62,22 @@ func TestHandler_Routes(t *testing.T) {
 		{"/alice/demo/log/refs/heads/main", http.StatusOK, "seed"},
 		{"/alice/demo/log/HEAD", http.StatusOK, "seed"},
 		{"/alice/demo/commit/" + sha, http.StatusOK, sha},
-		{"/alice/demo/rsl", http.StatusOK, "Reference state log"},
+		{"/alice/demo/rsl", http.StatusOK, "refs/heads/main"},
 		{"/alice/demo/policy", http.StatusOK, "Policy"},
 		{"/alice/demo/verify", http.StatusOK, "refs/heads/main"},
 		{"/alice/demo/compare/main...main", http.StatusOK, "0 commit"},
 		{"/alice/demo/compare/main", http.StatusBadRequest, ""},
 		{"/alice/demo/compare/main...nope", http.StatusNotFound, ""},
 		{"/alice/demo/branches", http.StatusOK, "main"},
-		{"/alice/demo/tags", http.StatusOK, "Tags"},
-		{"/alice/demo/policy/history", http.StatusOK, "Policy history"},
-		{"/alice/demo/rsl/refs/heads/main", http.StatusOK, "Reference state log"},
+		{"/alice/demo/tags", http.StatusOK, "v1"},
+		{"/alice/demo/policy/history", http.StatusOK, "Initialize policy"},
+		{"/alice/demo/rsl/refs/heads/main", http.StatusOK, "annotation"},
 		{"/alice/demo/attestations", http.StatusOK, "Attestations"},
 		{"/alice/demo/hooks", http.StatusOK, "Hooks"},
 		{"/alice/demo/principal/nobody", http.StatusNotFound, ""},
+		{"/alice/demo/principal/silo", http.StatusOK, "SHA256:forge"},
+		{"/alice/demo/compare/refs/heads/dev...refs/heads/main", http.StatusOK, "1 commit"},
+		{"/alice/demo/log/refs/heads/main?after=" + sha, http.StatusOK, "seed"},
 		{"/activity", http.StatusOK, "Activity"},
 		{"/alice/demo/blame/refs/heads/main/README.md", http.StatusOK, "hello"},
 		{"/alice/demo/contributors", http.StatusOK, "alice"},
@@ -136,7 +139,7 @@ func TestArchive(t *testing.T) {
 		t.Fatalf("first entry = %v, %v", hdr, err)
 	}
 	b, _ := io.ReadAll(tr)
-	if string(b) != "# hello\n" {
+	if !strings.HasPrefix(string(b), "# hello") {
 		t.Errorf("content = %q", b)
 	}
 }
@@ -243,21 +246,60 @@ func TestHelpers(t *testing.T) {
 func seedCommit(t *testing.T, repo *git.Repository) string {
 	t.Helper()
 	st := repo.Storer
-	bh := writeEnc(t, st, &plumbing.MemoryObject{}, func(o plumbing.EncodedObject) {
+	sig := object.Signature{Name: "alice", Email: "a@x", When: time.Now()}
+
+	bh := writeBlob(t, st, "# hello\n")
+	t1 := writeTree(t, st, []object.TreeEntry{{Name: "README.md", Mode: 0o100644, Hash: bh}})
+	c1 := writeCommit(t, st, &object.Commit{TreeHash: t1, Author: sig, Committer: sig, Message: "seed\n"})
+
+	bh2 := writeBlob(t, st, "# hello\n\nmore\n")
+	t2 := writeTree(t, st, []object.TreeEntry{{Name: "README.md", Mode: 0o100644, Hash: bh2}})
+	c2 := writeCommit(t, st, &object.Commit{TreeHash: t2, ParentHashes: []plumbing.Hash{c1}, Author: sig, Committer: sig, Message: "seed\n"})
+	setRef(t, st, "refs/heads/main", c2)
+	setRef(t, st, "refs/heads/dev", c1)
+
+	tagH := writeEnc(t, st, st.NewEncodedObject(), func(o plumbing.EncodedObject) {
+		_ = (&object.Tag{Name: "v1", Tagger: sig, Message: "v1", Target: c2, TargetType: plumbing.CommitObject}).Encode(o)
+	})
+	setRef(t, st, "refs/tags/v1", tagH)
+
+	pj := writeBlob(t, st, `{"fake":"policy"}`)
+	mt := writeTree(t, st, []object.TreeEntry{{Name: "targets.json", Mode: 0o100644, Hash: pj}})
+	pt := writeTree(t, st, []object.TreeEntry{{Name: "metadata", Mode: 0o40000, Hash: mt}})
+	pc := writeCommit(t, st, &object.Commit{TreeHash: pt, Author: sig, Committer: sig, Message: "Initialize policy\n"})
+	setRef(t, st, "refs/gittuf/policy", pc)
+
+	r1 := writeCommit(t, st, &object.Commit{TreeHash: t1, Committer: sig,
+		Message: "RSL Reference Entry\n\nref: refs/heads/main\ntargetID: " + c2.String() + "\nnumber: 1\n"})
+	r2 := writeCommit(t, st, &object.Commit{TreeHash: t1, ParentHashes: []plumbing.Hash{r1}, Committer: sig,
+		Message: "RSL Annotation Entry\n\nentryID: " + r1.String() + "\nnumber: 2\n"})
+	setRef(t, st, "refs/gittuf/reference-state-log", r2)
+
+	return c2.String()
+}
+
+func writeBlob(t *testing.T, st storer.EncodedObjectStorer, s string) plumbing.Hash {
+	return writeEnc(t, st, &plumbing.MemoryObject{}, func(o plumbing.EncodedObject) {
 		o.SetType(plumbing.BlobObject)
 		w, _ := o.Writer()
-		_, _ = w.Write([]byte("# hello\n"))
+		_, _ = w.Write([]byte(s))
 		_ = w.Close()
 	})
-	tree := &object.Tree{Entries: []object.TreeEntry{{Name: "README.md", Mode: 0o100644, Hash: bh}}}
-	th := writeEnc(t, st, st.NewEncodedObject(), func(o plumbing.EncodedObject) { _ = tree.Encode(o) })
-	sig := object.Signature{Name: "alice", Email: "a@x", When: time.Now()}
-	c := &object.Commit{TreeHash: th, Author: sig, Committer: sig, Message: "seed\n"}
-	ch := writeEnc(t, st, st.NewEncodedObject(), func(o plumbing.EncodedObject) { _ = c.Encode(o) })
-	if err := st.SetReference(plumbing.NewHashReference("refs/heads/main", ch)); err != nil {
+}
+
+func writeTree(t *testing.T, st storer.EncodedObjectStorer, e []object.TreeEntry) plumbing.Hash {
+	return writeEnc(t, st, st.NewEncodedObject(), func(o plumbing.EncodedObject) { _ = (&object.Tree{Entries: e}).Encode(o) })
+}
+
+func writeCommit(t *testing.T, st storer.EncodedObjectStorer, c *object.Commit) plumbing.Hash {
+	return writeEnc(t, st, st.NewEncodedObject(), func(o plumbing.EncodedObject) { _ = c.Encode(o) })
+}
+
+func setRef(t *testing.T, st storer.ReferenceStorer, name string, h plumbing.Hash) {
+	t.Helper()
+	if err := st.SetReference(plumbing.NewHashReference(plumbing.ReferenceName(name), h)); err != nil {
 		t.Fatal(err)
 	}
-	return ch.String()
 }
 
 func writeEnc(t *testing.T, st storer.EncodedObjectStorer, o plumbing.EncodedObject, fill func(plumbing.EncodedObject)) plumbing.Hash {

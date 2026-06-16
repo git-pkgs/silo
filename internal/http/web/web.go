@@ -172,7 +172,7 @@ func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	defaultRef := "HEAD"
+	defaultRef := plumbing.HEAD.String()
 	if head, err := gr.Head(); err == nil {
 		defaultRef = head.Name().String()
 	}

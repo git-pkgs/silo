@@ -14,6 +14,21 @@ import (
 
 const refMain = "refs/heads/main"
 
+func TestNoopHooks(t *testing.T) {
+	var h NoopHooks
+	if err := h.PreReceive(context.Background(), nil, nil); err != nil {
+		t.Errorf("NoopHooks.PreReceive = %v", err)
+	}
+	h.PostReceive(context.Background(), nil, nil)
+}
+
+func TestDefaultLimits(t *testing.T) {
+	l := DefaultLimits()
+	if l.MaxPackBytes <= 0 || l.MaxObjects == 0 {
+		t.Errorf("DefaultLimits = %+v", l)
+	}
+}
+
 func TestAdapt_PreReceiveRejection(t *testing.T) {
 	rej := &RejectionError{
 		Ref:        refMain,

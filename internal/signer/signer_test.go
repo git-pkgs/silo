@@ -22,6 +22,11 @@ func TestGenerateAndLoad(t *testing.T) {
 	if err := Generate(dir); err == nil {
 		t.Error("second Generate should refuse to overwrite")
 	}
+	if s, _ := Load(dir); s != nil {
+		if pem, err := s.KeyBytes(); err != nil || !strings.Contains(string(pem), "PRIVATE KEY") {
+			t.Errorf("KeyBytes = %q, %v", pem, err)
+		}
+	}
 
 	s, err := Load(dir)
 	if err != nil {

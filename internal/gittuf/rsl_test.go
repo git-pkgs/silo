@@ -66,6 +66,12 @@ func TestWalkRSL_NoRef(t *testing.T) {
 	}
 }
 
+func TestSignerFingerprintExport(t *testing.T) {
+	if SignerFingerprint("") != "" {
+		t.Error("export should delegate")
+	}
+}
+
 func TestSignerFingerprint(t *testing.T) {
 	_, priv, _ := ed25519.GenerateKey(rand.Reader)
 	signer, err := ssh.NewSignerFromKey(priv)
