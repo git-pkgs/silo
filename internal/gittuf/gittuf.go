@@ -94,6 +94,38 @@ func (r *Repo) Witness(ctx context.Context, entryID, message string, signingKeyP
 	)
 }
 
+// Hook describes one in-policy Lua hook.
+type Hook struct {
+	Stage, Name, Environment, BlobID string
+	Principals                       []string
+	Hashes                           map[string]string
+	Timeout                          int
+}
+
+// Hooks returns all in-policy hooks across stages.
+func (r *Repo) Hooks(ctx context.Context) ([]Hook, error) {
+	m, err := r.r.ListHooks(ctx, PolicyRef)
+	if err != nil {
+		return nil, err
+	}
+	var out []Hook
+	for stage, hs := range m {
+		for _, h := range hs {
+			ids := h.GetPrincipalIDs()
+			out = append(out, Hook{
+				Stage:       stage.String(),
+				Name:        h.ID(),
+				Environment: h.GetEnvironment().String(),
+				BlobID:      h.GetBlobID().String(),
+				Principals:  ids.Contents(),
+				Hashes:      h.GetHashes(),
+				Timeout:     h.GetTimeout(),
+			})
+		}
+	}
+	return out, nil
+}
+
 // Rule describes the policy rule governing a ref pattern.
 type Rule struct {
 	Name       string

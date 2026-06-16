@@ -1,8 +1,8 @@
 {{template "base" .}}
 {{define "title"}}RSL · {{.Repo}}{{end}}
 {{define "content"}}
-<h1>Reference state log</h1>
-<p class="subhead">{{len .Entries}} entries · newest first</p>
+<h1>Reference state log{{if .Filter}} · <span class="mono">{{.Filter}}</span>{{end}}</h1>
+<p class="subhead">{{len .Entries}} entries · newest first{{if .Filter}} · <a href="/{{.Repo}}/rsl">all refs</a>{{end}}</p>
 <div class="panel">
 <table class="table">
   <thead>
@@ -14,7 +14,7 @@
       <td title="{{.ID}}">{{.Number}}</td>
       <td>{{.Kind}}</td>
       <td>
-        {{if .Ref}}{{.Ref}}{{end}}
+        {{if .Ref}}<a href="/{{$.Repo}}/rsl/{{.Ref}}">{{.Ref}}</a>{{end}}
         {{if .AnnotatesID}}<span class="muted">→ {{slice .AnnotatesID 0 12}}</span>{{end}}
       </td>
       <td>

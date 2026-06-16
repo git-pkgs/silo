@@ -1,0 +1,21 @@
+{{template "base" .}}
+{{define "title"}}hooks · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Hooks</h1>
+<p class="subhead">in-policy hooks from <span class="mono">refs/gittuf/policy</span></p>
+<div class="panel"><table class="table">
+  <thead><tr><th>stage</th><th>name</th><th>env</th><th>principals</th><th>timeout</th><th>hashes</th></tr></thead>
+  <tbody>
+  {{range .Hooks}}
+    <tr>
+      <td>{{.Stage}}</td>
+      <td>{{.Name}}</td>
+      <td>{{.Environment}}</td>
+      <td>{{range .Principals}}<div><a href="/{{$.Repo}}/principal/{{.}}">{{.}}</a></div>{{end}}</td>
+      <td>{{.Timeout}}s</td>
+      <td class="xsmall">{{range $alg, $h := .Hashes}}<div>{{$alg}}: {{$h}}</div>{{end}}<div class="muted">blob {{slice .BlobID 0 12}}</div></td>
+    </tr>
+  {{else}}<tr><td colspan="6" class="muted">no hooks</td></tr>{{end}}
+  </tbody>
+</table></div>
+{{end}}

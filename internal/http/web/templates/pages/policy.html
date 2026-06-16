@@ -2,7 +2,7 @@
 {{define "title"}}policy · {{.Repo}}{{end}}
 {{define "content"}}
 <h1>Policy</h1>
-<p class="subhead"><a href="/{{.Repo}}/policy/history">history</a></p>
+<p class="subhead"><a href="/{{.Repo}}/policy/history">history</a> · <a href="/{{.Repo}}/hooks">hooks</a> · <a href="/{{.Repo}}/attestations">attestations</a></p>
 
 <h2 class="section">Rules</h2>
 <div class="panel">
@@ -14,7 +14,7 @@
       <td>{{.Name}}</td>
       <td>{{range .Patterns}}<div>{{.}}</div>{{end}}</td>
       <td>{{.Threshold}}</td>
-      <td>{{range .Principals}}<div>{{.}}</div>{{end}}</td>
+      <td>{{range .Principals}}<div><a href="/{{$.Repo}}/principal/{{.}}">{{.}}</a></div>{{end}}</td>
     </tr>
   {{else}}
     <tr><td colspan="4" class="muted">no rules</td></tr>
@@ -30,7 +30,7 @@
   <tbody>
   {{range $id, $keys := .Policy.Principals}}
     <tr>
-      <td>{{$id}}</td>
+      <td><a href="/{{$.Repo}}/principal/{{$id}}">{{$id}}</a></td>
       <td>{{range $keys}}<div class="xsmall">{{.}}</div>{{end}}</td>
     </tr>
   {{else}}

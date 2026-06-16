@@ -1,0 +1,18 @@
+{{template "base" .}}
+{{define "title"}}attestations · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Attestations</h1>
+<p class="subhead">contents of <span class="mono">refs/gittuf/attestations</span></p>
+<div class="panel"><table class="table">
+  <thead><tr><th>path</th><th>size</th><th>blob</th></tr></thead>
+  <tbody>
+  {{range .Rows}}
+    <tr>
+      <td><a href="/{{$.Repo}}/blob/refs/gittuf/attestations/{{.Path}}">{{.Path}}</a></td>
+      <td class="muted">{{.Size}}</td>
+      <td class="xsmall muted">{{slice .Hash 0 12}}</td>
+    </tr>
+  {{else}}<tr><td colspan="3" class="muted">no attestations</td></tr>{{end}}
+  </tbody>
+</table></div>
+{{end}}

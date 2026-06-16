@@ -59,6 +59,33 @@ stdout 'signed by .*alice'
 stdout 'metadata/targets.json'
 stdout 'show metadata diff'
 
+# rsl filtered to one ref
+exec curl -fsS http://$SILO_HTTP/alice/demo/rsl/refs/heads/main
+stdout 'refs/heads/main'
+stdout 'all refs'
+
+# principal page
+exec curl -fsS http://$SILO_HTTP/alice/demo/principal/alice
+stdout 'protect-main'
+stdout 'refs/heads/main'
+stdout 'SHA256:'
+
+# silo (forge) principal
+exec curl -fsS http://$SILO_HTTP/alice/demo/principal/silo
+stdout 'annotation'
+
+# attestations and hooks pages render (empty for this repo)
+exec curl -fsS http://$SILO_HTTP/alice/demo/attestations
+stdout 'no attestations'
+exec curl -fsS http://$SILO_HTTP/alice/demo/hooks
+stdout 'no hooks'
+
+# site-wide activity
+exec curl -fsS http://$SILO_HTTP/activity
+stdout 'alice/demo'
+stdout 'refs/heads/main'
+stdout '"signer-known">alice<'
+
 # log page shows the commit
 exec curl -fsS http://$SILO_HTTP/alice/demo/log/refs/heads/main
 stdout 'one'

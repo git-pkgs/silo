@@ -1,0 +1,22 @@
+{{template "base" .}}
+{{define "title"}}activity · silo{{end}}
+{{define "content"}}
+<h1>Activity</h1>
+<p class="subhead">recent RSL entries across all repositories</p>
+<div class="panel"><table class="table">
+  <thead><tr><th>repo</th><th>#</th><th>kind</th><th>ref</th><th>target / message</th><th>signer</th><th>when</th></tr></thead>
+  <tbody>
+  {{range .Rows}}
+    <tr>
+      <td><a href="/{{.Repo}}/rsl">{{.Repo}}</a></td>
+      <td title="{{.ID}}">{{.Number}}</td>
+      <td>{{.Kind}}</td>
+      <td>{{if .Ref}}<a href="/{{.Repo}}/rsl/{{.Ref}}">{{.Ref}}</a>{{end}}{{if .AnnotatesID}}<span class="muted">→ {{slice .AnnotatesID 0 12}}</span>{{end}}</td>
+      <td>{{if .TargetID}}<a href="/{{.Repo}}/commit/{{.TargetID}}">{{slice .TargetID 0 12}}</a>{{end}}{{if .Message}}<span class="muted">{{.Message}}</span>{{end}}</td>
+      <td class="xsmall" title="{{.SignerKeyID}}">{{template "signer" .}}</td>
+      <td class="muted">{{.Age}}</td>
+    </tr>
+  {{else}}<tr><td colspan="7" class="muted">no activity</td></tr>{{end}}
+  </tbody>
+</table></div>
+{{end}}

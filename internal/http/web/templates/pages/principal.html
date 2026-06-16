@@ -1,0 +1,40 @@
+{{template "base" .}}
+{{define "title"}}{{.ID}} · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>{{.ID}}</h1>
+
+<h2 class="section">Keys</h2>
+<div class="panel"><table class="table"><tbody>
+  {{range .Keys}}<tr><td class="xsmall">{{.}}</td></tr>{{end}}
+</tbody></table></div>
+
+<h2 class="section">Named in rules</h2>
+<div class="panel"><table class="table">
+  <thead><tr><th>rule</th><th>patterns</th><th>threshold</th></tr></thead>
+  <tbody>
+  {{range .Rules}}
+    <tr>
+      <td><a href="/{{$.Repo}}/policy#{{.Name}}">{{.Name}}</a></td>
+      <td>{{range .Patterns}}<div>{{.}}</div>{{end}}</td>
+      <td>{{.Threshold}}</td>
+    </tr>
+  {{else}}<tr><td colspan="3" class="muted">none</td></tr>{{end}}
+  </tbody>
+</table></div>
+
+<h2 class="section">RSL entries signed</h2>
+<div class="panel"><table class="table">
+  <thead><tr><th>#</th><th>kind</th><th>ref</th><th>target / message</th><th>when</th></tr></thead>
+  <tbody>
+  {{range .Signed}}
+    <tr>
+      <td title="{{.ID}}">{{.Number}}</td>
+      <td>{{.Kind}}</td>
+      <td>{{if .Ref}}<a href="/{{$.Repo}}/rsl/{{.Ref}}">{{.Ref}}</a>{{end}}{{if .AnnotatesID}}<span class="muted">→ {{slice .AnnotatesID 0 12}}</span>{{end}}</td>
+      <td>{{if .TargetID}}<a href="/{{$.Repo}}/commit/{{.TargetID}}">{{slice .TargetID 0 12}}</a>{{end}}{{if .Message}}<span class="muted">{{.Message}}</span>{{end}}</td>
+      <td class="muted">{{.Age}}</td>
+    </tr>
+  {{else}}<tr><td colspan="5" class="muted">none</td></tr>{{end}}
+  </tbody>
+</table></div>
+{{end}}

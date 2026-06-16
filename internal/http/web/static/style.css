@@ -20,8 +20,8 @@ main { flex: 1; padding-block: 1.5rem; }
 }
 
 .topbar { border-bottom: 1px solid var(--border); }
-.topbar .container { padding-block: 0.75rem; font-size: 0.875rem; }
-.topbar a { font-weight: 600; }
+.topbar .container { padding-block: 0.75rem; font-size: 0.875rem; display: flex; gap: 1rem; align-items: baseline; }
+.topbar a:first-child { font-weight: 600; }
 
 .repo-nav { border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--muted) 35%, transparent); }
 .repo-nav .container { padding-top: 1rem; }

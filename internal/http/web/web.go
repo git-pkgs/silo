@@ -41,7 +41,12 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{owner}/{repo}/compare/{spec...}", h.compare)
 	mux.HandleFunc("GET /{owner}/{repo}/log/{ref...}", h.log)
 	mux.HandleFunc("GET /{owner}/{repo}/commit/{sha}", h.commit)
+	mux.HandleFunc("GET /activity", h.activity)
 	mux.HandleFunc("GET /{owner}/{repo}/rsl", h.rsl)
+	mux.HandleFunc("GET /{owner}/{repo}/rsl/{ref...}", h.rslRef)
+	mux.HandleFunc("GET /{owner}/{repo}/principal/{id}", h.principal)
+	mux.HandleFunc("GET /{owner}/{repo}/attestations", h.attestations)
+	mux.HandleFunc("GET /{owner}/{repo}/hooks", h.hooks)
 	mux.HandleFunc("GET /{owner}/{repo}/policy", h.policy)
 	mux.HandleFunc("GET /{owner}/{repo}/policy/history", h.policyHistory)
 	mux.HandleFunc("GET /{owner}/{repo}/verify", h.verify)
@@ -49,6 +54,8 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{owner}/{repo}/tags", h.tags)
 	return mux
 }
+
+const forgePrincipal = "silo"
 
 type handler struct {
 	st         *store.Store
@@ -358,7 +365,7 @@ type rslRow struct {
 func (h *handler) signerNames(ps *gt.PolicySummary) map[string]string {
 	m := map[string]string{}
 	if h.forgeKeyID != "" {
-		m[h.forgeKeyID] = "silo"
+		m[h.forgeKeyID] = forgePrincipal
 	}
 	if ps != nil {
 		for name, keys := range ps.Principals {
@@ -409,7 +416,8 @@ func (h *handler) rsl(w http.ResponseWriter, r *http.Request) {
 	h.render(w, "rsl", struct {
 		page
 		Entries []rslRow
-	}{h.page(r, gr, repoPath, fsPath, "rsl", ""), rows})
+		Filter  string
+	}{h.page(r, gr, repoPath, fsPath, "rsl", ""), rows, ""})
 }
 
 func (h *handler) policy(w http.ResponseWriter, r *http.Request) {
