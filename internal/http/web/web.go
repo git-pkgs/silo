@@ -146,9 +146,10 @@ func (h *handler) open(w http.ResponseWriter, r *http.Request) (*git.Repository,
 }
 
 type repoRow struct {
-	Path     string
-	RefCount int
-	LastRSL  string
+	Path, DefaultRef, Description     string
+	Branches, Tags, RSLEntries, Rules int
+	VerifyBad                         int
+	LastRSL, LastSigner               string
 }
 
 func (h *handler) index(w http.ResponseWriter, r *http.Request) {
@@ -159,24 +160,67 @@ func (h *handler) index(w http.ResponseWriter, r *http.Request) {
 	}
 	rows := make([]repoRow, 0, len(repos))
 	for _, rp := range repos {
-		row := repoRow{Path: rp.Owner + "/" + rp.Name}
-		if gr, err := h.gst.Repo(rp.Owner, rp.Name); err == nil {
-			it, _ := gr.References()
-			if it != nil {
-				_ = it.ForEach(func(*plumbing.Reference) error { row.RefCount++; return nil })
-			}
-			if ref, err := gr.Reference(plumbing.ReferenceName(gt.RSLRef), true); err == nil {
-				if c, err := gr.CommitObject(ref.Hash()); err == nil {
-					row.LastRSL = ago(c.Committer.When)
-				}
-			}
-		}
-		rows = append(rows, row)
+		rows = append(rows, h.repoRow(r, rp.Owner, rp.Name))
 	}
 	h.render(w, r, "index", struct {
 		page
 		Repos []repoRow
 	}{page{BaseURL: h.baseURL}, rows})
+}
+
+func (h *handler) repoRow(r *http.Request, owner, name string) repoRow {
+	row := repoRow{Path: owner + "/" + name}
+	gr, err := h.gst.Repo(owner, name)
+	if err != nil {
+		return row
+	}
+	row.DefaultRef = shortRef(defaultBranch(gr))
+	g := groupRefs(listRefs(gr))
+	row.Branches, row.Tags = len(g.Heads), len(g.Tags)
+	if entries, _ := gt.WalkRSL(r.Context(), gr); len(entries) > 0 {
+		row.RSLEntries = len(entries)
+		row.LastRSL = ago(entries[0].Timestamp)
+		row.LastSigner = entries[0].SignerKeyID
+	}
+	fsPath, _ := h.gst.Path(owner, name)
+	if gtr, err := gt.Open(fsPath); err == nil {
+		if ps, _ := gtr.Policy(r.Context()); ps != nil {
+			row.Rules = len(ps.Rules)
+			if n := h.signerNames(ps)[row.LastSigner]; n != "" {
+				row.LastSigner = n
+			}
+		}
+		_, row.VerifyBad = verifyRefs(r.Context(), gr, gtr)
+	}
+	row.Description = readmeDescription(gr)
+	return row
+}
+
+func readmeDescription(gr *git.Repository) string {
+	head, err := gr.Head()
+	if err != nil {
+		return ""
+	}
+	c, _ := gr.CommitObject(head.Hash())
+	for _, name := range readmeNames {
+		f, err := c.File(name)
+		if err != nil {
+			continue
+		}
+		s, _ := f.Contents()
+		for _, line := range strings.Split(s, "\n") {
+			line = strings.TrimSpace(line)
+			if line == "" || strings.HasPrefix(line, "#") {
+				continue
+			}
+			const maxDesc = 160
+			if len(line) > maxDesc {
+				line = line[:maxDesc] + "…"
+			}
+			return line
+		}
+	}
+	return ""
 }
 
 type refRow struct{ Name, Hash string }
@@ -201,15 +245,21 @@ func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
-	defaultRef := plumbing.HEAD.String()
-	if head, err := gr.Head(); err == nil {
-		defaultRef = head.Name().String()
+	defaultRef := defaultBranch(gr)
+	var entries []treeEntry
+	if hh, err := gr.ResolveRevision(plumbing.Revision(defaultRef)); err == nil {
+		if c, err := gr.CommitObject(*hh); err == nil {
+			if t, err := c.Tree(); err == nil {
+				entries = treeEntries(t)
+			}
+		}
 	}
 	h.render(w, r, "repo", struct {
 		page
 		DefaultRef string
+		Entries    []treeEntry
 		Readme     template.HTML
-	}{h.page(r, gr, repoPath, fsPath, "code", ""), defaultRef, readReadme(gr)})
+	}{h.page(r, gr, repoPath, fsPath, "code", defaultRef), defaultRef, entries, readReadme(gr)})
 }
 
 var errStop = errors.New("stop")

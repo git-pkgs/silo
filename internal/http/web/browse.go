@@ -46,6 +46,31 @@ type treeEntry struct {
 	IsDir                  bool
 }
 
+func treeEntries(t *object.Tree) []treeEntry {
+	entries := make([]treeEntry, 0, len(t.Entries))
+	for _, e := range t.Entries {
+		te := treeEntry{
+			Name:  e.Name,
+			Hash:  e.Hash.String(),
+			Mode:  e.Mode.String(),
+			IsDir: e.Mode == filemode.Dir || e.Mode == filemode.Submodule,
+		}
+		if !te.IsDir {
+			if sz, err := t.Size(e.Name); err == nil {
+				te.Size = humanSize(sz)
+			}
+		}
+		entries = append(entries, te)
+	}
+	sort.SliceStable(entries, func(i, j int) bool {
+		if entries[i].IsDir != entries[j].IsDir {
+			return entries[i].IsDir
+		}
+		return entries[i].Name < entries[j].Name
+	})
+	return entries
+}
+
 type crumb struct{ Name, Path string }
 
 func crumbs(p string) []crumb {
@@ -82,27 +107,7 @@ func (h *handler) tree(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-	entries := make([]treeEntry, 0, len(t.Entries))
-	for _, e := range t.Entries {
-		te := treeEntry{
-			Name:  e.Name,
-			Hash:  e.Hash.String(),
-			Mode:  e.Mode.String(),
-			IsDir: e.Mode == filemode.Dir || e.Mode == filemode.Submodule,
-		}
-		if !te.IsDir {
-			if sz, err := t.Size(e.Name); err == nil {
-				te.Size = humanSize(sz)
-			}
-		}
-		entries = append(entries, te)
-	}
-	sort.SliceStable(entries, func(i, j int) bool {
-		if entries[i].IsDir != entries[j].IsDir {
-			return entries[i].IsDir
-		}
-		return entries[i].Name < entries[j].Name
-	})
+	entries := treeEntries(t)
 	var readme template.HTML
 	if p == "" {
 		readme = readReadme(gr)

@@ -31,9 +31,10 @@ exec curl -fsS http://$SILO_HTTP/
 stdout 'alice/demo'
 stdout '<html'
 
-# repo page shows refs including gittuf
+# repo page shows the tree at the default branch and the clone box
 exec curl -fsS http://$SILO_HTTP/alice/demo
-stdout 'refs/gittuf/reference-state-log'
+stdout 'README.md'
+stdout 'git clone'
 stdout 'refs/heads/main'
 
 # rsl page shows the entry for main and the witness annotation, with signer

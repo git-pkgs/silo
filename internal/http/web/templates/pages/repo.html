@@ -11,21 +11,29 @@
   </div>
 </div>
 
-<h2 class="section">References</h2>
+{{if .Entries}}
 <div class="panel">
 <table class="table">
-  <thead><tr><th>name</th><th>target</th><th></th></tr></thead>
   <tbody>
-  {{range .Refs}}
+  {{range .Entries}}
     <tr>
-      <td><a href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a></td>
-      <td><a href="/{{$.Repo}}/commit/{{.Hash}}">{{slice .Hash 0 12}}</a></td>
-      <td><a class="muted" href="/{{$.Repo}}/tree/{{.Name}}">browse</a></td>
+      <td>
+        {{if .IsDir}}
+          <a href="/{{$.Repo}}/tree/{{$.DefaultRef}}/{{.Name}}">{{.Name}}/</a>
+        {{else}}
+          <a href="/{{$.Repo}}/blob/{{$.DefaultRef}}/{{.Name}}">{{.Name}}</a>
+        {{end}}
+      </td>
+      <td class="muted">{{.Mode}}</td>
+      <td class="muted">{{.Size}}</td>
     </tr>
   {{end}}
   </tbody>
 </table>
 </div>
+{{else}}
+<p class="muted">empty repository</p>
+{{end}}
 
 {{if .Readme}}
 <div class="card">

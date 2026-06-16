@@ -2,20 +2,28 @@
 {{define "title"}}repositories · silo{{end}}
 {{define "content"}}
 <h1>Repositories</h1>
-<div class="panel">
-<table class="table">
-  <thead><tr><th>repo</th><th>refs</th><th>last RSL entry</th></tr></thead>
-  <tbody>
-  {{range .Repos}}
-    <tr>
-      <td><a href="/{{.Path}}">{{.Path}}</a></td>
-      <td>{{.RefCount}}</td>
-      <td class="muted">{{if .LastRSL}}{{.LastRSL}}{{else}}—{{end}}</td>
-    </tr>
-  {{else}}
-    <tr><td colspan="3" class="muted">no repositories</td></tr>
-  {{end}}
-  </tbody>
-</table>
+<div class="repo-grid">
+{{range .Repos}}
+  <a class="card repo-card" href="/{{.Path}}">
+    <header>
+      <h2 class="mono">{{.Path}}</h2>
+      {{if .Description}}<p class="muted small">{{.Description}}</p>{{end}}
+    </header>
+    <section>
+      <div class="repo-card-stats">
+        <span><i data-lucide="git-branch"></i>{{.Branches}}</span>
+        <span><i data-lucide="tag"></i>{{.Tags}}</span>
+        <span><i data-lucide="scroll-text"></i>{{.RSLEntries}}</span>
+        <span><i data-lucide="shield"></i>{{.Rules}}</span>
+        {{if gt .VerifyBad 0}}<span class="badge-destructive">{{.VerifyBad}} failing</span>
+        {{else if gt .Rules 0}}<span class="badge-secondary"><i data-lucide="badge-check"></i>verified</span>{{end}}
+      </div>
+      {{if .LastRSL}}<p class="muted xsmall">last push {{.LastRSL}} by <b>{{.LastSigner}}</b> · default <span class="mono">{{.DefaultRef}}</span></p>
+      {{else}}<p class="muted xsmall">no pushes yet · default <span class="mono">{{.DefaultRef}}</span></p>{{end}}
+    </section>
+  </a>
+{{else}}
+  <p class="muted">no repositories</p>
+{{end}}
 </div>
 {{end}}
