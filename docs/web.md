@@ -12,6 +12,7 @@ All paths are `GET`. Append `?format=json` (or send `Accept: application/json`) 
 /<o>/<r>/blob/<ref>/<path>            file view; markup-rendered or <pre>
 /<o>/<r>/raw/<ref>/<path>             raw bytes with detected Content-Type
 /<o>/<r>/blame/<ref>/<path>           per-line attribution
+/<o>/<r>/history/<ref>/<path>         commits that touched <path>
 /<o>/<r>/archive/<ref>.tar.gz         tarball of the tree at <ref>
 /<o>/<r>/search/<ref>?q=<substr>      filename search
 

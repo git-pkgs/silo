@@ -40,6 +40,7 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{owner}/{repo}/blob/{rest...}", h.blob)
 	mux.HandleFunc("GET /{owner}/{repo}/raw/{rest...}", h.raw)
 	mux.HandleFunc("GET /{owner}/{repo}/blame/{rest...}", h.blame)
+	mux.HandleFunc("GET /{owner}/{repo}/history/{rest...}", h.fileHistory)
 	mux.HandleFunc("GET /{owner}/{repo}/archive/{rest...}", h.archive)
 	mux.HandleFunc("GET /{owner}/{repo}/contributors", h.contributors)
 	mux.HandleFunc("GET /{owner}/{repo}/search/{ref...}", h.search)

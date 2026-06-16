@@ -67,6 +67,7 @@ git commit -q -m "add README"
 
 echo "second line" >> README.md
 git commit -q -am "expand README"
+git tag -s -m "v1.0.0" v1.0.0
 
 echo "initialising gittuf policy"
 gittuf trust init -k "$DEMO/keys/alice"
@@ -74,12 +75,14 @@ gittuf trust add-policy-key -k "$DEMO/keys/alice" --policy-key "$DEMO/keys/alice
 gittuf policy init -k "$DEMO/keys/alice" --policy-name targets
 gittuf policy add-person -k "$DEMO/keys/alice" --person-ID alice --public-key "$DEMO/keys/alice.pub"
 gittuf policy add-rule -k "$DEMO/keys/alice" --rule-name protect-main --rule-pattern 'git:refs/heads/main' --authorize alice
+gittuf policy add-rule -k "$DEMO/keys/alice" --rule-name protect-tags --rule-pattern 'git:refs/tags/*' --authorize alice
 gittuf policy stage --local-only
 gittuf policy apply --local-only
 gittuf rsl record main --local-only
+gittuf rsl record refs/tags/v1.0.0 --local-only
 
-echo "pushing policy + main"
-git push origin 'refs/gittuf/*:refs/gittuf/*' main
+echo "pushing policy + main + tag"
+git push origin 'refs/gittuf/*:refs/gittuf/*' main v1.0.0
 
 echo "third commit, second push"
 # silo wrote a witness annotation to the RSL server-side; pull it before

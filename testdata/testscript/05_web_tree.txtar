@@ -72,6 +72,15 @@ exec curl -fsS http://$SILO_HTTP/alice/demo/blame/refs/heads/main/pkg/main.go
 stdout 'package main'
 stdout 'blame-meta'
 
+# file history
+exec curl -fsS http://$SILO_HTTP/alice/demo/history/refs/heads/main/pkg/main.go
+stdout 'initial'
+stdout 'view at this commit'
+
+# blob page links to history
+exec curl -fsS http://$SILO_HTTP/alice/demo/blob/refs/heads/main/pkg/main.go
+stdout '/history/refs/heads/main/pkg/main.go'
+
 # contributors
 exec curl -fsS http://$SILO_HTTP/alice/demo/contributors
 stdout '1 author'

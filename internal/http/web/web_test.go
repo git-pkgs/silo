@@ -80,6 +80,8 @@ func TestHandler_Routes(t *testing.T) {
 		{"/alice/demo/log/refs/heads/main?after=" + sha, http.StatusOK, "seed"},
 		{"/activity", http.StatusOK, "Activity"},
 		{"/alice/demo/blame/refs/heads/main/README.md", http.StatusOK, "hello"},
+		{"/alice/demo/history/refs/heads/main/README.md", http.StatusOK, "seed"},
+		{"/alice/demo/history/refs/heads/main", http.StatusNotFound, ""},
 		{"/alice/demo/contributors", http.StatusOK, "alice"},
 		{"/alice/demo/search/refs/heads/main?q=read", http.StatusOK, "README.md"},
 		{"/alice/demo/search/refs/heads/main?q=nope", http.StatusOK, "no matches"},

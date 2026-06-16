@@ -2,7 +2,7 @@
 {{define "title"}}blame {{.Path}} · {{.Repo}}{{end}}
 {{define "content"}}
 {{template "breadcrumbs" .}}
-<p class="subhead"><a href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}">view</a> · <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">raw</a></p>
+<p class="subhead"><a href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}">view</a> · <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">raw</a> · <a href="/{{.Repo}}/history/{{.Ref}}/{{.Path}}">history</a></p>
 <div class="panel">
 <table class="table blame">
   <tbody>

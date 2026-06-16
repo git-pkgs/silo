@@ -1,0 +1,26 @@
+{{template "base" .}}
+{{define "title"}}history {{.Path}} · {{.Repo}}{{end}}
+{{define "content"}}
+{{template "breadcrumbs" .}}
+<p class="subhead">
+  history of <span class="mono">{{.Path}}</span>
+  · <a href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}">view</a>
+  · <a href="/{{.Repo}}/blame/{{.Ref}}/{{.Path}}">blame</a>
+</p>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>commit</th><th>author</th><th>date</th><th>message</th><th></th></tr></thead>
+  <tbody>
+  {{range .Commits}}
+    <tr>
+      <td><a href="/{{$.Repo}}/commit/{{.Hash}}">{{slice .Hash 0 12}}</a></td>
+      <td>{{.Author}}</td>
+      <td class="muted">{{.When}}</td>
+      <td>{{.Subject}}</td>
+      <td><a class="muted" href="/{{$.Repo}}/blob/{{.Hash}}/{{$.Path}}">view at this commit</a></td>
+    </tr>
+  {{else}}<tr><td colspan="5" class="muted">no history</td></tr>{{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

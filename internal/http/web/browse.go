@@ -200,6 +200,45 @@ func (h *handler) raw(w http.ResponseWriter, r *http.Request) {
 	_, _ = io.Copy(w, rd)
 }
 
+func (h *handler) fileHistory(w http.ResponseWriter, r *http.Request) {
+	gr, repoPath, fsPath, ok := h.open(w, r)
+	if !ok {
+		return
+	}
+	ref, c, p, ok := splitRefPath(gr, r.PathValue("rest"))
+	if !ok || p == "" {
+		http.NotFound(w, r)
+		return
+	}
+	iter, err := gr.Log(&git.LogOptions{
+		From:       c.Hash,
+		PathFilter: func(s string) bool { return s == p },
+	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	var rows []commitRow
+	_ = iter.ForEach(func(cc *object.Commit) error {
+		if len(rows) >= logPageSize {
+			return errStop
+		}
+		rows = append(rows, commitRow{
+			Hash:    cc.Hash.String(),
+			Author:  cc.Author.Name,
+			When:    cc.Author.When.Format(time.DateOnly),
+			Subject: firstLine(cc.Message),
+		})
+		return nil
+	})
+	h.render(w, r, "history", struct {
+		page
+		Path    string
+		Crumbs  []crumb
+		Commits []commitRow
+	}{h.page(r, gr, repoPath, fsPath, "log", ref), p, crumbs(p), rows})
+}
+
 type blameLine struct {
 	Hash, Author, When, Text string
 }
