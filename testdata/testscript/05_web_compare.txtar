@@ -1,0 +1,60 @@
+# 05_web_compare: compare page with VerifyMergeable and merge-locally steps.
+exec silo keygen --data $SILO_DATA
+exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
+exec silo admin repo create alice/demo --data $SILO_DATA
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH --base-url http://$SILO_HTTP &
+waitfor $SILO_SSH
+
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+exec git init -b main repo
+cd repo
+exec git config user.signingKey $WORK/alice
+exec git config gpg.format ssh
+cp $WORK/README.md README.md
+exec git add README.md
+exec git commit -m one
+exec git remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
+
+exec gittuf trust init -k $WORK/alice
+exec gittuf trust add-policy-key -k $WORK/alice --policy-key $WORK/alice.pub
+exec gittuf policy init -k $WORK/alice --policy-name targets
+exec gittuf policy add-person -k $WORK/alice --person-ID alice --public-key $WORK/alice.pub
+exec gittuf policy add-rule -k $WORK/alice --rule-name protect-main --rule-pattern 'git:refs/heads/main' --authorize alice
+exec gittuf policy stage --local-only
+exec gittuf policy apply --local-only
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+
+# feature branch with a change, recorded in RSL
+exec git fetch -q origin 'refs/gittuf/*:refs/gittuf/*'
+exec git switch -c feature
+cp $WORK/README2.md README.md
+exec git commit -am two
+exec gittuf rsl record feature --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' feature
+cd ..
+
+# compare main...feature: rule rendered, merge steps filled in, diff shown.
+# VerifyMergeable's verdict is whatever gittuf says; assert structure not outcome.
+exec curl -fsS http://$SILO_HTTP/alice/demo/compare/main...feature
+stdout 'Policy would (accept|reject) this merge'
+stdout 'protect-main'
+stdout 'threshold 1 of alice'
+stdout 'gittuf rsl record main'
+stdout 'class="diff"'
+stdout 'second line'
+
+# fully-qualified refs work too
+exec curl -fsS http://$SILO_HTTP/alice/demo/compare/refs/heads/main...refs/heads/feature
+stdout 'Policy would'
+
+# bad spec
+! exec curl -fsS http://$SILO_HTTP/alice/demo/compare/mainfeature
+# unknown ref
+! exec curl -fsS http://$SILO_HTTP/alice/demo/compare/main...nope
+
+-- README.md --
+first line
+-- README2.md --
+first line
+second line

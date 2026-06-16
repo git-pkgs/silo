@@ -38,6 +38,7 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{owner}/{repo}/tree/{rest...}", h.tree)
 	mux.HandleFunc("GET /{owner}/{repo}/blob/{rest...}", h.blob)
 	mux.HandleFunc("GET /{owner}/{repo}/raw/{rest...}", h.raw)
+	mux.HandleFunc("GET /{owner}/{repo}/compare/{spec...}", h.compare)
 	mux.HandleFunc("GET /{owner}/{repo}/log/{ref...}", h.log)
 	mux.HandleFunc("GET /{owner}/{repo}/commit/{sha}", h.commit)
 	mux.HandleFunc("GET /{owner}/{repo}/rsl", h.rsl)
@@ -159,6 +160,8 @@ func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
 	}{h.page(r, gr, repoPath, fsPath, "overview", ""), defaultRef, readReadme(gr)})
 }
 
+var errStop = errors.New("stop")
+
 type commitRow struct{ Hash, Author, When, Subject string }
 
 type fileStat struct {
@@ -193,7 +196,7 @@ func (h *handler) log(w http.ResponseWriter, r *http.Request) {
 	_ = iter.ForEach(func(c *object.Commit) error {
 		if len(rows) >= logPageSize {
 			next = c.Hash.String()
-			return errors.New("stop")
+			return errStop
 		}
 		rows = append(rows, commitRow{
 			Hash:    c.Hash.String(),

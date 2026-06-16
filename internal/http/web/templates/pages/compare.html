@@ -1,0 +1,34 @@
+{{template "base" .}}
+{{define "title"}}{{.Base}}...{{.Head}} · {{.Repo}}{{end}}
+{{define "content"}}
+<h1 class="mono">{{.Base}}...{{.Head}}</h1>
+<p class="subhead">
+  {{.Ahead}} commit{{if ne .Ahead 1}}s{{end}} ahead · {{.Files}} file{{if ne .Files 1}}s{{end}} changed ·
+  <a href="/{{.Repo}}/commit/{{.BaseHash}}">{{slice .BaseHash 0 12}}</a> →
+  <a href="/{{.Repo}}/commit/{{.HeadHash}}">{{slice .HeadHash 0 12}}</a>
+</p>
+
+<div class="card {{if .Mergeable}}rsl-pass{{else}}rsl-fail{{end}}">
+  <header>
+    <h2>{{if .Mergeable}}Policy would accept this merge{{else}}Policy would reject this merge{{end}}</h2>
+    {{if .Rule}}<p class="muted small">rule <b>{{.Rule.Name}}</b> · threshold {{.Rule.Threshold}} of {{range $i, $p := .Rule.Principals}}{{if $i}}, {{end}}{{$p}}{{end}}</p>{{end}}
+  </header>
+  <section>
+    {{if .Mergeable}}
+      {{if .NeedRSL}}<p>The merge commit needs an RSL entry signed by an authorising key.</p>
+      {{else}}<p>An RSL entry already covers this; pushing the merge will verify.</p>{{end}}
+    {{else}}
+      <p style="color:var(--destructive)">{{.MergeErr}}</p>
+    {{end}}
+    <p class="muted small">From a clone where you hold an authorising key:</p>
+    <pre class="blob">{{.MergeSteps}}</pre>
+  </section>
+</div>
+
+{{if .Diff}}
+<h2 class="section">Diff</h2>
+<div class="panel"><pre class="diff">{{.Diff}}</pre></div>
+{{else}}
+<p class="muted">No changes.</p>
+{{end}}
+{{end}}

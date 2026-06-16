@@ -46,6 +46,18 @@ func (r *Repo) HasSignedRoot() bool {
 	return err == nil && ok
 }
 
+// VerifyMergeable reports whether featureRef can be merged into targetRef
+// under the current policy. needRSL is true when the merger must also append a
+// signed RSL entry for the merge to verify.
+func (r *Repo) VerifyMergeable(ctx context.Context, targetRef, featureRef string) (needRSL bool, err error) {
+	defer func() {
+		if rec := recover(); rec != nil {
+			err = fmt.Errorf("gittuf: verify-mergeable panicked: %v", rec)
+		}
+	}()
+	return r.r.VerifyMergeable(ctx, targetRef, featureRef)
+}
+
 // VerifyRef checks that the current tip of refName is backed by a valid RSL
 // chain under the current policy. The caller must have already applied the
 // proposed ref updates (including any pushed RSL entries) before calling.

@@ -52,6 +52,12 @@ The `os.Chdir` race specifically is fixed on `git-pkgs/gittuf@silo` by adding `e
 
 ---
 
+## `VerifyMergeable` rejects threshold-1 with no attestations
+
+For a target ref protected by a threshold-1 rule and a feature ref whose RSL entry is signed by the sole principal, `VerifyMergeable(ctx, target, feature)` returns `not enough approvals to meet Git namespace policies` rather than `(true, nil)` ("merge possible if performed by an authorised key"). The doc comment's `(true, nil)` case reads as if the merger's own RSL signature counts toward threshold; in practice it appears only `refs/gittuf/attestations` approvals are counted, so threshold 1 with zero attestations is "0 of 1, even with merger" → reject. Either the comment or the count-the-merger logic is off; raised while building silo's compare page, which now renders whatever the verdict is rather than asserting accept.
+
+---
+
 ## Related upstream
 
 Key rotation across many repos (a forge key in N policies needing N owner re-signs) overlaps open [#1297](https://github.com/gittuf/gittuf/issues/1297) on TAP-8 self-rotation; same friction, different angle.
