@@ -42,6 +42,7 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{owner}/{repo}/commit/{sha}", h.commit)
 	mux.HandleFunc("GET /{owner}/{repo}/rsl", h.rsl)
 	mux.HandleFunc("GET /{owner}/{repo}/policy", h.policy)
+	mux.HandleFunc("GET /{owner}/{repo}/verify", h.verify)
 	return mux
 }
 
@@ -54,20 +55,22 @@ type handler struct {
 }
 
 type page struct {
-	Repo    string
-	BaseURL string
-	Active  string
-	Ref     string
-	Refs    []refRow
+	Repo      string
+	BaseURL   string
+	Active    string
+	Ref       string
+	Refs      []refRow
+	VerifyBad int
 }
 
-func (h *handler) page(gr *git.Repository, repoPath, active, ref string) page {
+func (h *handler) page(r *http.Request, gr *git.Repository, repoPath, fsPath, active, ref string) page {
 	return page{
-		Repo:    repoPath,
-		BaseURL: h.baseURL,
-		Active:  active,
-		Ref:     ref,
-		Refs:    listRefs(gr),
+		Repo:      repoPath,
+		BaseURL:   h.baseURL,
+		Active:    active,
+		Ref:       ref,
+		Refs:      listRefs(gr),
+		VerifyBad: h.verifyBadge(r.Context(), gr, fsPath),
 	}
 }
 
@@ -141,7 +144,7 @@ func listRefs(gr *git.Repository) []refRow {
 }
 
 func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
-	gr, repoPath, _, ok := h.open(w, r)
+	gr, repoPath, fsPath, ok := h.open(w, r)
 	if !ok {
 		return
 	}
@@ -153,7 +156,7 @@ func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
 		page
 		DefaultRef string
 		Readme     template.HTML
-	}{h.page(gr, repoPath, "overview", ""), defaultRef, readReadme(gr)})
+	}{h.page(r, gr, repoPath, fsPath, "overview", ""), defaultRef, readReadme(gr)})
 }
 
 type commitRow struct{ Hash, Author, When, Subject string }
@@ -166,7 +169,7 @@ type fileStat struct {
 const logPageSize = 50
 
 func (h *handler) log(w http.ResponseWriter, r *http.Request) {
-	gr, repoPath, _, ok := h.open(w, r)
+	gr, repoPath, fsPath, ok := h.open(w, r)
 	if !ok {
 		return
 	}
@@ -204,7 +207,7 @@ func (h *handler) log(w http.ResponseWriter, r *http.Request) {
 		page
 		Commits []commitRow
 		Next    string
-	}{h.page(gr, repoPath, "log", refName), rows, next})
+	}{h.page(r, gr, repoPath, fsPath, "log", refName), rows, next})
 }
 
 func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
@@ -235,7 +238,7 @@ func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
 		RSL                                 []rslRow
 		Diff                                template.HTML
 	}{
-		h.page(gr, repoPath, "log", ""),
+		h.page(r, gr, repoPath, fsPath, "log", ""),
 		c.Hash.String(), c.Author.String(), c.Author.When.Format(time.RFC1123),
 		c.Message, gt.SignerFingerprint(c.Signature), parents, files,
 		h.rslForCommit(r, gr, fsPath, c.Hash.String()),
@@ -301,7 +304,7 @@ func (h *handler) rslForCommit(r *http.Request, gr *git.Repository, fsPath, sha 
 	}
 	annot := map[string][]gt.RSLEntry{}
 	for _, e := range entries {
-		if e.Kind == "annotation" && e.AnnotatesID != "" {
+		if e.Kind == gt.KindAnnotation && e.AnnotatesID != "" {
 			annot[e.AnnotatesID] = append(annot[e.AnnotatesID], e)
 		}
 	}
@@ -313,7 +316,7 @@ func (h *handler) rslForCommit(r *http.Request, gr *git.Repository, fsPath, sha 
 	}
 	var rows []rslRow
 	for _, e := range entries {
-		if e.Kind != "reference" || e.TargetID != sha {
+		if e.Kind != gt.KindReference || e.TargetID != sha {
 			continue
 		}
 		row := rslRow{RSLEntry: e, Age: ago(e.Timestamp), SignerName: names[e.SignerKeyID]}
@@ -380,7 +383,7 @@ func (h *handler) rsl(w http.ResponseWriter, r *http.Request) {
 	rows := make([]rslRow, 0, len(entries))
 	for _, e := range entries {
 		row := rslRow{RSLEntry: e, Age: ago(e.Timestamp), SignerName: names[e.SignerKeyID]}
-		if e.Kind == "reference" && e.Ref != "" && !gt.IsGittufRef(e.Ref) && gtr != nil {
+		if e.Kind == gt.KindReference && e.Ref != "" && !gt.IsGittufRef(e.Ref) && gtr != nil {
 			verr, seen := verified[e.Ref]
 			if !seen {
 				verr = gtr.VerifyRef(r.Context(), e.Ref)
@@ -397,7 +400,7 @@ func (h *handler) rsl(w http.ResponseWriter, r *http.Request) {
 	h.render(w, "rsl", struct {
 		page
 		Entries []rslRow
-	}{h.page(gr, repoPath, "rsl", ""), rows})
+	}{h.page(r, gr, repoPath, fsPath, "rsl", ""), rows})
 }
 
 func (h *handler) policy(w http.ResponseWriter, r *http.Request) {
@@ -417,7 +420,7 @@ func (h *handler) policy(w http.ResponseWriter, r *http.Request) {
 	h.render(w, "policy", struct {
 		page
 		Policy *gt.PolicySummary
-	}{h.page(gr, repoPath, "policy", ""), ps})
+	}{h.page(r, gr, repoPath, fsPath, "policy", ""), ps})
 }
 
 var readmeNames = []string{"README.md", "README.org", "README", "readme.md"} //nolint:goconst

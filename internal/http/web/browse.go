@@ -57,7 +57,7 @@ func crumbs(p string) []crumb {
 }
 
 func (h *handler) tree(w http.ResponseWriter, r *http.Request) {
-	gr, repoPath, _, ok := h.open(w, r)
+	gr, repoPath, fsPath, ok := h.open(w, r)
 	if !ok {
 		return
 	}
@@ -109,13 +109,13 @@ func (h *handler) tree(w http.ResponseWriter, r *http.Request) {
 		Crumbs  []crumb
 		Entries []treeEntry
 		Readme  template.HTML
-	}{h.page(gr, repoPath, "overview", ref), p, crumbs(p), entries, readme})
+	}{h.page(r, gr, repoPath, fsPath, "overview", ref), p, crumbs(p), entries, readme})
 }
 
 const blobMaxBytes = 512 << 10
 
 func (h *handler) blob(w http.ResponseWriter, r *http.Request) {
-	gr, repoPath, _, ok := h.open(w, r)
+	gr, repoPath, fsPath, ok := h.open(w, r)
 	if !ok {
 		return
 	}
@@ -159,7 +159,7 @@ func (h *handler) blob(w http.ResponseWriter, r *http.Request) {
 		Content    string
 		LineCount  int
 	}{
-		h.page(gr, repoPath, "overview", ref),
+		h.page(r, gr, repoPath, fsPath, "overview", ref),
 		p, crumbs(p), path.Dir(p), humanSize(f.Size), f.Mode.String(),
 		binary, truncated, rendered, string(data), countLines(data),
 	})

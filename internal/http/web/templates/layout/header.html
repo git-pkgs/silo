@@ -31,6 +31,7 @@
         <a role="tab" href="/{{.Repo}}/rsl" aria-selected="{{if eq .Active "rsl"}}true{{else}}false{{end}}"><i data-lucide="scroll-text"></i>rsl</a>
         <a role="tab" href="/{{.Repo}}/policy" aria-selected="{{if eq .Active "policy"}}true{{else}}false{{end}}"><i data-lucide="shield"></i>policy</a>
         <a role="tab" href="/{{.Repo}}/log/HEAD" aria-selected="{{if eq .Active "log"}}true{{else}}false{{end}}"><i data-lucide="history"></i>log</a>
+        <a role="tab" href="/{{.Repo}}/verify" aria-selected="{{if eq .Active "verify"}}true{{else}}false{{end}}"><i data-lucide="badge-check"></i>verify{{if gt .VerifyBad 0}}<span class="badge-destructive">{{.VerifyBad}}</span>{{end}}</a>
       </nav>
     </div>
   </div>

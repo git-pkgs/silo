@@ -13,6 +13,13 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+// RSLEntry kinds.
+const (
+	KindReference   = "reference"
+	KindAnnotation  = "annotation"
+	KindPropagation = "propagation"
+)
+
 // RSLEntry is one commit on refs/gittuf/reference-state-log, decoded enough
 // for the web UI's RSL viewer.
 type RSLEntry struct {
@@ -72,11 +79,11 @@ func parseRSLCommit(c *object.Commit) RSLEntry {
 		line := sc.Text()
 		switch {
 		case line == "RSL Reference Entry":
-			e.Kind = "reference"
+			e.Kind = KindReference
 		case line == "RSL Annotation Entry":
-			e.Kind = "annotation"
+			e.Kind = KindAnnotation
 		case line == "RSL Propagation Entry":
-			e.Kind = "propagation"
+			e.Kind = KindPropagation
 		case strings.HasPrefix(line, "ref: "):
 			e.Ref = strings.TrimPrefix(line, "ref: ")
 		case strings.HasPrefix(line, "targetID: "):

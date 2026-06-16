@@ -61,6 +61,7 @@ func TestHandler_Routes(t *testing.T) {
 		{"/alice/demo/commit/" + sha, http.StatusOK, sha},
 		{"/alice/demo/rsl", http.StatusOK, "Reference state log"},
 		{"/alice/demo/policy", http.StatusOK, "Policy"},
+		{"/alice/demo/verify", http.StatusOK, "refs/heads/main"},
 		{"/nobody/nothing", http.StatusNotFound, ""},
 		{"/alice/demo/log/refs/heads/absent", http.StatusNotFound, ""},
 		{"/alice/demo/commit/0000000000000000000000000000000000000000", http.StatusNotFound, ""},
