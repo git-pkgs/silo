@@ -2,6 +2,10 @@
 
 Findings from embedding `github.com/gittuf/gittuf/experimental/gittuf` server-side, against bare repositories, at commit `6f382ee`. Each entry is self-contained and can be filed as an upstream issue independently.
 
+silo implements [GAP-2 "gittuf on the Forge"](https://github.com/gittuf/gittuf/blob/main/docs/gaps/2/README.md) Configuration A: clients create RSL entries, the forge runs pre-receive verification, users push directly. GAP-2 is currently marked "Implemented: No / Prototype Implementation: None yet"; the entries below are what surfaces when you build one.
+
+Existing-issue cross-reference (searched 2026-06-16 across 223 issues, ~300 PRs): the first three bugs have no prior issue or PR. The signer and verdict items have nothing direct (#902 added the config-load path the signer item wants to bypass; #1315 touches `VerifyMergeable`'s counting, not the result shape). The rotation item overlaps with open #1297 (TAP-8 self-rotation), which addresses the same friction from a different direction.
+
 ---
 
 ## `GetGoGitRepository` cannot open bare repositories
@@ -99,13 +103,15 @@ For a bare repo, `gitDirPath` is the bare directory itself, which by convention 
 
 **What happens.** `LoadRepository` fails with `unable to find Git binary` if `git` isn't on PATH. Almost every operation in `pkg/gitinterface` (`blob.go`, `commit.go`, `log.go`, `changes.go`, `tree.go`) shells out to it.
 
-**Why.** This is a design choice, not a bug. But it means anything embedding gittuf can't ship as a single static binary, and the one place that *does* use go-git instead (`GetGoGitRepository`, for signature verification) is exactly where the bare-repo bug above lives.
+**Why.** The package appears to have started on go-git and migrated to shelling out as it needed operations go-git lacked at the time (#145 unvendored a patched go-git once upstream caught up; `GetGoGitRepository()` is a remnant used only for signature verification). So this is accretion rather than a stated position, but the effect is the same: anything embedding gittuf needs `git` on PATH, and the one place that still uses go-git is where the bare-repo bug above lives.
 
-**Suggested change (larger).** A go-git backend for `gitinterface`. `GetGoGitRepository()` already exists; routing the read operations through it would let embedders choose between shelling out and pure-Go.
+**Suggested change (larger).** A go-git backend for `gitinterface`. `GetGoGitRepository()` already exists; routing the read operations (`cat-file`, `rev-parse`, `for-each-ref`, `diff-tree`) through it would let embedders choose between shelling out and pure-Go without changing the public surface. Most of those operations have direct go-git equivalents now.
 
 ---
 
 ## No way to reference a principal's key indirectly
+
+Related: open issue [#1297](https://github.com/gittuf/gittuf/issues/1297) discusses TAP-8 self-rotation, where a person updates their own keys using their other keys at threshold. That helps a person rotating within one repo; the case here is one principal (the forge) appearing in many repos.
 
 **What happens.** A forge that adds its witness key to a thousand repos' policies needs a thousand owners to re-sign root metadata when that key rotates.
 
