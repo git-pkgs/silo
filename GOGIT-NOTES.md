@@ -12,9 +12,7 @@ v6 ships a `backend` package — `Backend.Serve` / `ServeConn` / `ServeHTTP` ove
 
 **Why it matters.** Any forge wanting branch protection, signed-commit checks, or gittuf verification needs to inspect proposed updates after objects are available but before refs move. Without it, every such project re-implements receive-pack on top of `packp.UpdateRequests` + `packfile.UpdateObjectStorage` + `Storer.SetReference`, which is what silo does in ~200 lines.
 
-**Suggested change.** A `Hooks` field on `ReceivePackRequest` with `PreReceive(ctx, []*packp.Command) error` called after unpack and before `updateReferences`; non-nil error fills `cmdStatus` with `ng <ref> <err>` and skips the update. A `PostReceive` after ref apply rounds it out. Possibly tracked under #2185.
-
-**What silo would do once this lands.** `internal/receive` shrinks to a `Hooks` adapter; `internal/http/git` and `internal/ssh` become thin wrappers over `backend.Backend`.
+**Fix:** `ReceivePackHooks{PreReceive, PostReceive}` on `ReceivePackRequest`, called after unpack and after `updateReferences` respectively, with a sideband-band-2 progress writer passed to `PreReceive` so hooks can write `remote:` lines. Applied on `git-pkgs/go-git@silo`. Refs #2185.
 
 ---
 

@@ -96,6 +96,10 @@ func (b *Builtin) PreReceive(ctx context.Context, repo *git.Repository, updates 
 
 	b.gtr = gtr
 	b.rslTip = gtr.RSLTip()
+	// Verification passed. Roll back so go-git's updateReferences (which
+	// rejects Create on an existing ref) applies cleanly. The flock is held
+	// through PostReceive so no other reader sees the gap.
+	rollback(repo, updates)
 	return nil
 }
 

@@ -93,10 +93,6 @@ func handler(gst *gitstore.Store, hf HooksFactory, limits receive.Limits) gssh.H
 				rctx = receive.WithPusher(rctx, p)
 			}
 			rctx = receive.WithRepoPath(rctx, repoPath)
-			if err := receive.Advertise(repo, s); err != nil {
-				slog.Warn("advertise", "err", err)
-				return
-			}
 			if err := receive.ReceivePack(rctx, repo, s, s, hf(), limits); err != nil {
 				slog.Warn("receive-pack", "repo", owner+"/"+name, "err", err)
 			}

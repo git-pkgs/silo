@@ -1,66 +1,19 @@
 package receive
 
 import (
-	"bytes"
-	"encoding/binary"
 	"errors"
-	"fmt"
 	"io"
-
-	"github.com/go-git/go-git/v6/plumbing/format/packfile"
-	"github.com/go-git/go-git/v6/plumbing/storer"
 )
 
-var (
-	errPackTooLarge   = errors.New("unpack-limit: packfile exceeds MaxPackBytes")
-	errTooManyObjects = errors.New("unpack-limit: packfile exceeds MaxObjects")
-	errBadPackHeader  = errors.New("malformed packfile header")
-)
+var errPackTooLarge = errors.New("unpack-limit: packfile exceeds MaxPackBytes")
 
-const (
-	packHeaderLen     = 12
-	packSignature     = "PACK"
-	packNumObjectsOff = 8
-)
-
-// unpack streams a packfile into st, enforcing the byte and object-count
-// limits. The reader is left open: over SSH it is the session itself and the
-// caller still needs to write report-status on it.
-func unpack(st storer.Storer, r io.Reader, limits Limits) error {
-	lr := &capReader{r: r, remaining: limits.MaxPackBytes}
-
-	hdr := make([]byte, packHeaderLen)
-	if _, err := io.ReadFull(lr, hdr); err != nil {
-		if errors.Is(err, errPackTooLarge) {
-			return drain(r, errPackTooLarge)
-		}
-		return errBadPackHeader
-	}
-	if string(hdr[:len(packSignature)]) != packSignature {
-		return errBadPackHeader
-	}
-	if n := binary.BigEndian.Uint32(hdr[packNumObjectsOff:]); limits.MaxObjects > 0 && n > limits.MaxObjects {
-		return drain(r, fmt.Errorf("%w (%d > %d)", errTooManyObjects, n, limits.MaxObjects))
-	}
-
-	full := io.MultiReader(bytes.NewReader(hdr), lr)
-	if err := packfile.UpdateObjectStorage(st, full); err != nil {
-		if errors.Is(err, errPackTooLarge) {
-			return drain(r, errPackTooLarge)
-		}
-		return err
-	}
-	return nil
+// newCapReader bounds total bytes read from r. Unlike io.LimitedReader it
+// returns a distinguishable error so callers can report `unpack-limit` rather
+// than a generic EOF.
+func newCapReader(r io.Reader, max int64) io.Reader {
+	return &capReader{r: r, remaining: max}
 }
 
-func drain(r io.Reader, err error) error {
-	_, _ = io.Copy(io.Discard, r)
-	return err
-}
-
-// capReader is an io.Reader that fails with errPackTooLarge once more than
-// remaining bytes have been requested. Unlike io.LimitedReader it returns a
-// distinguishable error rather than io.EOF.
 type capReader struct {
 	r         io.Reader
 	remaining int64
