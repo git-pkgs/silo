@@ -76,7 +76,13 @@ Forget the `rsl record` and the push is rejected naming the rule, the threshold,
 
 ## Web UI
 
-Open the base URL in a browser. Each repo has an overview (refs and README), a log per ref, an RSL viewer with rows tinted by current verify status and signers resolved to principal names, a policy page rendered from `refs/gittuf/policy`, and commit pages that show the relevant RSL slice plus a diff. It's read-only; there is no merge button by design.
+Open the base URL in a browser. Each repo carries a persistent header with overview / rsl / policy / log / branches / tags / verify / contributors tabs, a refs dropdown grouped into heads/tags/gittuf, and a filename search box. The verify tab shows a count badge whenever any ref fails `gittuf verify-ref` or has a tip with no RSL entry behind it.
+
+The git-browsing pages cover tree, blob (markdown/org rendered via `git-pkgs/markup` and sanitised; everything else as a `<pre>`), raw, blame, branches with ahead/behind against the default branch, tags with per-tag verify status, log per ref with paging, contributors from a log walk, archive download as `<ref>.tar.gz`, and `compare/<base>...<head>` with a unified diff.
+
+The gittuf-specific pages are what you can't get elsewhere. The RSL viewer lists every entry on `refs/gittuf/reference-state-log` with rows tinted by current verify status and signer fingerprints resolved to principal names (or `silo` for the forge key); click a ref to filter the log to it. The policy page renders rules and principals straight from `refs/gittuf/policy`, with a history view showing each policy change, its signer, and a collapsible metadata diff. A principal page lists one identity's keys, the rules naming it, and every RSL entry it signed. The compare page carries a `VerifyMergeable` panel naming the rule, threshold, and principals, plus the exact local command sequence to perform the merge with an authorising key. Commit pages embed the RSL entries that recorded that sha and a coloured diff. `/activity` rolls up recent RSL entries across every repo.
+
+Every page also responds with JSON when `?format=json` is appended or `Accept: application/json` is sent. It's read-only; there is no merge button by design. [docs/web.md](docs/web.md) has the full route list.
 
 ## Commands
 
@@ -99,6 +105,6 @@ silo admin repo create  create a bare repository
 
 ## More
 
-[docs/architecture.md](docs/architecture.md) covers the receive pipeline and disk layout. [docs/trust-model.md](docs/trust-model.md) explains why the owner signs root and the forge only witnesses. [docs/demo.md](docs/demo.md) is the show-and-tell script. The fork patches are catalogued in [GITTUF-NOTES.md](GITTUF-NOTES.md) and [GOGIT-NOTES.md](GOGIT-NOTES.md), each written as a standalone upstream issue.
+[docs/architecture.md](docs/architecture.md) covers the receive pipeline and disk layout. [docs/trust-model.md](docs/trust-model.md) explains why the owner signs root and the forge only witnesses. [docs/web.md](docs/web.md) lists every route. [docs/demo.md](docs/demo.md) is the show-and-tell script. The fork patches are catalogued in [GITTUF-NOTES.md](GITTUF-NOTES.md) and [GOGIT-NOTES.md](GOGIT-NOTES.md), each written as a standalone upstream issue.
 
 MIT licensed.

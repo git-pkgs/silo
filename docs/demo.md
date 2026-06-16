@@ -62,7 +62,9 @@ The fetch pulls silo's last witness annotation so the local RSL extends cleanly;
 
 **Browser:** refresh the **rsl** tab. Two new rows at the top: entry #7 `alice` moved main, entry #8 `silo` witnessed it. Click the target sha on #7.
 
-The commit page shows author/date/parent, then a "Reference state log" table with just those two rows (one green, one annotation), then changed files and a coloured diff with `+fourth line`. This is "here's a change and here's who authorised it" without the reader needing to know what an RSL is.
+The commit page shows author/date/parent, then a "Reference state log" table with just those two rows (one green, one annotation), then changed files (each linked to the blob view) and a coloured diff with `+fourth line`. Click `README.md` in the file list to see the rendered markdown, then **blame** in the subhead to see which commit owns each line. This is "here's a change and here's who authorised it" without the reader needing to know what an RSL is.
+
+While here: the **verify** tab shows `all 1 refs verify` with main green. The **branches** tab shows main as default with a `protect-main` rule link and a green verify cell. **policy → history** lists each policy change alice signed (`Add rule 'protect-main'`, `Add principal 'alice'`, …) with a collapsible JSON diff of `metadata/targets.json`. **policy → principal alice** lists her key, the rules naming her, and every RSL entry her key signed.
 
 ## A push without an RSL entry
 
@@ -118,13 +120,40 @@ remote:   you pushed as: bob (...) — not in principal set
 
 Transport access and policy authorisation are different things.
 
-**Browser:** **rsl** unchanged.
+**Browser:** **rsl** unchanged. The **verify** tab still shows all green, because the rejected push never moved a ref.
 
 ```sh
 git reset -q --hard HEAD^
 ```
 
 Drop bob's commit so the working tree matches the server again.
+
+## A branch and a compare
+
+**CLI:**
+
+```sh
+git switch -c topic
+echo "topic line" >> README.md
+git commit -q -am "topic"
+as-alice git fetch -q origin 'refs/gittuf/*:refs/gittuf/*'
+gittuf rsl record topic --local-only
+as-alice git push origin 'refs/gittuf/*:refs/gittuf/*' topic
+```
+
+**Browser:** open **branches**. `topic` is listed `+1 -0` against main with a **compare** link. Click it.
+
+The compare page shows the diff and a panel with the `protect-main` rule, threshold 1 of alice, gittuf's mergeable verdict, and a "from a clone where you hold an authorising key" block with the exact `git fetch` / `git merge` / `gittuf rsl record main` / `git push` sequence to land it. There is no merge button; that block is what replaces it.
+
+## Breaking something on purpose
+
+**CLI:** write a ref straight into the server's bare repo, bypassing receive-pack entirely:
+
+```sh
+git -C ../../data/repos/alice/demo.git update-ref refs/heads/rogue HEAD
+```
+
+**Browser:** every tab now shows a red **1** badge on **verify**. Click it: `refs/heads/rogue` is listed red with "no RSL entry for this tip" and a verify failure. This is what a compromised forge writing refs out-of-band looks like to anyone watching.
 
 ## Verifying without the forge
 
