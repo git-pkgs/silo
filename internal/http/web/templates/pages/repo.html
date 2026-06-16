@@ -1,0 +1,27 @@
+{{template "base" .}}
+{{define "title"}}{{.Repo}} · silo{{end}}
+{{define "content"}}
+<p class="subhead">clone: <code class="mono">git clone {{.BaseURL}}/{{.Repo}}.git</code></p>
+
+<h2 class="section">References</h2>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>name</th><th>target</th></tr></thead>
+  <tbody>
+  {{range .Refs}}
+    <tr>
+      <td><a href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a></td>
+      <td><a href="/{{$.Repo}}/commit/{{.Hash}}">{{slice .Hash 0 12}}</a></td>
+    </tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+
+{{if .Readme}}
+<div class="card">
+  <header><h2>README</h2></header>
+  <section>{{.Readme}}</section>
+</div>
+{{end}}
+{{end}}

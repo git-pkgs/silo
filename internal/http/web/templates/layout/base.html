@@ -1,0 +1,21 @@
+{{define "base"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{block "title" .}}silo{{end}}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.11/dist/basecoat.cdn.min.css">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/basecoat-css@0.3.11/dist/js/all.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.545.0/dist/umd/lucide.min.js" defer></script>
+</head>
+<body>
+  {{template "header" .}}
+  <main><div class="container">
+    {{block "content" .}}{{end}}
+  </div></main>
+  {{template "footer" .}}
+</body>
+</html>
+{{end}}

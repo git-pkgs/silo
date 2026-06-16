@@ -1,0 +1,41 @@
+{{template "base" .}}
+{{define "title"}}policy · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Policy</h1>
+
+<h2 class="section">Rules</h2>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>name</th><th>patterns</th><th>threshold</th><th>principals</th></tr></thead>
+  <tbody>
+  {{range .Policy.Rules}}
+    <tr id="{{.Name}}">
+      <td>{{.Name}}</td>
+      <td>{{range .Patterns}}<div>{{.}}</div>{{end}}</td>
+      <td>{{.Threshold}}</td>
+      <td>{{range .Principals}}<div>{{.}}</div>{{end}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="4" class="muted">no rules</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+
+<h2 class="section">Principals</h2>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>id</th><th>keys</th></tr></thead>
+  <tbody>
+  {{range $id, $keys := .Policy.Principals}}
+    <tr>
+      <td>{{$id}}</td>
+      <td>{{range $keys}}<div class="xsmall">{{.}}</div>{{end}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="2" class="muted">no principals</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

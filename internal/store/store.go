@@ -127,6 +127,24 @@ func (s *Store) CreateRepo(owner, name string) (*Repo, error) {
 	return &Repo{ID: id, Owner: owner, Name: name, CreatedAt: now}, nil
 }
 
+// ListRepos returns all repos ordered by owner, name.
+func (s *Store) ListRepos() ([]Repo, error) {
+	rows, err := s.db.Query(`SELECT id, owner, name, created_at FROM repos ORDER BY owner, name`)
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = rows.Close() }()
+	var out []Repo
+	for rows.Next() {
+		var r Repo
+		if err := rows.Scan(&r.ID, &r.Owner, &r.Name, &r.CreatedAt); err != nil {
+			return nil, err
+		}
+		out = append(out, r)
+	}
+	return out, rows.Err()
+}
+
 // RepoByPath looks up a repo by owner/name.
 func (s *Store) RepoByPath(owner, name string) (*Repo, error) {
 	var r Repo

@@ -1,0 +1,85 @@
+# 04_web: HTML UI renders repos, refs, log, RSL, and policy.
+exec silo keygen --data $SILO_DATA
+exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
+exec silo admin repo create alice/demo --data $SILO_DATA
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH --base-url http://$SILO_HTTP &
+waitfor $SILO_SSH
+
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+exec git init -b main repo
+cd repo
+exec git config user.signingKey $WORK/alice
+exec git config gpg.format ssh
+cp $WORK/README.md README.md
+exec git add README.md
+exec git commit -m one
+exec git remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
+
+exec gittuf trust init -k $WORK/alice
+exec gittuf trust add-policy-key -k $WORK/alice --policy-key $WORK/alice.pub
+exec gittuf policy init -k $WORK/alice --policy-name targets
+exec gittuf policy add-person -k $WORK/alice --person-ID alice --public-key $WORK/alice.pub
+exec gittuf policy add-rule -k $WORK/alice --rule-name protect-main --rule-pattern 'git:refs/heads/main' --authorize alice
+exec gittuf policy stage --local-only
+exec gittuf policy apply --local-only
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+cd ..
+
+# index lists the repo
+exec curl -fsS http://$SILO_HTTP/
+stdout 'alice/demo'
+stdout '<html'
+
+# repo page shows refs including gittuf
+exec curl -fsS http://$SILO_HTTP/alice/demo
+stdout 'refs/gittuf/reference-state-log'
+stdout 'refs/heads/main'
+
+# rsl page shows the entry for main and the witness annotation, with signer
+# fingerprints resolved to names
+exec curl -fsS http://$SILO_HTTP/alice/demo/rsl
+stdout 'refs/heads/main'
+stdout 'reference'
+stdout 'annotation'
+stdout 'silo: pushed by alice'
+stdout '"signer-known">alice<'
+stdout '"signer-known">silo<'
+
+# policy page shows the rule and principal
+exec curl -fsS http://$SILO_HTTP/alice/demo/policy
+stdout 'protect-main'
+stdout 'git:refs/heads/main'
+stdout 'alice'
+
+# log page shows the commit
+exec curl -fsS http://$SILO_HTTP/alice/demo/log/refs/heads/main
+stdout 'one'
+
+# commit page shows RSL slice and diff
+exec git -C $SILO_DATA/repos/alice/demo.git rev-parse refs/heads/main
+cp stdout sha.txt
+exec sh -c 'curl -fsS http://'$SILO_HTTP'/alice/demo/commit/$(tr -d "\n" < sha.txt)'
+stdout 'Reference state log'
+stdout 'silo: pushed by alice'
+stdout 'class="diff"'
+
+# log via HEAD resolves
+exec curl -fsS http://$SILO_HTTP/alice/demo/log/HEAD
+stdout 'one'
+
+# static assets serve
+exec curl -fsS http://$SILO_HTTP/static/style.css
+stdout 'rsl-pass'
+
+# layout pulls basecoat from CDN
+exec curl -fsS http://$SILO_HTTP/alice/demo
+stdout 'basecoat-css'
+stdout 'role="tablist"'
+stdout 'class="dropdown-menu"'
+
+# unknown repo 404s
+! exec curl -fsS http://$SILO_HTTP/nobody/nothing
+
+-- README.md --
+hello from alice/demo

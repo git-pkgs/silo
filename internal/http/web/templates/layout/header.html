@@ -1,0 +1,39 @@
+{{define "header"}}
+<header class="topbar">
+  <div class="container"><a href="/">silo</a></div>
+</header>
+{{if .Repo}}
+<div class="repo-nav">
+  <div class="container">
+    <div class="repo-nav-head">
+      <div class="repo-name mono"><a href="/{{.Repo}}">{{.Repo}}</a></div>
+      {{if .Refs}}
+      <div id="ref-menu" class="dropdown-menu">
+        <button type="button" id="ref-menu-trigger" class="btn-sm-outline mono"
+                aria-haspopup="menu" aria-controls="ref-menu-list" aria-expanded="false">
+          <i data-lucide="git-branch"></i>
+          {{if .Ref}}{{.Ref}}{{else}}refs{{end}}
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div data-popover aria-hidden="true">
+          <div role="menu" id="ref-menu-list" aria-labelledby="ref-menu-trigger" class="mono small">
+            {{range .Refs}}
+            <a role="menuitem" href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a>
+            {{end}}
+          </div>
+        </div>
+      </div>
+      {{end}}
+    </div>
+    <div class="tabs">
+      <nav role="tablist">
+        <a role="tab" href="/{{.Repo}}" aria-selected="{{if eq .Active "overview"}}true{{else}}false{{end}}"><i data-lucide="book-open"></i>overview</a>
+        <a role="tab" href="/{{.Repo}}/rsl" aria-selected="{{if eq .Active "rsl"}}true{{else}}false{{end}}"><i data-lucide="scroll-text"></i>rsl</a>
+        <a role="tab" href="/{{.Repo}}/policy" aria-selected="{{if eq .Active "policy"}}true{{else}}false{{end}}"><i data-lucide="shield"></i>policy</a>
+        <a role="tab" href="/{{.Repo}}/log/HEAD" aria-selected="{{if eq .Active "log"}}true{{else}}false{{end}}"><i data-lucide="history"></i>log</a>
+      </nav>
+    </div>
+  </div>
+</div>
+{{end}}
+{{end}}

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -17,6 +18,7 @@ import (
 	"github.com/git-pkgs/silo/internal/gitstore"
 	"github.com/git-pkgs/silo/internal/hooks"
 	githttp "github.com/git-pkgs/silo/internal/http/git"
+	"github.com/git-pkgs/silo/internal/http/web"
 	"github.com/git-pkgs/silo/internal/receive"
 	"github.com/git-pkgs/silo/internal/signer"
 	siloSSH "github.com/git-pkgs/silo/internal/ssh"
@@ -44,6 +46,12 @@ const (
 	shutdownTimeout   = 5 * time.Second
 )
 
+func isGitTransportPath(p string) bool {
+	return strings.HasSuffix(p, "/info/refs") ||
+		strings.HasSuffix(p, "/git-upload-pack") ||
+		strings.HasSuffix(p, "/git-receive-pack")
+}
+
 func serve(ctx context.Context, cfg config.Config) error {
 	if os.Getenv("SILO_DEBUG") != "" {
 		slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelDebug})))
@@ -70,8 +78,21 @@ func serve(ctx context.Context, cfg config.Config) error {
 	}
 	h := func() receive.Hooks { return &hooks.Builtin{BaseURL: cfg.BaseURL, Signer: sgn} }
 
+	gitH := githttp.Handler(gst)
+	webH := web.Handler(st, gst, cfg.BaseURL, sgn.ID())
+	staticH := http.StripPrefix("/static/", web.StaticHandler())
 	mux := http.NewServeMux()
-	mux.Handle("/", githttp.Handler(gst))
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case strings.HasPrefix(r.URL.Path, "/static/"):
+			staticH.ServeHTTP(w, r)
+			return
+		case isGitTransportPath(r.URL.Path):
+			gitH.ServeHTTP(w, r)
+			return
+		}
+		webH.ServeHTTP(w, r)
+	})
 	srv := &http.Server{Handler: mux, ReadHeaderTimeout: readHeaderTimeout}
 	ln, err := net.Listen("tcp", cfg.HTTPAddr)
 	if err != nil {

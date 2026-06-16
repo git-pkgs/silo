@@ -1,0 +1,34 @@
+{{template "base" .}}
+{{define "title"}}RSL · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Reference state log</h1>
+<p class="subhead">{{len .Entries}} entries · newest first</p>
+<div class="panel">
+<table class="table">
+  <thead>
+    <tr><th>#</th><th>kind</th><th>ref / annotates</th><th>target / message</th><th>signer</th><th>when</th></tr>
+  </thead>
+  <tbody>
+  {{range .Entries}}
+    <tr class="{{if .Verified}}rsl-pass{{else if .VerifyErr}}rsl-fail{{end}}">
+      <td title="{{.ID}}">{{.Number}}</td>
+      <td>{{.Kind}}</td>
+      <td>
+        {{if .Ref}}{{.Ref}}{{end}}
+        {{if .AnnotatesID}}<span class="muted">→ {{slice .AnnotatesID 0 12}}</span>{{end}}
+      </td>
+      <td>
+        {{if .TargetID}}<a href="/{{$.Repo}}/commit/{{.TargetID}}">{{slice .TargetID 0 12}}</a>{{end}}
+        {{if .Message}}<span class="muted">{{.Message}}</span>{{end}}
+        {{if .VerifyErr}}<div class="xsmall" style="color:var(--destructive)">{{.VerifyErr}}</div>{{end}}
+      </td>
+      <td class="xsmall" title="{{.SignerKeyID}}">{{template "signer" .}}</td>
+      <td class="muted">{{.Age}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="6" class="muted">no RSL entries</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

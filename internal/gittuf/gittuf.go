@@ -87,6 +87,7 @@ type Rule struct {
 	Name       string
 	Threshold  int
 	Principals []string
+	Patterns   []string
 }
 
 // RuleFor returns the first delegation rule whose patterns match refName.

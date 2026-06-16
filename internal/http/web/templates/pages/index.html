@@ -1,0 +1,21 @@
+{{template "base" .}}
+{{define "title"}}repositories · silo{{end}}
+{{define "content"}}
+<h1>Repositories</h1>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>repo</th><th>refs</th><th>last RSL entry</th></tr></thead>
+  <tbody>
+  {{range .Repos}}
+    <tr>
+      <td><a href="/{{.Path}}">{{.Path}}</a></td>
+      <td>{{.RefCount}}</td>
+      <td class="muted">{{if .LastRSL}}{{.LastRSL}}{{else}}—{{end}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="3" class="muted">no repositories</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

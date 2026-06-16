@@ -1,68 +1,65 @@
 # silo spec — web UI
 
-Goal: a read-only HTML view of repos and their gittuf state, enough to see what the receive path is doing without reading server logs. Server-rendered `html/template` styled with Tailwind utility classes, following the same asset layout as `git-pkgs/proxy`.
+Goal: a read-only HTML view of repos and their gittuf state, enough to see what the receive path is doing without reading server logs. Server-rendered `html/template`; styles are plain CSS files so pages paint on first frame from browser cache.
 
 Conventions and quality bar inherited from `SPEC.md`.
 
+## Styling
+
+Two stylesheets, both `<link rel="stylesheet">`, both cacheable:
+
+- `https://cdn.jsdelivr.net/npm/basecoat-css@0.3.11/dist/basecoat.cdn.min.css` — basecoat component classes (`table`, `tabs`, `dropdown-menu`, `btn-*`, `card`) and the shadcn theme variables (`--background`, `--foreground`, `--border`, `--muted-foreground`, …). The CDN build is compiled with `source(none)` so it ships zero Tailwind utility classes; it's components + preflight + theme only.
+- `/static/style.css` — silo's layout: `.container`, `.topbar`, `.repo-nav`, `.panel`, `.kv`, `.diff`, `.rsl-pass`/`.rsl-fail`, heading sizes, table padding overrides. Written against basecoat's theme vars so it follows dark mode for free.
+
+Two deferred scripts: `basecoat-css/dist/js/all.min.js` (drives `dropdown-menu` and `tabs`) and `lucide@0.545.0` for icons (`<i data-lucide="…">`, `lucide.createIcons()` on `DOMContentLoaded`).
+
+No JS-generated stylesheets, no Tailwind browser/Play-CDN runtime, no FOUC cloak. If utility classes are ever wanted, compile them to a static file with the standalone Tailwind CLI and serve that; don't ship the runtime.
+
 ## Deliverables
 
-`internal/http/web/` mirrors `proxy/internal/server/`:
+`internal/http/web/`:
 
-- `web.go` — `Handler(st *store.Store, gst *gitstore.Store, baseURL string) http.Handler` mounting the routes below plus `/static/*`.
-- `templates.go` — `//go:embed templates/**/*.html`; parse into one `*template.Template` per page composed with the layout.
-- `static.go` — `//go:embed static/*`; `http.FileServer(http.FS(sub))` at `/static/`.
-- `templates/layout/{base,header,footer}.html` — same block structure as proxy (`{{define "base"}}` with `{{block "title"}}`, `{{block "content"}}`).
-- `templates/pages/{index,repo,log,commit,rsl,policy}.html` — one per route.
-- `static/vendor/tailwind.js` — the Tailwind Play CDN script, vendored (copy from `proxy/internal/server/static/vendor/tailwind.js`). Loaded via `<script src="/static/vendor/tailwind.js">` in `base.html`; no build step.
-- `static/style.css` — only for the handful of things Tailwind utilities don't cover cleanly (the RSL row pass/fail tint, monospace tables).
+- `web.go` — `Handler(st *store.Store, gst *gitstore.Store, baseURL string) http.Handler` mounting the routes below. Every repo handler builds a `page{Repo, BaseURL, Active, Ref, Refs}` so the header can render the persistent nav and refs dropdown. `commitDiff(c)` produces a coloured unified diff via go-git's `object.DiffTree(parentTree, commitTree).Patch()`; `rslForCommit` filters `WalkRSL` to entries whose `TargetID` is the commit plus their annotations.
+- `templates.go` — `//go:embed templates/**/*.html`; one parsed `*template.Template` per page composed with the layout.
+- `static.go` — `//go:embed static`; `StaticHandler()` exported separately because `/{owner}/{repo}` wildcard routes conflict with `/static/` under ServeMux specificity.
+- `templates/layout/{base,header,footer}.html` — `base` defines `<head>` and the container; `header` renders the brand row plus, when `.Repo` is set, the repo nav (name, refs `dropdown-menu`, `tabs` tablist of overview/rsl/policy/log links with `aria-selected` driven by `.Active`).
+- `templates/pages/{index,repo,log,commit,rsl,policy}.html`.
+- `static/style.css`.
 
-Styling: Tailwind utility classes inline on elements, dark-mode aware (`dark:` variants), same grey palette as proxy. Tables use `text-sm font-mono`; the RSL pass/fail tint is `bg-green-50 dark:bg-green-950` / `bg-red-50 dark:bg-red-950` on the `<tr>`.
+`cmd/silo/serve.go`: top-level dispatcher routes `/static/` → `web.StaticHandler()`, `*.git/{info/refs,git-upload-pack,git-receive-pack}` → git transport, everything else → web.
 
-`internal/gittuf/` additions:
+`internal/gittuf/rsl.go`:
 
-- `(*Repo).WalkRSL(ctx) ([]RSLEntry, error)` — walk `refs/gittuf/reference-state-log` parents; each `RSLEntry{ID, Number, Ref, TargetID, SignerKeyID, Timestamp}`. Signer key ID comes from the commit signature (parse the SSH sig header to a fingerprint, or empty if unsigned).
+- `WalkRSL(ctx, repo) ([]RSLEntry, error)` — walk `refs/gittuf/reference-state-log` parents newest-first, parsing each commit message into `RSLEntry{ID, Kind, Number, Ref, TargetID, Message, AnnotatesID, SignerKeyID, Timestamp}`. `SignerKeyID` is the SSH SHA256 fingerprint pulled from the commit's `SSH SIGNATURE` block.
 - `(*Repo).Policy(ctx) (*PolicySummary, error)` — `{Rules []Rule, Principals map[string][]string}` from `ListRules` + `ListPrincipals`.
-
-Wire into `cmd/silo/serve.go`: mount `web.Handler` at `/` and move the git transport handler to a sub-mux that matches `*.git/` paths.
+- `SignerFingerprint(sig string) string` — exported for the commit page's "signed by" row.
 
 ## Routes
 
 ```
 GET /                          repo list: owner/name, ref count, last RSL entry time
-GET /:owner/:repo              refs table (heads, tags, gittuf/*) with tip sha + link;
-                               README rendered via git-pkgs/markup if present
-GET /:owner/:repo/log/:ref     commit list: sha, author, date, message first line; ?after=<sha>
-GET /:owner/:repo/commit/:sha  one commit: metadata, parents, changed files (names only)
-GET /:owner/:repo/rsl          WalkRSL as a table: #, ref, target sha (linked to /commit/),
-                               signer fingerprint, age; row tinted green if VerifyRef(ref)
-                               currently passes, red if not
-GET /:owner/:repo/policy       Rules table: name, patterns, threshold, principals;
-                               Principals table: ID, key fingerprints
+GET /:owner/:repo              refs table + README card
+GET /:owner/:repo/log/:ref     commit list: sha, author, date, subject; ?after=<sha>
+GET /:owner/:repo/commit/:sha  metadata, signer fingerprint, parents,
+                               RSL entries whose target is this sha (with witness
+                               annotations, row tinted on VerifyRef result),
+                               changed files, unified diff
+GET /:owner/:repo/rsl          WalkRSL as a table: #, kind, ref/annotates,
+                               target/message, signer fingerprint, age; rows for
+                               non-gittuf refs tinted by VerifyRef(ref)
+GET /:owner/:repo/policy       Rules table (name, patterns, threshold, principals)
+                               + Principals table (id, key fingerprints)
+GET /static/style.css          embedded
 ```
 
-Every page links to `/rsl` and `/policy` in the header. Unknown repo → 404 with the same layout.
+Unknown repo → 404.
 
 ## Acceptance
 
-`testdata/testscript/04_web.txtar`: reuse 03's setup (alice's policy + push), then `curl -fsS` each route and assert:
+`testdata/testscript/04_web.txtar`: seed alice/demo with policy and a push (same flow as 03), then `curl -fsS` each route and assert content; the commit page asserts `Reference state log` and a `class="diff"` block; static asserts `rsl-pass`; layout asserts `basecoat-css`, `role="tablist"`, `class="dropdown-menu"`.
 
-```
-exec curl -fsS http://$SILO_HTTP/
-stdout 'alice/demo'
-exec curl -fsS http://$SILO_HTTP/alice/demo
-stdout 'refs/gittuf/reference-state-log'
-exec curl -fsS http://$SILO_HTTP/alice/demo/rsl
-stdout 'refs/heads/main'
-stdout 'protect-main|alice'
-exec curl -fsS http://$SILO_HTTP/alice/demo/policy
-stdout 'protect-main'
-stdout 'git:refs/heads/main'
-stdout 'alice'
-exec curl -fsS http://$SILO_HTTP/alice/demo/log/main
-stdout 'one'
-! exec curl -fsS http://$SILO_HTTP/nobody/nothing
-```
+Unit: `TestWalkRSL` (ordering, field extraction, annotation message PEM-decode), `TestSignerFingerprint`, `TestHandler_Routes` (every route 200 `text/html`, unknowns 404), `TestStaticHandler`, `TestLoadTemplates`.
 
-Unit: `TestWalkRSL` against a repo with two recorded entries asserts order (newest first) and field extraction. `TestHandler_Routes` with `httptest.Server` asserts each route returns 200 and `Content-Type: text/html`.
+`scripts/demo.sh` (run via `make demo`) builds silo + gittuf, generates an alice keypair, seeds `alice/demo` with a policy and two pushes (fetching the witness annotation between them so the RSL stays fast-forward), and leaves `silo serve` running on `:8080` for manual clicking.
 
-**Done when:** `04_web.txtar` passes; opening `http://localhost:8080/alice/demo/rsl` in a browser after running 03's manual steps shows the entry alice pushed, with her key fingerprint, and the row is green.
+**Done when:** `04_web.txtar` passes and `make demo` brings up a server where `/alice/demo/rsl` shows alice's entries with her fingerprint and green rows, the tabs and refs dropdown work on every repo page, and navigating between tabs paints without a flash.

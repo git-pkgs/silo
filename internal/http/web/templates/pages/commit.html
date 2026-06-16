@@ -1,0 +1,54 @@
+{{template "base" .}}
+{{define "title"}}{{slice .Hash 0 12}} · {{.Repo}}{{end}}
+{{define "content"}}
+<h1 class="mono">{{.Hash}}</h1>
+<dl class="kv">
+  <dt>author</dt><dd>{{.Author}}</dd>
+  <dt>date</dt><dd>{{.When}}</dd>
+  {{if .Signer}}<dt>signed by</dt><dd class="mono xsmall">{{.Signer}}</dd>{{end}}
+  {{range .Parents}}
+  <dt>parent</dt>
+  <dd><a class="mono" href="/{{$.Repo}}/commit/{{.}}">{{slice . 0 12}}</a></dd>
+  {{end}}
+</dl>
+<pre class="panel">{{.Message}}</pre>
+
+{{if .RSL}}
+<h2 class="section">Reference state log</h2>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>#</th><th>kind</th><th>ref</th><th>detail</th><th>signer</th><th>when</th></tr></thead>
+  <tbody>
+  {{range .RSL}}
+    <tr class="{{if .Verified}}rsl-pass{{else if .VerifyErr}}rsl-fail{{end}}">
+      <td title="{{.ID}}">{{.Number}}</td>
+      <td>{{.Kind}}</td>
+      <td>
+        {{if .Ref}}{{.Ref}}{{end}}
+        {{if .AnnotatesID}}<span class="muted">→ {{slice .AnnotatesID 0 12}}</span>{{end}}
+      </td>
+      <td>
+        {{if .Message}}<span class="muted">{{.Message}}</span>{{end}}
+        {{if .VerifyErr}}<div class="xsmall" style="color:var(--destructive)">{{.VerifyErr}}</div>{{end}}
+      </td>
+      <td class="xsmall" title="{{.SignerKeyID}}">{{template "signer" .}}</td>
+      <td class="muted">{{.Age}}</td>
+    </tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}
+
+{{if .Files}}
+<h2 class="section">Changed files</h2>
+<ul class="filelist mono">
+  {{range .Files}}<li>{{.}}</li>{{end}}
+</ul>
+{{end}}
+
+{{if .Diff}}
+<h2 class="section">Diff</h2>
+<div class="panel"><pre class="diff">{{.Diff}}</pre></div>
+{{end}}
+{{end}}

@@ -1,0 +1,23 @@
+{{template "base" .}}
+{{define "title"}}log {{.Ref}} · {{.Repo}}{{end}}
+{{define "content"}}
+<h1 class="mono">{{.Ref}}</h1>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>commit</th><th>author</th><th>date</th><th>message</th></tr></thead>
+  <tbody>
+  {{range .Commits}}
+    <tr>
+      <td><a href="/{{$.Repo}}/commit/{{.Hash}}">{{slice .Hash 0 12}}</a></td>
+      <td>{{.Author}}</td>
+      <td class="muted">{{.When}}</td>
+      <td>{{.Subject}}</td>
+    </tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{if .Next}}
+<p><a class="btn-sm-ghost" href="/{{.Repo}}/log/{{.Ref}}?after={{.Next}}">older →</a></p>
+{{end}}
+{{end}}

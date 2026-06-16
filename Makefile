@@ -1,4 +1,4 @@
-.PHONY: all test lint cover bench fuzz smoke check build
+.PHONY: all test lint cover bench fuzz smoke check build demo
 
 GO        ?= go
 LINTERS   := gocritic,gocognit,gocyclo,maintidx,dupl,mnd,unparam,ireturn,goconst,errcheck
@@ -35,3 +35,6 @@ smoke:
 	$(GO) test -run TestScript -count=3 ./...
 
 check: test cover lint
+
+demo:
+	./scripts/demo.sh

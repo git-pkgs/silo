@@ -1,0 +1,97 @@
+/* Layout — basecoat (CDN) supplies components and theme vars; this file
+   covers page structure so nothing depends on a JS-generated stylesheet. */
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--foreground);
+}
+main { flex: 1; padding-block: 1.5rem; }
+
+.container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+.topbar { border-bottom: 1px solid var(--border); }
+.topbar .container { padding-block: 0.75rem; font-size: 0.875rem; }
+.topbar a { font-weight: 600; }
+
+.repo-nav { border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--muted) 35%, transparent); }
+.repo-nav .container { padding-top: 1rem; }
+.repo-nav-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.repo-nav-head .repo-name { font-size: 1.125rem; }
+
+.footer { border-top: 1px solid var(--border); padding-block: 0.75rem; }
+.footer .container { font-size: 0.75rem; color: var(--muted-foreground); }
+
+h1 { font-size: 1.25rem; font-weight: 600; margin: 0 0 1rem; }
+h2.section { font-size: 0.75rem; text-transform: uppercase; color: var(--muted-foreground); margin: 0 0 0.5rem; }
+.subhead { font-size: 0.875rem; color: var(--muted-foreground); margin: -0.5rem 0 1rem; }
+
+.muted { color: var(--muted-foreground); }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.small { font-size: 0.8125rem; }
+.xsmall { font-size: 0.75rem; }
+a:hover { text-decoration: underline; }
+a.btn, a.btn-sm-outline, a.btn-sm-ghost, [role="tab"] { text-decoration: none; }
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  background: var(--card);
+}
+pre.panel { padding: 1rem; font-size: 0.875rem; white-space: pre-wrap; margin-top: 0; }
+
+.kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 1.5rem;
+  row-gap: 0.4rem;
+  font-size: 0.875rem;
+  margin: 0 0 1.5rem;
+}
+.kv dt { color: var(--muted-foreground); }
+.kv dd { margin: 0; }
+
+ul.filelist { font-size: 0.875rem; padding-left: 1.25rem; margin: 0 0 1.5rem; }
+ul.filelist li { padding-block: 0.125rem; }
+pre.readme { white-space: pre-wrap; font-size: 0.875rem; margin: 0; }
+
+.table { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.table th, .table td { padding: 0.75rem 1rem; }
+.table td { white-space: normal; }
+
+.signer-known { font-weight: 600; font-family: inherit; font-size: 0.875rem; }
+.signer-unknown { color: oklch(0.55 0.15 60); }
+
+.rsl-pass { background-color: oklch(0.96 0.04 150 / 0.6); }
+.rsl-fail { background-color: oklch(0.95 0.05 25 / 0.6); }
+.dark .rsl-pass { background-color: oklch(0.30 0.06 150 / 0.5); }
+.dark .rsl-fail { background-color: oklch(0.28 0.08 25 / 0.5); }
+
+.diff {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  white-space: pre;
+  overflow-x: auto;
+  padding: 1rem;
+  margin: 0;
+}
+.diff .h { color: var(--muted-foreground); }
+.diff .a { color: oklch(0.55 0.14 150); }
+.diff .d { color: oklch(0.55 0.18 25); }
