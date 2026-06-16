@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"regexp"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/transport"
+	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing/transport"
 )
 
 // Store locates bare repositories under DataDir/repos/<owner>/<name>.git.
@@ -73,8 +73,6 @@ func (s *Store) Init(owner, name string) (*git.Repository, error) {
 	if err := os.MkdirAll(filepath.Dir(p), dirPerm); err != nil {
 		return nil, err
 	}
-	return git.PlainInitWithOptions(p, &git.PlainInitOptions{
-		Bare:        true,
-		InitOptions: git.InitOptions{DefaultBranch: plumbing.ReferenceName("refs/heads/main")},
-	})
+	return git.PlainInit(p, true,
+		git.WithDefaultBranch(plumbing.ReferenceName("refs/heads/main")))
 }

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v6/plumbing"
 
 	"github.com/git-pkgs/silo/internal/gitstore"
 	"github.com/git-pkgs/silo/internal/receive"
@@ -78,10 +78,6 @@ func TestPreReceive_GittufRefsOnlyAllowed(t *testing.T) {
 		t.Fatal(err)
 	}
 	repoPath, _ := gst.Path("alice", "demo")
-
-	// Need a real object to point the ref at; write a blob.
-	h := plumbing.ComputeHash(plumbing.BlobObject, []byte("x"))
-	_ = h
 
 	b := &Builtin{}
 	ctx := receive.WithRepoPath(context.Background(), repoPath)

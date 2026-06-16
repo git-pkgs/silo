@@ -4,18 +4,19 @@
 package receive
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"errors"
 	"io"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/format/pktline"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp/capability"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp/sideband"
-	"github.com/go-git/go-git/v5/plumbing/storer"
+	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing/format/pktline"
+	"github.com/go-git/go-git/v6/plumbing/protocol/capability"
+	"github.com/go-git/go-git/v6/plumbing/protocol/packp"
+	"github.com/go-git/go-git/v6/plumbing/protocol/packp/sideband"
+	"github.com/go-git/go-git/v6/plumbing/storer"
 )
 
 // RefUpdate is a single ref change requested by the client.
@@ -77,7 +78,7 @@ func Advertise(repo *git.Repository, w io.Writer) error {
 }
 
 func buildAdvRefs(repo *git.Repository) (*packp.AdvRefs, error) {
-	ar := packp.NewAdvRefs()
+	ar := &packp.AdvRefs{}
 	for _, c := range []capability.Capability{
 		capability.ReportStatus,
 		capability.Sideband64k,
@@ -85,13 +86,9 @@ func buildAdvRefs(repo *git.Repository) (*packp.AdvRefs, error) {
 		capability.Quiet,
 		capability.OFSDelta,
 	} {
-		if err := ar.Capabilities.Add(c); err != nil {
-			return nil, err
-		}
+		ar.Capabilities.Add(c)
 	}
-	if err := ar.Capabilities.Add(capability.Agent, Agent); err != nil {
-		return nil, err
-	}
+	ar.Capabilities.Add(capability.Agent, Agent)
 
 	iter, err := repo.Storer.IterReferences()
 	if err != nil {
@@ -101,7 +98,7 @@ func buildAdvRefs(repo *git.Repository) (*packp.AdvRefs, error) {
 		if ref.Type() != plumbing.HashReference {
 			return nil
 		}
-		ar.References[ref.Name().String()] = ref.Hash()
+		ar.References = append(ar.References, ref)
 		return nil
 	}); err != nil {
 		return nil, err
@@ -121,8 +118,9 @@ func ReceivePack(ctx context.Context, repo *git.Repository, r io.Reader, w io.Wr
 		limits = DefaultLimits()
 	}
 
-	req := packp.NewReferenceUpdateRequest()
-	if err := req.Decode(r); err != nil {
+	rd := bufio.NewReader(r)
+	req := &packp.UpdateRequests{}
+	if err := req.Decode(rd); err != nil {
 		return err
 	}
 
@@ -135,16 +133,15 @@ func ReceivePack(ctx context.Context, repo *git.Repository, r io.Reader, w io.Wr
 		}
 	}
 
-	rs := packp.NewReportStatus()
-	rs.UnpackStatus = statusOK
+	rs := &packp.ReportStatus{UnpackStatus: statusOK}
 
 	useSideband := req.Capabilities.Supports(capability.Sideband64k) ||
 		req.Capabilities.Supports(capability.Sideband)
 	wantReport := req.Capabilities.Supports(capability.ReportStatus)
 	out := newResponder(w, useSideband, wantReport)
 
-	if needPack && req.Packfile != nil {
-		if err := unpack(repo.Storer, req.Packfile, limits); err != nil {
+	if needPack {
+		if err := unpack(repo.Storer, rd, limits); err != nil {
 			rs.UnpackStatus = err.Error()
 			fillStatuses(rs, updates, "unpack failed")
 			return out.finish(rs)
@@ -241,7 +238,7 @@ func (r *responder) progress(lines []string) {
 func (r *responder) finish(rs *packp.ReportStatus) error {
 	if !r.report {
 		if r.sideband {
-			return pktline.NewEncoder(r.w).Flush()
+			return pktline.WriteFlush(r.w)
 		}
 		return nil
 	}
@@ -253,7 +250,7 @@ func (r *responder) finish(rs *packp.ReportStatus) error {
 		if _, err := r.mux.Write(buf.Bytes()); err != nil {
 			return err
 		}
-		return pktline.NewEncoder(r.w).Flush()
+		return pktline.WriteFlush(r.w)
 	}
 	return rs.Encode(r.w)
 }

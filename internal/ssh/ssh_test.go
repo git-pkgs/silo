@@ -6,49 +6,23 @@ import (
 	"testing"
 
 	gssh "github.com/gliderlabs/ssh"
-	"github.com/go-git/go-git/v5/plumbing/transport"
 	xssh "golang.org/x/crypto/ssh"
 
-	"github.com/git-pkgs/silo/internal/gitstore"
 	"github.com/git-pkgs/silo/internal/receive"
 	"github.com/git-pkgs/silo/internal/store"
 )
-
-func TestLoader(t *testing.T) {
-	gst, err := gitstore.Open(t.TempDir())
-	if err != nil {
-		t.Fatal(err)
-	}
-	if _, err := gst.Init("alice", "demo"); err != nil {
-		t.Fatal(err)
-	}
-	l := &loader{gst: gst}
-
-	ep, _ := transport.NewEndpoint("/alice/demo.git")
-	if _, err := l.Load(ep); err != nil {
-		t.Errorf("Load existing: %v", err)
-	}
-	ep2, _ := transport.NewEndpoint("/alice/missing.git")
-	if _, err := l.Load(ep2); err == nil {
-		t.Error("Load missing should fail")
-	}
-	ep3, _ := transport.NewEndpoint("/one")
-	if _, err := l.Load(ep3); err == nil {
-		t.Error("Load malformed should fail")
-	}
-}
 
 type fakeCtx struct {
 	gssh.Context
 	vals map[any]any
 }
 
-func (c *fakeCtx) SetValue(k, v any)   { c.vals[k] = v }
-func (c *fakeCtx) Value(k any) any     { return c.vals[k] }
-func (c *fakeCtx) SessionID() string   { return "" }
+func (c *fakeCtx) SetValue(k, v any)     { c.vals[k] = v }
+func (c *fakeCtx) Value(k any) any       { return c.vals[k] }
+func (c *fakeCtx) SessionID() string     { return "" }
 func (c *fakeCtx) ClientVersion() string { return "" }
 func (c *fakeCtx) ServerVersion() string { return "" }
-func (c *fakeCtx) User() string        { return "" }
+func (c *fakeCtx) User() string          { return "" }
 
 func TestPublicKeyHandler(t *testing.T) {
 	st, err := store.Open(t.TempDir())
@@ -94,9 +68,9 @@ func TestPublicKeyHandler(t *testing.T) {
 
 func TestParseExec(t *testing.T) {
 	tests := []struct {
-		in                   string
-		cmd, owner, name     string
-		ok                   bool
+		in               string
+		cmd, owner, name string
+		ok               bool
 	}{
 		{"git-upload-pack 'alice/demo.git'", "git-upload-pack", "alice", "demo", true},
 		{"git-receive-pack '/alice/demo.git'", "git-receive-pack", "alice", "demo", true},

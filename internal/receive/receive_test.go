@@ -9,12 +9,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp/capability"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp/sideband"
-	"github.com/go-git/go-git/v5/plumbing/storer"
+	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing/protocol/capability"
+	"github.com/go-git/go-git/v6/plumbing/protocol/packp"
+	"github.com/go-git/go-git/v6/plumbing/protocol/packp/sideband"
+	"github.com/go-git/go-git/v6/plumbing/storer"
 )
 
 const refMain = "refs/heads/main"
@@ -258,7 +258,7 @@ func TestReceive_Atomic(t *testing.T) {
 		{Name: refA, Old: plumbing.ZeroHash, New: head},
 		{Name: refB, Old: plumbing.ZeroHash, New: head},
 	}
-	rs := packp.NewReportStatus()
+	rs := &packp.ReportStatus{}
 	rs.UnpackStatus = "ok"
 
 	if err := applyUpdates(st, updates, rs); err == nil {
@@ -284,7 +284,7 @@ func TestReceive_AtomicRollbackToOld(t *testing.T) {
 		{Name: refA, Old: old, New: neu},
 		{Name: refB, Old: plumbing.ZeroHash, New: neu},
 	}
-	rs := packp.NewReportStatus()
+	rs := &packp.ReportStatus{}
 
 	if err := applyUpdates(st, updates, rs); err == nil {
 		t.Fatal("applyUpdates did not return error")

@@ -12,10 +12,7 @@ import (
 	"strings"
 
 	gssh "github.com/gliderlabs/ssh"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp"
-	"github.com/go-git/go-git/v5/plumbing/storer"
-	"github.com/go-git/go-git/v5/plumbing/transport"
-	"github.com/go-git/go-git/v5/plumbing/transport/server"
+	"github.com/go-git/go-git/v6/plumbing/transport"
 	xssh "golang.org/x/crypto/ssh"
 
 	"github.com/git-pkgs/silo/internal/gitstore"
@@ -71,8 +68,6 @@ func publicKeyHandler(st *store.Store) gssh.PublicKeyHandler {
 }
 
 func handler(gst *gitstore.Store, hf HooksFactory, limits receive.Limits) gssh.Handler {
-	upSrv := server.NewServer(&loader{gst: gst})
-
 	return func(s gssh.Session) {
 		cmd, owner, name, err := parseExec(s.RawCommand())
 		if err != nil {
@@ -88,14 +83,8 @@ func handler(gst *gitstore.Store, hf HooksFactory, limits receive.Limits) gssh.H
 
 		switch cmd {
 		case cmdUploadPack:
-			ep, _ := transport.NewEndpoint("/" + owner + "/" + name + ".git")
-			sess, err := upSrv.NewUploadPackSession(ep, nil)
-			if err != nil {
-				fail(s, err.Error())
-				return
-			}
-			defer func() { _ = sess.Close() }()
-			if err := serveUploadPack(s.Context(), sess, s); err != nil {
+			if err := transport.UploadPack(s.Context(), repo.Storer,
+				io.NopCloser(s), &nopWriteCloser{s}, nil); err != nil {
 				slog.Warn("upload-pack", "repo", owner+"/"+name, "err", err)
 			}
 		case cmdReceivePack:
@@ -116,40 +105,9 @@ func handler(gst *gitstore.Store, hf HooksFactory, limits receive.Limits) gssh.H
 	}
 }
 
-func serveUploadPack(ctx context.Context, sess transport.UploadPackSession, rw io.ReadWriter) error {
-	ar, err := sess.AdvertisedReferencesContext(ctx)
-	if err != nil {
-		return err
-	}
-	if err := ar.Encode(rw); err != nil {
-		return err
-	}
-	req := packp.NewUploadPackRequest()
-	if err := req.Decode(rw); err != nil {
-		return err
-	}
-	resp, err := sess.UploadPack(ctx, req)
-	if err != nil {
-		return err
-	}
-	defer func() { _ = resp.Close() }()
-	return resp.Encode(rw)
-}
+type nopWriteCloser struct{ io.Writer }
 
-type loader struct{ gst *gitstore.Store }
-
-func (l *loader) Load(ep *transport.Endpoint) (storer.Storer, error) { //nolint:ireturn // implements server.Loader
-	p := strings.TrimSuffix(strings.TrimPrefix(ep.Path, "/"), ".git")
-	seg := strings.SplitN(p, "/", expectedExecParts)
-	if len(seg) != expectedExecParts {
-		return nil, transport.ErrRepositoryNotFound
-	}
-	repo, err := l.gst.Repo(seg[0], seg[1])
-	if err != nil {
-		return nil, err
-	}
-	return repo.Storer, nil
-}
+func (nopWriteCloser) Close() error { return nil }
 
 var errBadCommand = errors.New("only git-upload-pack and git-receive-pack are accepted")
 

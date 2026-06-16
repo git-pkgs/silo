@@ -6,9 +6,9 @@ import (
 	"io"
 	"testing"
 
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp/capability"
+	"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing/protocol/capability"
+	"github.com/go-git/go-git/v6/plumbing/protocol/packp"
 )
 
 func BenchmarkReceive_SingleRef(b *testing.B) {
@@ -35,7 +35,7 @@ func BenchmarkPktlineRead(b *testing.B) {
 
 	b.ReportAllocs()
 	for b.Loop() {
-		req := packp.NewReferenceUpdateRequest()
+		req := &packp.UpdateRequests{}
 		if err := req.Decode(bytes.NewReader(wire)); err != nil {
 			b.Fatal(err)
 		}

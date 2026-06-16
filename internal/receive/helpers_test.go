@@ -2,27 +2,26 @@ package receive
 
 import (
 	"bytes"
-	"io"
 	"testing"
 	"time"
 
-	"github.com/go-git/go-billy/v5/memfs"
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/format/packfile"
-	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp"
-	"github.com/go-git/go-git/v5/plumbing/protocol/packp/capability"
-	"github.com/go-git/go-git/v5/plumbing/storer"
-	"github.com/go-git/go-git/v5/storage/memory"
+	"github.com/go-git/go-billy/v6/memfs"
+	"github.com/go-git/go-git/v6"
+	"github.com/go-git/go-git/v6/config"
+	"github.com/go-git/go-git/v6/plumbing"
+	"github.com/go-git/go-git/v6/plumbing/format/packfile"
+	"github.com/go-git/go-git/v6/plumbing/object"
+	"github.com/go-git/go-git/v6/plumbing/protocol/capability"
+	"github.com/go-git/go-git/v6/plumbing/protocol/packp"
+	"github.com/go-git/go-git/v6/plumbing/storer"
+	"github.com/go-git/go-git/v6/storage/memory"
 )
 
 const testDefaultBranch = "refs/heads/main"
 
 func newBareRepo(t testing.TB) *git.Repository {
 	t.Helper()
-	repo, err := git.InitWithOptions(memory.NewStorage(), nil,
-		git.InitOptions{DefaultBranch: testDefaultBranch})
+	repo, err := git.Init(memory.NewStorage(), git.WithDefaultBranch(testDefaultBranch))
 	if err != nil {
 		t.Fatalf("init bare: %v", err)
 	}
@@ -35,10 +34,14 @@ func newSourceCommit(t testing.TB) (*git.Repository, plumbing.Hash) {
 	t.Helper()
 	st := memory.NewStorage()
 	fs := memfs.New()
-	repo, err := git.InitWithOptions(st, fs,
-		git.InitOptions{DefaultBranch: testDefaultBranch})
+	repo, err := git.Init(st, git.WithDefaultBranch(testDefaultBranch), git.WithWorkTree(fs))
 	if err != nil {
 		t.Fatalf("init source: %v", err)
+	}
+	cfg, _ := repo.Config()
+	cfg.Commit.GpgSign = config.NewOptBool(false)
+	if err := repo.SetConfig(cfg); err != nil {
+		t.Fatalf("config: %v", err)
 	}
 	wt, err := repo.Worktree()
 	if err != nil {
@@ -67,27 +70,20 @@ func newSourceCommit(t testing.TB) (*git.Repository, plumbing.Hash) {
 // with a packfile containing every object reachable from each non-zero New.
 func encodePush(t testing.TB, src storer.Storer, cmds []*packp.Command, caps ...capability.Capability) *bytes.Buffer {
 	t.Helper()
-	req := packp.NewReferenceUpdateRequest()
-	req.Commands = cmds
+	req := &packp.UpdateRequests{Commands: cmds}
 	for _, c := range caps {
-		if err := req.Capabilities.Add(c); err != nil {
-			t.Fatalf("cap %s: %v", c, err)
-		}
-	}
-
-	wantPack := false
-	for _, c := range cmds {
-		if !c.New.IsZero() {
-			wantPack = true
-		}
-	}
-	if wantPack {
-		req.Packfile = io.NopCloser(buildPack(t, src, cmds))
+		req.Capabilities.Add(c)
 	}
 
 	var buf bytes.Buffer
 	if err := req.Encode(&buf); err != nil {
 		t.Fatalf("encode req: %v", err)
+	}
+	for _, c := range cmds {
+		if !c.New.IsZero() {
+			_, _ = buildPack(t, src, cmds).WriteTo(&buf)
+			break
+		}
 	}
 	return &buf
 }
@@ -137,7 +133,7 @@ func walkObjects(t testing.TB, st storer.EncodedObjectStorer, h plumbing.Hash, s
 
 func decodeReport(t testing.TB, b []byte) *packp.ReportStatus {
 	t.Helper()
-	rs := packp.NewReportStatus()
+	rs := &packp.ReportStatus{}
 	if err := rs.Decode(bytes.NewReader(b)); err != nil {
 		t.Fatalf("decode report: %v", err)
 	}

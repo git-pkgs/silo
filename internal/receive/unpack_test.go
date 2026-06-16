@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/go-git/go-git/v5/storage/memory"
+	"github.com/go-git/go-git/v6/storage/memory"
 )
 
 func TestUnpack_BadHeader(t *testing.T) {
