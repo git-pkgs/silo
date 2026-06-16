@@ -1,8 +1,20 @@
 # go-git integration notes
 
-Findings from using `github.com/go-git/go-git/v5@v5.19.1` server-side in silo, plus an inventory of operations gittuf currently shells out to `git` for that go-git can now handle. Each entry is self-contained.
+Findings from using go-git server-side in silo. silo targets `github.com/go-git/go-git/v6` at main (currently `v6.0.0-alpha.4`+); v5.19.1 is the last stable tag but main has 1300+ commits of server-side work on top of it. Each entry below is self-contained and written against v6 main as of 2026-06-16.
 
-Existing-issue cross-reference (searched 2026-06-16): #2185 (open) tracks git hooks generally and likely subsumes the receive-pack hook item; #1842 (closed) fixed `DetectDotGit` for linked worktrees, which is adjacent to the bare-repo case but didn't cover it.
+v6 ships a `backend` package — `Backend.Serve` / `ServeConn` / `ServeHTTP` over a `Loader` — that handles upload-pack and receive-pack across TCP, SSH, and HTTP. That's the surface silo's `internal/http/git` and `internal/ssh` should sit on once the receive-pack hook below lands; for now silo owns receive-pack and reuses v6's `packp`/`pktline`/`sideband`/`packfile` packages directly, all of which work without modification.
+
+---
+
+## `transport.ReceivePack` has no pre-receive hook callback
+
+**What happens.** A server using `transport.ReceivePack` cannot run policy checks between unpack and ref update. `plumbing/transport/receive_pack.go` decodes, unpacks, then calls `updateReferences` directly. The line `// TODO: Pass the options to the server-side hooks.` sits between decode and update, so this is planned.
+
+**Why it matters.** Any forge wanting branch protection, signed-commit checks, or gittuf verification needs to inspect proposed updates after objects are available but before refs move. Without it, every such project re-implements receive-pack on top of `packp.UpdateRequests` + `packfile.UpdateObjectStorage` + `Storer.SetReference`, which is what silo does in ~200 lines.
+
+**Suggested change.** A `Hooks` field on `ReceivePackRequest` with `PreReceive(ctx, []*packp.Command) error` called after unpack and before `updateReferences`; non-nil error fills `cmdStatus` with `ng <ref> <err>` and skips the update. A `PostReceive` after ref apply rounds it out. Possibly tracked under #2185.
+
+**What silo would do once this lands.** `internal/receive` shrinks to a `Hooks` adapter; `internal/http/git` and `internal/ssh` become thin wrappers over `backend.Backend`. The `git-pkgs/gitserve` extraction in `EXTRACT.md` becomes "contribute the hook upstream" instead.
 
 ---
 
@@ -10,54 +22,37 @@ Existing-issue cross-reference (searched 2026-06-16): #2185 (open) tracks git ho
 
 **What happens.** `PlainOpenWithOptions("/path/to/bare.git", &PlainOpenOptions{DetectDotGit: true})` returns `ErrRepositoryNotExists`. The same path with `DetectDotGit: false` opens.
 
-**Why.** With detect on, `dotGitToOSFilesystems` (`repository.go:341`) walks looking for a `.git` entry; it doesn't first check whether the given path is itself a git directory (has `HEAD`, `objects/`, `refs/`). A bare repo has no `.git` inside it, so the walk finds nothing.
+**Why.** `dotGitToOSFilesystems` (`repository.go:467` on main) does `fs.Stat(GitDirName)` — looking for a `.git` entry inside the given path — and on miss with detect on walks up the tree. It never checks whether the given path is itself a git directory (has `HEAD`, `objects/`, `refs/`). A bare repo has no `.git` inside it, so the walk finds nothing.
 
-This is arguably correct behaviour (the option says "detect `.git`"), but it's a footgun: callers that already have the git dir resolved and pass `DetectDotGit: true` for safety silently break on bare repos. gittuf hit this; see `GITTUF-NOTES.md`.
+This is arguably correct behaviour (the option says "detect `.git`"), but it's a footgun: callers that already have the git dir resolved and pass `DetectDotGit: true` for safety break on bare repos. gittuf hits this; see `GITTUF-NOTES.md`.
 
-**Suggested change.** Before walking, check if the given path itself looks like a git dir (the same heuristic `DetectDotGit: false` uses). #1842 fixed the linked-worktree case in the same function; this is the bare-repo sibling.
+**To reproduce.**
 
----
+```go
+git.PlainOpenWithOptions("/tmp/bare.git", &git.PlainOpenOptions{DetectDotGit: true})
+// repository does not exist
+git.PlainOpenWithOptions("/tmp/bare.git", &git.PlainOpenOptions{DetectDotGit: false})
+// nil error
+```
 
-## `transport/server.ReceivePack` has no hook between unpack and ref update
-
-**What happens.** A server using `transport/server` cannot run pre-receive checks. `server.go:238-264` unpacks the packfile then immediately calls `updateReferences` with no callback, and the `// TODO: Implement 'atomic' update of references` at `:252` notes the related gap.
-
-**Why it matters.** Any forge wanting policy enforcement (gittuf, branch protection, signed-commit checks) needs to inspect proposed updates after objects are available but before refs move. Without a hook, every such project re-implements receive-pack.
-
-**Suggested change.** A `Hooks` field on `rpSession` (or an option to `NewServer`) with `PreReceive(ctx, []*packp.Command) error` called between `writePackfile` and `updateReferences`; non-nil error populates `ng` statuses and skips the update.
-
-Possibly covered by open #2185 ("Git hooks").
-
-**What silo does instead.** Owns receive-pack: reads `packp.ReferenceUpdateRequest`, calls `packfile.UpdateObjectStorage`, runs hooks, applies refs via `Storer.SetReference`, writes `packp.ReportStatus`. About 200 lines reusing the `packp`/`pktline`/`sideband` packages, which all worked without modification.
+**Suggested change.** Before walking, check if the given path itself looks like a git dir (the same check `DetectDotGit: false` falls through to). #1842 fixed the linked-worktree case in this function; this is the bare-repo sibling.
 
 ---
 
-## `packp.UploadHaves` has Encode but no Decode
+## No `merge-tree` equivalent
 
-**What happens.** A smart-HTTP server needs to decode the client's `have` lines from the upload-pack POST body. `packp.UploadRequest` decodes the wants/shallows/deepen section, but `packp.UploadHaves` (`uppackreq.go:67`) only has `Encode`.
+**What happens.** There's no way to compute the three-way-merged tree of two commits without a worktree. gittuf's `VerifyMergeable` shells to `git merge-tree` for this; silo's planned client-signed-merge button needs it too.
 
-**Suggested change.** Add `(*UploadHaves).Decode(r io.Reader) error` that scans pkt-lines for `have <hash>` until `done` or flush.
-
-**What silo does.** A 15-line `decodeHaves` in `internal/http/git/git.go`.
+**Tracked at** [#942](https://github.com/go-git/go-git/issues/942). The historical blocker was a Go diff3; that's resolved: `epiclabs-io/diff3` relicensed to MIT, and AntGroup open-sourced [HugeSCM](https://github.com/antgroup/hugescm) with a complete pure-Go three-way merge — `modules/diferenco` for text-level diff3 (Histogram/Myers/ONP/Patience algorithms, merge/diff3/zdiff3 conflict styles, charset-aware) and `pkg/zeta/odb/merge.go` for tree-level merge with rename and mode-conflict handling — explicitly offered back as a reference implementation in the issue thread.
 
 ---
 
-## `ReferenceUpdateRequest.Decode` sets `Packfile` even when there is none
+## What gittuf shells to `git` for, and the go-git equivalent
 
-**What happens.** After decoding a delete-only push (every command's New is zero), `req.Packfile` is still set (`updreq_decode.go:198` `setPackfile()` assigns the remaining reader unconditionally). Reading it returns immediate EOF.
-
-**Why it matters.** Callers can't use `req.Packfile != nil` to decide whether to unpack; they have to re-scan the commands. Minor.
-
-**Suggested change.** Set `Packfile` only if any command's `New` is non-zero.
-
----
-
-## What gittuf shells to `git` for, and whether go-git v5.19 can do it
-
-gittuf's `pkg/gitinterface` shells out for the operations below. The right-hand column is the go-git equivalent at v5.19.1. Almost everything is covered; the user's hunch that go-git has caught up since gittuf last looked is right.
+gittuf's `pkg/gitinterface` shells out for the operations below. The right column is the go-git equivalent on main. Everything a server-side gittuf needs is available pure-Go and bare-safe; the only gap is `merge-tree` (above), and the worktree operations don't apply to a forge.
 
 | `git` invocation | go-git equivalent | bare-safe |
-|---|---|---|
+| --- | --- | --- |
 | `cat-file -t <id>` | `Storer.EncodedObject(AnyObject, h).Type()` | yes |
 | `cat-file -p <id>` | `object.DecodeObject` / `Blob.Reader` | yes |
 | `cat-file -e <id>` | `Storer.HasEncodedObject(h)` | yes |
@@ -76,10 +71,18 @@ gittuf's `pkg/gitinterface` shells out for the operations below. The right-hand 
 | `remote add/remove/get-url` | `CreateRemote` / `DeleteRemote` / `Remote.Config().URLs` | yes |
 | `merge-base <a> <b>` | `Commit.MergeBase(other)` | yes |
 | `merge-base --is-ancestor` | `Commit.IsAncestor(other)` | yes |
-| `merge-tree <a> <b>` | **none** — no three-way merge tree builder | n/a |
+| `merge-tree <a> <b>` | none; see #942 / HugeSCM `diferenco` | n/a |
 | `status --porcelain` | `Worktree.Status()` | worktree-only |
 | `restore [--staged]` | `Worktree.Checkout` / `Reset` | worktree-only |
 | `for-each-ref` | `Storer.IterReferences()` | yes |
 | `log` / `rev-list` (range) | `Repository.Log(LogOptions)` | yes |
 
-The only operation with no go-git equivalent is `merge-tree`, used by `gitinterface.GetMergeTree` for `VerifyMergeable`. Everything else a server-side gittuf needs (`cat-file`, `ls-tree`, `diff-tree`, `rev-parse`, `update-ref`, `merge-base`) is available pure-Go and bare-safe. The worktree operations (`status`, `restore`) don't apply to a forge.
+---
+
+## Fixed on main since v5.19.1
+
+These were issues against v5 that are resolved on main; listed so they don't get re-filed.
+
+- `packp.UploadHaves` had `Encode` but no `Decode`. v6 has `(*UploadHaves).Decode` at `plumbing/protocol/packp/uphav.go:52`.
+- `ReferenceUpdateRequest.Decode` set `Packfile` even on delete-only pushes. v6's `transport.ReceivePack` has an explicit `needPackfile` check over the commands.
+- `transport/server` had no sideband support in receive-pack. v6's `transport.ReceivePack` muxes report-status over `Sideband64k`/`Sideband` when negotiated.

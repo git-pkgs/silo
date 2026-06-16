@@ -18,7 +18,7 @@ Expected from the design doc (confirm or revise as the code lands):
 from:    internal/receive, internal/http/git, internal/ssh
 surface: ReceivePack/UploadPack over io.Reader/Writer with Hooks; http.Handler and ssh.Handler over a Loader; refStateHash, bundle-uri, upload-pack response cache, dumb-protocol static handler
 users:   silo, any go-git host
-notes:
+notes:   go-git v6 (alpha.4) has a `backend` package with the same shape (Backend.Serve/ServeConn/ServeHTTP over a Loader) and a top-level `transport.ReceivePack`. The missing piece there is the pre-receive hook callback (a TODO in v6's receive_pack.go). Likely better contributed upstream than maintained as a separate module: the hook callback, the upload-pack response cache, and bundle-uri are the deltas. See GOGIT-NOTES.md § "go-git v6 status".
 
 ## git-pkgs/oidcache
 from:    internal/cache
