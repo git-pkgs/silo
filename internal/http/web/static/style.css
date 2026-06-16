@@ -20,8 +20,22 @@ main { flex: 1; padding-block: 1.5rem; }
 }
 
 .topbar { border-bottom: 1px solid var(--border); }
-.topbar .container { padding-block: 0.75rem; font-size: 0.875rem; display: flex; gap: 1rem; align-items: baseline; }
+.topbar .container {
+  padding-block: 0.625rem;
+  font-size: 0.875rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  min-width: 0;
+}
 .topbar a:first-child { font-weight: 600; }
+.nav-search { margin-left: auto; min-width: 0; }
+.nav-search input {
+  height: 2rem;
+  width: 16rem;
+  max-width: 40vw;
+  font-size: 0.8125rem;
+}
 
 .repo-nav { border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--muted) 35%, transparent); }
 .repo-nav .container { padding-top: 1rem; }
@@ -31,8 +45,10 @@ main { flex: 1; padding-block: 1.5rem; }
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 0.75rem;
+  min-width: 0;
 }
-.repo-nav-head .repo-name { font-size: 1.125rem; }
+.repo-nav-head .repo-name { font-size: 1.125rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+#ref-menu [data-popover] { max-width: min(24rem, 90vw); }
 
 .footer { border-top: 1px solid var(--border); padding-block: 0.75rem; }
 .footer .container { font-size: 0.75rem; color: var(--muted-foreground); }
@@ -131,10 +147,6 @@ pre.blob {
 
 .card { margin-bottom: 1rem; }
 details > summary { cursor: pointer; color: var(--muted-foreground); }
-
-.nav-tabs { flex-direction: row; align-items: center; gap: 1rem; }
-.nav-search { margin-left: auto; padding-bottom: 0.5rem; }
-.nav-search input { height: 2rem; font-size: 0.8125rem; }
 
 .sub-nav { border-bottom: 1px solid var(--border); }
 .sub-nav .container { padding-block: 0.5rem; }
