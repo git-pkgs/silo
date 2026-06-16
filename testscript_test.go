@@ -16,9 +16,12 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+const gittufPin = "github.com/gittuf/gittuf@v0.14.2-0.20260614183827-6f382ee5c029"
+
 func TestScript(t *testing.T) {
 	binDir := t.TempDir()
 	build(t, filepath.Join(binDir, "silo"), "./cmd/silo")
+	install(t, binDir, gittufPin)
 
 	testscript.Run(t, testscript.Params{
 		Dir:                 "testdata/testscript",
@@ -40,6 +43,17 @@ func build(t *testing.T, out, pkg string) {
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
 		t.Fatalf("build %s: %v", pkg, err)
+	}
+}
+
+func install(t *testing.T, binDir, mod string) {
+	t.Helper()
+	cmd := exec.Command("go", "install", mod)
+	cmd.Env = append(os.Environ(), "GOBIN="+binDir)
+	cmd.Dir = binDir
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		t.Fatalf("install %s: %v", mod, err)
 	}
 }
 

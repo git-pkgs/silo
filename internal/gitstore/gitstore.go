@@ -73,8 +73,22 @@ func (s *Store) Init(owner, name string) (*git.Repository, error) {
 	if err := os.MkdirAll(filepath.Dir(p), dirPerm); err != nil {
 		return nil, err
 	}
-	return git.PlainInitWithOptions(p, &git.PlainInitOptions{
+	repo, err := git.PlainInitWithOptions(p, &git.PlainInitOptions{
 		Bare:        true,
 		InitOptions: git.InitOptions{DefaultBranch: plumbing.ReferenceName("refs/heads/main")},
 	})
+	if err != nil {
+		return nil, err
+	}
+	// gittuf's GetGoGitRepository (pkg/gitinterface/repository.go:39) opens
+	// with DetectDotGit:true, which fails on a bare git dir because go-git
+	// then looks for a .git/ entry and finds none. A self-referential gitfile
+	// makes the bare dir openable that way without changing anything else.
+	// Upstream fix: change DetectDotGit to false there. See GITTUF-NOTES.md.
+	if err := os.WriteFile(filepath.Join(p, ".git"), []byte("gitdir: .\n"), gitfilePerm); err != nil {
+		return nil, err
+	}
+	return repo, nil
 }
+
+const gitfilePerm = 0o640

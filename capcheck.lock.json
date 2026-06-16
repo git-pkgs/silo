@@ -104,7 +104,7 @@
       "packageName":  "main",
       "capabilityName":  "RUNTIME",
       "capability":  "CAPABILITY_RUNTIME",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 database/sql.rowsiFromStatement database/sql.ctxDriverStmtQuery (*modernc.org/sqlite.stmt).Query (*modernc.org/sqlite.stmt).query (*modernc.org/sqlite.conn).step modernc.org/sqlite/lib.Xsqlite3_step modernc.org/sqlite/lib._sqlite3Step modernc.org/sqlite/lib._sqlite3VdbeExec modernc.org/sqlite/lib._sqlite3VdbeSorterRewind modernc.org/sqlite/lib._vdbeSorterFlushPMA modernc.org/sqlite/lib._vdbeSorterCreateThread modernc.org/sqlite/lib._sqlite3ThreadCreate modernc.org/libc.Xpthread_create modernc.org/libc.Xpthread_create$1 modernc.org/libc.Xpthread_exit runtime.Goexit",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry errors.Is errors.is (*google.golang.org/grpc/internal/status.Error).Is google.golang.org/protobuf/proto.Equal google.golang.org/protobuf/internal/impl.equal google.golang.org/protobuf/internal/impl.equalMessage (google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadFileDesc io.ReadAll (*go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.wrappedBody).Read (*go.uber.org/multierr.multiError).Error (*sync.Pool).Get internal/poll.newPoolPipe runtime.AddCleanup[internal/poll.splicePipe internal/poll.splicePipeFields]",
       "path":  [
         {
           "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
@@ -147,155 +147,146 @@
           "package":  "database/sql"
         },
         {
-          "name":  "(*database/sql.Stmt).QueryContext$1",
+          "name":  "errors.Is",
           "site":  {
             "filename":  "sql.go",
-            "line":  "1576",
-            "column":  "12"
+            "line":  "1578",
+            "column":  "30"
           },
-          "package":  "database/sql"
+          "package":  "errors"
         },
         {
-          "name":  "database/sql.rowsiFromStatement",
+          "name":  "errors.is",
           "site":  {
-            "filename":  "sql.go",
-            "line":  "2798",
-            "column":  "34"
+            "filename":  "wrap.go",
+            "line":  "51",
+            "column":  "11"
           },
-          "package":  "database/sql"
+          "package":  "errors"
         },
         {
-          "name":  "database/sql.ctxDriverStmtQuery",
+          "name":  "(*google.golang.org/grpc/internal/status.Error).Is",
           "site":  {
-            "filename":  "sql.go",
-            "line":  "2848",
-            "column":  "27"
+            "filename":  "wrap.go",
+            "line":  "59",
+            "column":  "60"
           },
-          "package":  "database/sql"
+          "package":  "google.golang.org/grpc/internal/status"
         },
         {
-          "name":  "(*modernc.org/sqlite.stmt).Query",
+          "name":  "google.golang.org/protobuf/proto.Equal",
           "site":  {
-            "filename":  "ctxutil.go",
-            "line":  "94",
-            "column":  "17"
-          },
-          "package":  "modernc.org/sqlite"
-        },
-        {
-          "name":  "(*modernc.org/sqlite.stmt).query",
-          "site":  {
-            "filename":  "stmt.go",
-            "line":  "282",
-            "column":  "16"
-          },
-          "package":  "modernc.org/sqlite"
-        },
-        {
-          "name":  "(*modernc.org/sqlite.conn).step",
-          "site":  {
-            "filename":  "stmt.go",
-            "line":  "337",
-            "column":  "22"
-          },
-          "package":  "modernc.org/sqlite"
-        },
-        {
-          "name":  "modernc.org/sqlite/lib.Xsqlite3_step",
-          "site":  {
-            "filename":  "conn.go",
-            "line":  "381",
-            "column":  "37"
-          },
-          "package":  "modernc.org/sqlite/lib"
-        },
-        {
-          "name":  "modernc.org/sqlite/lib._sqlite3Step",
-          "site":  {
-            "filename":  "sqlite_linux_amd64.go",
-            "line":  "61779",
+            "filename":  "status.go",
+            "line":  "227",
             "column":  "20"
           },
-          "package":  "modernc.org/sqlite/lib"
+          "package":  "google.golang.org/protobuf/proto"
         },
         {
-          "name":  "modernc.org/sqlite/lib._sqlite3VdbeExec",
+          "name":  "google.golang.org/protobuf/internal/impl.equal",
           "site":  {
-            "filename":  "sqlite_linux_amd64.go",
-            "line":  "61716",
-            "column":  "24"
+            "filename":  "equal.go",
+            "line":  "60",
+            "column":  "19"
           },
-          "package":  "modernc.org/sqlite/lib"
+          "package":  "google.golang.org/protobuf/internal/impl"
         },
         {
-          "name":  "modernc.org/sqlite/lib._sqlite3VdbeSorterRewind",
+          "name":  "google.golang.org/protobuf/internal/impl.equalMessage",
           "site":  {
-            "filename":  "sqlite_linux_amd64.go",
-            "line":  "69434",
-            "column":  "33"
+            "filename":  "equal.go",
+            "line":  "16",
+            "column":  "51"
           },
-          "package":  "modernc.org/sqlite/lib"
+          "package":  "google.golang.org/protobuf/internal/impl"
         },
         {
-          "name":  "modernc.org/sqlite/lib._vdbeSorterFlushPMA",
+          "name":  "(google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor",
           "site":  {
-            "filename":  "sqlite_linux_amd64.go",
-            "line":  "75019",
+            "filename":  "equal.go",
+            "line":  "26",
+            "column":  "18"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "511",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "91",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadFileDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "142",
             "column":  "26"
           },
-          "package":  "modernc.org/sqlite/lib"
+          "package":  "google.golang.org/protobuf/internal/impl"
         },
         {
-          "name":  "modernc.org/sqlite/lib._vdbeSorterCreateThread",
+          "name":  "io.ReadAll",
           "site":  {
-            "filename":  "sqlite_linux_amd64.go",
-            "line":  "74116",
+            "filename":  "legacy_file.go",
+            "line":  "54",
+            "column":  "23"
+          },
+          "package":  "io"
+        },
+        {
+          "name":  "(*go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.wrappedBody).Read",
+          "site":  {
+            "filename":  "io.go",
+            "line":  "722",
+            "column":  "19"
+          },
+          "package":  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+        },
+        {
+          "name":  "(*go.uber.org/multierr.multiError).Error",
+          "site":  {
+            "filename":  "transport.go",
+            "line":  "250",
+            "column":  "43"
+          },
+          "package":  "go.uber.org/multierr"
+        },
+        {
+          "name":  "(*sync.Pool).Get",
+          "site":  {
+            "filename":  "error.go",
+            "line":  "228",
+            "column":  "25"
+          },
+          "package":  "sync"
+        },
+        {
+          "name":  "internal/poll.newPoolPipe",
+          "site":  {
+            "filename":  "pool.go",
+            "line":  "155",
+            "column":  "12"
+          },
+          "package":  "internal/poll"
+        },
+        {
+          "name":  "runtime.AddCleanup[internal/poll.splicePipe internal/poll.splicePipeFields]",
+          "site":  {
+            "filename":  "splice_linux.go",
+            "line":  "197",
             "column":  "32"
-          },
-          "package":  "modernc.org/sqlite/lib"
-        },
-        {
-          "name":  "modernc.org/sqlite/lib._sqlite3ThreadCreate",
-          "site":  {
-            "filename":  "sqlite_linux_amd64.go",
-            "line":  "73399",
-            "column":  "29"
-          },
-          "package":  "modernc.org/sqlite/lib"
-        },
-        {
-          "name":  "modernc.org/libc.Xpthread_create",
-          "site":  {
-            "filename":  "sqlite_linux_amd64.go",
-            "line":  "17178",
-            "column":  "28"
-          },
-          "package":  "modernc.org/libc"
-        },
-        {
-          "name":  "modernc.org/libc.Xpthread_create$1",
-          "site":  {
-            "filename":  "pthread_musl.go",
-            "line":  "137",
-            "column":  "2"
-          },
-          "package":  "modernc.org/libc"
-        },
-        {
-          "name":  "modernc.org/libc.Xpthread_exit",
-          "site":  {
-            "filename":  "pthread_musl.go",
-            "line":  "138",
-            "column":  "16"
-          },
-          "package":  "modernc.org/libc"
-        },
-        {
-          "name":  "runtime.Goexit",
-          "site":  {
-            "filename":  "pthread_musl.go",
-            "line":  "180",
-            "column":  "16"
           },
           "package":  "runtime"
         }
@@ -424,7 +415,7 @@
       "packageName":  "main",
       "capabilityName":  "MODIFY_SYSTEM_STATE/SIGNALS",
       "capability":  "CAPABILITY_MODIFY_SYSTEM_STATE",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 (*database/sql.Rows).initContextClose context.WithCancel context.withCancel (*context.cancelCtx).propagateCancel (*context.afterFuncCtx).cancel (*context.afterFuncCtx).cancel$1 (*crypto/tls.Conn).handshakeContext$1 (*golang.org/x/crypto/ssh.chanConn).Close (*golang.org/x/crypto/ssh.channel).Close (*golang.org/x/crypto/ssh.channel).sendMessage (*golang.org/x/crypto/ssh.channel).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).pushPacket (*golang.org/x/crypto/ssh.transport).writePacket (*golang.org/x/crypto/ssh.connectionState).writePacket (*bufio.Writer).Flush (*crypto/tls.Conn).Write (*crypto/tls.Conn).Handshake (*crypto/tls.Conn).HandshakeContext (*crypto/tls.Conn).handshakeContext (*crypto/tls.Conn).clientHandshake$bound (*crypto/tls.Conn).clientHandshake (os/signal.signalError).Error",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry errors.Is errors.is (*google.golang.org/grpc/internal/status.Error).Is google.golang.org/protobuf/proto.Equal google.golang.org/protobuf/internal/impl.equal google.golang.org/protobuf/internal/impl.equalMessage (google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadFileDesc io.ReadAll (*go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.wrappedBody).Read (os/signal.signalError).Error",
       "path":  [
         {
           "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
@@ -467,203 +458,119 @@
           "package":  "database/sql"
         },
         {
-          "name":  "(*database/sql.Stmt).QueryContext$1",
+          "name":  "errors.Is",
           "site":  {
             "filename":  "sql.go",
-            "line":  "1576",
-            "column":  "12"
+            "line":  "1578",
+            "column":  "30"
           },
-          "package":  "database/sql"
+          "package":  "errors"
         },
         {
-          "name":  "(*database/sql.Rows).initContextClose",
+          "name":  "errors.is",
           "site":  {
-            "filename":  "sql.go",
-            "line":  "2821",
-            "column":  "25"
+            "filename":  "wrap.go",
+            "line":  "51",
+            "column":  "11"
           },
-          "package":  "database/sql"
+          "package":  "errors"
         },
         {
-          "name":  "context.WithCancel",
+          "name":  "(*google.golang.org/grpc/internal/status.Error).Is",
           "site":  {
-            "filename":  "sql.go",
-            "line":  "2994",
-            "column":  "40"
+            "filename":  "wrap.go",
+            "line":  "59",
+            "column":  "60"
           },
-          "package":  "context"
+          "package":  "google.golang.org/grpc/internal/status"
         },
         {
-          "name":  "context.withCancel",
+          "name":  "google.golang.org/protobuf/proto.Equal",
           "site":  {
-            "filename":  "context.go",
-            "line":  "241",
-            "column":  "17"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.cancelCtx).propagateCancel",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "278",
-            "column":  "19"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.afterFuncCtx).cancel",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "486",
-            "column":  "15"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.afterFuncCtx).cancel$1",
-          "package":  "context"
-        },
-        {
-          "name":  "(*crypto/tls.Conn).handshakeContext$1",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "358",
-            "column":  "3"
-          },
-          "package":  "crypto/tls"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.chanConn).Close",
-          "site":  {
-            "filename":  "conn.go",
-            "line":  "1539",
+            "filename":  "status.go",
+            "line":  "227",
             "column":  "20"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "google.golang.org/protobuf/proto"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.channel).Close",
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.channel).sendMessage",
+          "name":  "google.golang.org/protobuf/internal/impl.equal",
           "site":  {
-            "filename":  "channel.go",
-            "line":  "564",
-            "column":  "23"
+            "filename":  "equal.go",
+            "line":  "60",
+            "column":  "19"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "google.golang.org/protobuf/internal/impl"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.channel).writePacket",
+          "name":  "google.golang.org/protobuf/internal/impl.equalMessage",
           "site":  {
-            "filename":  "channel.go",
-            "line":  "229",
-            "column":  "23"
+            "filename":  "equal.go",
+            "line":  "16",
+            "column":  "51"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "google.golang.org/protobuf/internal/impl"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).writePacket",
+          "name":  "(google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor",
           "site":  {
-            "filename":  "channel.go",
-            "line":  "217",
-            "column":  "32"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).pushPacket",
-          "site":  {
-            "filename":  "handshake.go",
-            "line":  "629",
-            "column":  "24"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.transport).writePacket",
-          "site":  {
-            "filename":  "handshake.go",
-            "line":  "267",
-            "column":  "27"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.connectionState).writePacket",
-          "site":  {
-            "filename":  "transport.go",
-            "line":  "186",
-            "column":  "29"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*bufio.Writer).Flush",
-          "site":  {
-            "filename":  "transport.go",
-            "line":  "196",
+            "filename":  "equal.go",
+            "line":  "26",
             "column":  "18"
           },
-          "package":  "bufio"
+          "package":  "google.golang.org/protobuf/internal/impl"
         },
         {
-          "name":  "(*crypto/tls.Conn).Write",
+          "name":  "google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc",
           "site":  {
-            "filename":  "bufio.go",
-            "line":  "642",
-            "column":  "22"
+            "filename":  "legacy_message.go",
+            "line":  "511",
+            "column":  "30"
           },
-          "package":  "crypto/tls"
+          "package":  "google.golang.org/protobuf/internal/impl"
         },
         {
-          "name":  "(*crypto/tls.Conn).Handshake",
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc",
           "site":  {
-            "filename":  "conn.go",
-            "line":  "1215",
+            "filename":  "legacy_message.go",
+            "line":  "91",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadFileDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "142",
+            "column":  "26"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "io.ReadAll",
+          "site":  {
+            "filename":  "legacy_file.go",
+            "line":  "54",
             "column":  "23"
           },
-          "package":  "crypto/tls"
+          "package":  "io"
         },
         {
-          "name":  "(*crypto/tls.Conn).HandshakeContext",
+          "name":  "(*go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.wrappedBody).Read",
           "site":  {
-            "filename":  "conn.go",
-            "line":  "1500",
-            "column":  "27"
+            "filename":  "io.go",
+            "line":  "722",
+            "column":  "19"
           },
-          "package":  "crypto/tls"
-        },
-        {
-          "name":  "(*crypto/tls.Conn).handshakeContext",
-          "site":  {
-            "filename":  "conn.go",
-            "line":  "1516",
-            "column":  "27"
-          },
-          "package":  "crypto/tls"
-        },
-        {
-          "name":  "(*crypto/tls.Conn).clientHandshake$bound",
-          "site":  {
-            "filename":  "conn.go",
-            "line":  "1562",
-            "column":  "32"
-          },
-          "package":  "crypto/tls"
-        },
-        {
-          "name":  "(*crypto/tls.Conn).clientHandshake",
-          "package":  "crypto/tls"
+          "package":  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
         },
         {
           "name":  "(os/signal.signalError).Error",
           "site":  {
-            "filename":  "handshake_client.go",
-            "line":  "267",
-            "column":  "63"
+            "filename":  "transport.go",
+            "line":  "250",
+            "column":  "43"
           },
           "package":  "os/signal"
         }
@@ -673,9 +580,289 @@
     },
     {
       "packageName":  "main",
+      "capabilityName":  "MODIFY_SYSTEM_STATE/LOGGING",
+      "capability":  "CAPABILITY_MODIFY_SYSTEM_STATE",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute github.com/git-pkgs/silo/cmd/silo.newServeCmd$1 github.com/git-pkgs/silo/cmd/silo.serve log/slog.SetDefault log.SetFlags",
+      "path":  [
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "(*github.com/spf13/cobra.Command).Execute",
+          "site":  {
+            "filename":  "main.go",
+            "line":  "14",
+            "column":  "32"
+          },
+          "package":  "github.com/spf13/cobra"
+        },
+        {
+          "name":  "(*github.com/spf13/cobra.Command).ExecuteC",
+          "site":  {
+            "filename":  "command.go",
+            "line":  "1071",
+            "column":  "22"
+          },
+          "package":  "github.com/spf13/cobra"
+        },
+        {
+          "name":  "(*github.com/spf13/cobra.Command).execute",
+          "site":  {
+            "filename":  "command.go",
+            "line":  "1148",
+            "column":  "19"
+          },
+          "package":  "github.com/spf13/cobra"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.newServeCmd$1",
+          "site":  {
+            "filename":  "command.go",
+            "line":  "1015",
+            "column":  "19"
+          },
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.serve",
+          "site":  {
+            "filename":  "serve.go",
+            "line":  "33",
+            "column":  "16"
+          },
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "log/slog.SetDefault",
+          "site":  {
+            "filename":  "serve.go",
+            "line":  "49",
+            "column":  "18"
+          },
+          "package":  "log/slog"
+        },
+        {
+          "name":  "log.SetFlags",
+          "site":  {
+            "filename":  "logger.go",
+            "line":  "73",
+            "column":  "15"
+          },
+          "package":  "log"
+        }
+      ],
+      "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
+      "capabilityType":  "CAPABILITY_TYPE_TRANSITIVE"
+    },
+    {
+      "packageName":  "main",
+      "capabilityName":  "MODIFY_SYSTEM_STATE/CHDIR",
+      "capability":  "CAPABILITY_MODIFY_SYSTEM_STATE",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute github.com/git-pkgs/silo/cmd/silo.newServeCmd$1 github.com/git-pkgs/silo/cmd/silo.serve github.com/git-pkgs/silo/cmd/silo.serve$4 github.com/git-pkgs/silo/internal/ssh.Serve github.com/git-pkgs/silo/internal/ssh.Serve$1 (*github.com/gliderlabs/ssh.Server).ListenAndServe (*github.com/gliderlabs/ssh.Server).Serve (*github.com/gliderlabs/ssh.Server).HandleConn github.com/gliderlabs/ssh.DefaultSessionHandler (*github.com/gliderlabs/ssh.session).handleRequests (*github.com/gliderlabs/ssh.session).handleRequests$1 github.com/git-pkgs/silo/internal/ssh.handler$1 github.com/git-pkgs/silo/internal/receive.ReceivePack (*github.com/git-pkgs/silo/internal/hooks.Builtin).PreReceive github.com/git-pkgs/silo/internal/gittuf.Open github.com/gittuf/gittuf/experimental/gittuf.LoadRepository github.com/gittuf/gittuf/pkg/gitinterface.LoadRepository os.Chdir",
+      "path":  [
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "(*github.com/spf13/cobra.Command).Execute",
+          "site":  {
+            "filename":  "main.go",
+            "line":  "14",
+            "column":  "32"
+          },
+          "package":  "github.com/spf13/cobra"
+        },
+        {
+          "name":  "(*github.com/spf13/cobra.Command).ExecuteC",
+          "site":  {
+            "filename":  "command.go",
+            "line":  "1071",
+            "column":  "22"
+          },
+          "package":  "github.com/spf13/cobra"
+        },
+        {
+          "name":  "(*github.com/spf13/cobra.Command).execute",
+          "site":  {
+            "filename":  "command.go",
+            "line":  "1148",
+            "column":  "19"
+          },
+          "package":  "github.com/spf13/cobra"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.newServeCmd$1",
+          "site":  {
+            "filename":  "command.go",
+            "line":  "1015",
+            "column":  "19"
+          },
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.serve",
+          "site":  {
+            "filename":  "serve.go",
+            "line":  "33",
+            "column":  "16"
+          },
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.serve$4",
+          "site":  {
+            "filename":  "serve.go",
+            "line":  "85",
+            "column":  "2"
+          },
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/internal/ssh.Serve",
+          "site":  {
+            "filename":  "serve.go",
+            "line":  "86",
+            "column":  "24"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/ssh"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/internal/ssh.Serve$1",
+          "site":  {
+            "filename":  "ssh.go",
+            "line":  "41",
+            "column":  "2"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/ssh"
+        },
+        {
+          "name":  "(*github.com/gliderlabs/ssh.Server).ListenAndServe",
+          "site":  {
+            "filename":  "ssh.go",
+            "line":  "41",
+            "column":  "40"
+          },
+          "package":  "github.com/gliderlabs/ssh"
+        },
+        {
+          "name":  "(*github.com/gliderlabs/ssh.Server).Serve",
+          "site":  {
+            "filename":  "server.go",
+            "line":  "351",
+            "column":  "18"
+          },
+          "package":  "github.com/gliderlabs/ssh"
+        },
+        {
+          "name":  "(*github.com/gliderlabs/ssh.Server).HandleConn",
+          "site":  {
+            "filename":  "server.go",
+            "line":  "271",
+            "column":  "3"
+          },
+          "package":  "github.com/gliderlabs/ssh"
+        },
+        {
+          "name":  "github.com/gliderlabs/ssh.DefaultSessionHandler",
+          "site":  {
+            "filename":  "server.go",
+            "line":  "318",
+            "column":  "3"
+          },
+          "package":  "github.com/gliderlabs/ssh"
+        },
+        {
+          "name":  "(*github.com/gliderlabs/ssh.session).handleRequests",
+          "site":  {
+            "filename":  "session.go",
+            "line":  "106",
+            "column":  "21"
+          },
+          "package":  "github.com/gliderlabs/ssh"
+        },
+        {
+          "name":  "(*github.com/gliderlabs/ssh.session).handleRequests$1",
+          "site":  {
+            "filename":  "session.go",
+            "line":  "260",
+            "column":  "4"
+          },
+          "package":  "github.com/gliderlabs/ssh"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/internal/ssh.handler$1",
+          "site":  {
+            "filename":  "session.go",
+            "line":  "261",
+            "column":  "17"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/ssh"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/internal/receive.ReceivePack",
+          "site":  {
+            "filename":  "ssh.go",
+            "line":  "111",
+            "column":  "33"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/receive"
+        },
+        {
+          "name":  "(*github.com/git-pkgs/silo/internal/hooks.Builtin).PreReceive",
+          "site":  {
+            "filename":  "receive.go",
+            "line":  "154",
+            "column":  "28"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/hooks"
+        },
+        {
+          "name":  "github.com/git-pkgs/silo/internal/gittuf.Open",
+          "site":  {
+            "filename":  "builtin.go",
+            "line":  "57",
+            "column":  "21"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/gittuf"
+        },
+        {
+          "name":  "github.com/gittuf/gittuf/experimental/gittuf.LoadRepository",
+          "site":  {
+            "filename":  "gittuf.go",
+            "line":  "42",
+            "column":  "36"
+          },
+          "package":  "github.com/gittuf/gittuf/experimental/gittuf"
+        },
+        {
+          "name":  "github.com/gittuf/gittuf/pkg/gitinterface.LoadRepository",
+          "site":  {
+            "filename":  "repository.go",
+            "line":  "51",
+            "column":  "42"
+          },
+          "package":  "github.com/gittuf/gittuf/pkg/gitinterface"
+        },
+        {
+          "name":  "os.Chdir",
+          "site":  {
+            "filename":  "repository.go",
+            "line":  "72",
+            "column":  "19"
+          },
+          "package":  "os"
+        }
+      ],
+      "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
+      "capabilityType":  "CAPABILITY_TYPE_TRANSITIVE"
+    },
+    {
+      "packageName":  "main",
       "capabilityName":  "OPERATING_SYSTEM",
       "capability":  "CAPABILITY_OPERATING_SYSTEM",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 (*database/sql.Rows).initContextClose context.WithCancel context.withCancel (*context.cancelCtx).propagateCancel (*context.afterFuncCtx).cancel (*context.afterFuncCtx).cancel$1 (*crypto/tls.Conn).handshakeContext$1 (*golang.org/x/crypto/ssh.chanConn).Close (*golang.org/x/crypto/ssh.channel).Close (*golang.org/x/crypto/ssh.channel).sendMessage (*golang.org/x/crypto/ssh.channel).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).pushPacket (*golang.org/x/crypto/ssh.transport).writePacket (*golang.org/x/crypto/ssh.connectionState).writePacket (*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket io.ReadFull io.ReadAtLeast (*github.com/go-git/go-git/v5/utils/ioutil.readerOnError).Read (*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError$bound (*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError (*github.com/go-git/go-git/v5/plumbing/transport/file.command).Kill (*os.Process).Kill",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry errors.Is errors.is (*google.golang.org/grpc/internal/status.Error).Is google.golang.org/protobuf/proto.Equal google.golang.org/protobuf/internal/impl.equal google.golang.org/protobuf/internal/impl.equalMessage (google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadFileDesc io.ReadAll (*bufio.Reader).Read (*google.golang.org/grpc/credentials/alts/internal/conn.conn).Read (*google.golang.org/grpc/credentials/alts/internal/conn.conn).ReadOnReady (*google.golang.org/grpc/internal/transport/readyreader.nonBlockingReader).ReadOnReady (*os.rawConn).Read",
       "path":  [
         {
           "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
@@ -718,203 +905,146 @@
           "package":  "database/sql"
         },
         {
-          "name":  "(*database/sql.Stmt).QueryContext$1",
+          "name":  "errors.Is",
           "site":  {
             "filename":  "sql.go",
-            "line":  "1576",
-            "column":  "12"
+            "line":  "1578",
+            "column":  "30"
           },
-          "package":  "database/sql"
+          "package":  "errors"
         },
         {
-          "name":  "(*database/sql.Rows).initContextClose",
+          "name":  "errors.is",
           "site":  {
-            "filename":  "sql.go",
-            "line":  "2821",
-            "column":  "25"
-          },
-          "package":  "database/sql"
-        },
-        {
-          "name":  "context.WithCancel",
-          "site":  {
-            "filename":  "sql.go",
-            "line":  "2994",
-            "column":  "40"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "context.withCancel",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "241",
-            "column":  "17"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.cancelCtx).propagateCancel",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "278",
-            "column":  "19"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.afterFuncCtx).cancel",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "486",
-            "column":  "15"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.afterFuncCtx).cancel$1",
-          "package":  "context"
-        },
-        {
-          "name":  "(*crypto/tls.Conn).handshakeContext$1",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "358",
-            "column":  "3"
-          },
-          "package":  "crypto/tls"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.chanConn).Close",
-          "site":  {
-            "filename":  "conn.go",
-            "line":  "1539",
-            "column":  "20"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.channel).Close",
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.channel).sendMessage",
-          "site":  {
-            "filename":  "channel.go",
-            "line":  "564",
-            "column":  "23"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.channel).writePacket",
-          "site":  {
-            "filename":  "channel.go",
-            "line":  "229",
-            "column":  "23"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).writePacket",
-          "site":  {
-            "filename":  "channel.go",
-            "line":  "217",
-            "column":  "32"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).pushPacket",
-          "site":  {
-            "filename":  "handshake.go",
-            "line":  "629",
-            "column":  "24"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.transport).writePacket",
-          "site":  {
-            "filename":  "handshake.go",
-            "line":  "267",
-            "column":  "27"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.connectionState).writePacket",
-          "site":  {
-            "filename":  "transport.go",
-            "line":  "186",
-            "column":  "29"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket",
-          "site":  {
-            "filename":  "transport.go",
-            "line":  "192",
-            "column":  "41"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "io.ReadFull",
-          "site":  {
-            "filename":  "cipher.go",
-            "line":  "618",
-            "column":  "26"
-          },
-          "package":  "io"
-        },
-        {
-          "name":  "io.ReadAtLeast",
-          "site":  {
-            "filename":  "io.go",
-            "line":  "354",
-            "column":  "20"
-          },
-          "package":  "io"
-        },
-        {
-          "name":  "(*github.com/go-git/go-git/v5/utils/ioutil.readerOnError).Read",
-          "site":  {
-            "filename":  "io.go",
-            "line":  "335",
-            "column":  "19"
-          },
-          "package":  "github.com/go-git/go-git/v5/utils/ioutil"
-        },
-        {
-          "name":  "(*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError$bound",
-          "site":  {
-            "filename":  "common.go",
-            "line":  "180",
+            "filename":  "wrap.go",
+            "line":  "51",
             "column":  "11"
           },
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/internal/common"
+          "package":  "errors"
         },
         {
-          "name":  "(*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError",
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/internal/common"
-        },
-        {
-          "name":  "(*github.com/go-git/go-git/v5/plumbing/transport/file.command).Kill",
+          "name":  "(*google.golang.org/grpc/internal/status.Error).Is",
           "site":  {
-            "filename":  "common.go",
-            "line":  "320",
-            "column":  "13"
+            "filename":  "wrap.go",
+            "line":  "59",
+            "column":  "60"
           },
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/file"
+          "package":  "google.golang.org/grpc/internal/status"
         },
         {
-          "name":  "(*os.Process).Kill",
+          "name":  "google.golang.org/protobuf/proto.Equal",
           "site":  {
-            "filename":  "client.go",
-            "line":  "146",
+            "filename":  "status.go",
+            "line":  "227",
             "column":  "20"
+          },
+          "package":  "google.golang.org/protobuf/proto"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.equal",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "60",
+            "column":  "19"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.equalMessage",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "16",
+            "column":  "51"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "(google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "26",
+            "column":  "18"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "511",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "91",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadFileDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "142",
+            "column":  "26"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "io.ReadAll",
+          "site":  {
+            "filename":  "legacy_file.go",
+            "line":  "54",
+            "column":  "23"
+          },
+          "package":  "io"
+        },
+        {
+          "name":  "(*bufio.Reader).Read",
+          "site":  {
+            "filename":  "io.go",
+            "line":  "722",
+            "column":  "19"
+          },
+          "package":  "bufio"
+        },
+        {
+          "name":  "(*google.golang.org/grpc/credentials/alts/internal/conn.conn).Read",
+          "site":  {
+            "filename":  "bufio.go",
+            "line":  "231",
+            "column":  "24"
+          },
+          "package":  "google.golang.org/grpc/credentials/alts/internal/conn"
+        },
+        {
+          "name":  "(*google.golang.org/grpc/credentials/alts/internal/conn.conn).ReadOnReady",
+          "site":  {
+            "filename":  "record.go",
+            "line":  "187",
+            "column":  "27"
+          },
+          "package":  "google.golang.org/grpc/credentials/alts/internal/conn"
+        },
+        {
+          "name":  "(*google.golang.org/grpc/internal/transport/readyreader.nonBlockingReader).ReadOnReady",
+          "site":  {
+            "filename":  "record.go",
+            "line":  "240",
+            "column":  "47"
+          },
+          "package":  "google.golang.org/grpc/internal/transport/readyreader"
+        },
+        {
+          "name":  "(*os.rawConn).Read",
+          "site":  {
+            "filename":  "ready_reader.go",
+            "line":  "114",
+            "column":  "19"
           },
           "package":  "os"
         }
@@ -926,7 +1056,7 @@
       "packageName":  "main",
       "capabilityName":  "SYSTEM_CALLS",
       "capability":  "CAPABILITY_SYSTEM_CALLS",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.DB).Conn$1 (*database/sql.DB).conn (database/sql.dsnConnector).Connect (*modernc.org/sqlite.Driver).Open modernc.org/sqlite.newConn modernc.org/libc.Xfree (*modernc.org/memory.Allocator).UintptrFree (*modernc.org/memory.Allocator).unmap modernc.org/memory.unmap golang.org/x/sys/unix.MunmapPtr",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.DB).Conn$1 (*database/sql.DB).conn (*database/sql.DB).putConn (*github.com/syndtr/goleveldb/leveldb.tOps).remove$1 (*github.com/syndtr/goleveldb/leveldb/cache.Cache).EvictNS (*github.com/syndtr/goleveldb/leveldb/cache.Cache).enumerateNodesByNS (*github.com/syndtr/goleveldb/leveldb/cache.mHead).enumerateNodesByNS (github.com/syndtr/goleveldb/leveldb/cache.mNodes).search sort.Search golang.org/x/sys/unix.ErrnoName$1",
       "path":  [
         {
           "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
@@ -987,74 +1117,74 @@
           "package":  "database/sql"
         },
         {
-          "name":  "(database/sql.dsnConnector).Connect",
+          "name":  "(*database/sql.DB).putConn",
           "site":  {
             "filename":  "sql.go",
-            "line":  "1431",
-            "column":  "33"
+            "line":  "1392",
+            "column":  "17"
           },
           "package":  "database/sql"
         },
         {
-          "name":  "(*modernc.org/sqlite.Driver).Open",
+          "name":  "(*github.com/syndtr/goleveldb/leveldb.tOps).remove$1",
           "site":  {
             "filename":  "sql.go",
-            "line":  "809",
+            "line":  "1507",
+            "column":  "5"
+          },
+          "package":  "github.com/syndtr/goleveldb/leveldb"
+        },
+        {
+          "name":  "(*github.com/syndtr/goleveldb/leveldb/cache.Cache).EvictNS",
+          "site":  {
+            "filename":  "table.go",
+            "line":  "484",
+            "column":  "24"
+          },
+          "package":  "github.com/syndtr/goleveldb/leveldb/cache"
+        },
+        {
+          "name":  "(*github.com/syndtr/goleveldb/leveldb/cache.Cache).enumerateNodesByNS",
+          "site":  {
+            "filename":  "cache.go",
+            "line":  "606",
+            "column":  "32"
+          },
+          "package":  "github.com/syndtr/goleveldb/leveldb/cache"
+        },
+        {
+          "name":  "(*github.com/syndtr/goleveldb/leveldb/cache.mHead).enumerateNodesByNS",
+          "site":  {
+            "filename":  "cache.go",
+            "line":  "411",
+            "column":  "29"
+          },
+          "package":  "github.com/syndtr/goleveldb/leveldb/cache"
+        },
+        {
+          "name":  "(github.com/syndtr/goleveldb/leveldb/cache.mNodes).search",
+          "site":  {
+            "filename":  "cache.go",
+            "line":  "337",
             "column":  "22"
           },
-          "package":  "modernc.org/sqlite"
+          "package":  "github.com/syndtr/goleveldb/leveldb/cache"
         },
         {
-          "name":  "modernc.org/sqlite.newConn",
+          "name":  "sort.Search",
           "site":  {
-            "filename":  "driver.go",
-            "line":  "96",
-            "column":  "19"
+            "filename":  "cache.go",
+            "line":  "85",
+            "column":  "20"
           },
-          "package":  "modernc.org/sqlite"
+          "package":  "sort"
         },
         {
-          "name":  "modernc.org/libc.Xfree",
+          "name":  "golang.org/x/sys/unix.ErrnoName$1",
           "site":  {
-            "filename":  "conn.go",
-            "line":  "94",
-            "column":  "2"
-          },
-          "package":  "modernc.org/libc"
-        },
-        {
-          "name":  "(*modernc.org/memory.Allocator).UintptrFree",
-          "site":  {
-            "filename":  "mem_musl.go",
-            "line":  "99",
-            "column":  "23"
-          },
-          "package":  "modernc.org/memory"
-        },
-        {
-          "name":  "(*modernc.org/memory.Allocator).unmap",
-          "site":  {
-            "filename":  "memory.go",
-            "line":  "202",
-            "column":  "17"
-          },
-          "package":  "modernc.org/memory"
-        },
-        {
-          "name":  "modernc.org/memory.unmap",
-          "site":  {
-            "filename":  "memory.go",
-            "line":  "161",
-            "column":  "14"
-          },
-          "package":  "modernc.org/memory"
-        },
-        {
-          "name":  "golang.org/x/sys/unix.MunmapPtr",
-          "site":  {
-            "filename":  "mmap_unix.go",
-            "line":  "25",
-            "column":  "23"
+            "filename":  "search.go",
+            "line":  "65",
+            "column":  "8"
           },
           "package":  "golang.org/x/sys/unix"
         }
@@ -1066,7 +1196,7 @@
       "packageName":  "main",
       "capabilityName":  "ARBITRARY_EXECUTION",
       "capability":  "CAPABILITY_ARBITRARY_EXECUTION",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 (*database/sql.Rows).initContextClose context.WithCancel context.withCancel (*context.cancelCtx).propagateCancel (*context.afterFuncCtx).cancel (*context.afterFuncCtx).cancel$1 (*crypto/tls.Conn).handshakeContext$1 (*golang.org/x/crypto/ssh.chanConn).Close (*golang.org/x/crypto/ssh.channel).Close (*golang.org/x/crypto/ssh.channel).sendMessage (*golang.org/x/crypto/ssh.channel).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).pushPacket (*golang.org/x/crypto/ssh.transport).writePacket (*golang.org/x/crypto/ssh.connectionState).writePacket (*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket (*crypto/internal/fips140/hmac.HMAC).Reset (*github.com/pjbgf/sha1cd.digest).Write github.com/pjbgf/sha1cd.block github.com/pjbgf/sha1cd.blockAMD64",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry errors.Is errors.is (*google.golang.org/grpc/internal/status.Error).Is google.golang.org/protobuf/proto.Equal google.golang.org/protobuf/internal/impl.equal google.golang.org/protobuf/internal/impl.equalMessage (google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadFileDesc io.ReadAll (*bufio.Reader).Read (*github.com/klauspost/compress/zstd.Decoder).Read (*github.com/klauspost/compress/zstd.Decoder).nextBlock github.com/klauspost/compress/zstd/internal/xxhash.Sum64",
       "path":  [
         {
           "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
@@ -1109,183 +1239,139 @@
           "package":  "database/sql"
         },
         {
-          "name":  "(*database/sql.Stmt).QueryContext$1",
+          "name":  "errors.Is",
           "site":  {
             "filename":  "sql.go",
-            "line":  "1576",
-            "column":  "12"
+            "line":  "1578",
+            "column":  "30"
           },
-          "package":  "database/sql"
+          "package":  "errors"
         },
         {
-          "name":  "(*database/sql.Rows).initContextClose",
+          "name":  "errors.is",
           "site":  {
-            "filename":  "sql.go",
-            "line":  "2821",
-            "column":  "25"
+            "filename":  "wrap.go",
+            "line":  "51",
+            "column":  "11"
           },
-          "package":  "database/sql"
+          "package":  "errors"
         },
         {
-          "name":  "context.WithCancel",
+          "name":  "(*google.golang.org/grpc/internal/status.Error).Is",
           "site":  {
-            "filename":  "sql.go",
-            "line":  "2994",
-            "column":  "40"
+            "filename":  "wrap.go",
+            "line":  "59",
+            "column":  "60"
           },
-          "package":  "context"
+          "package":  "google.golang.org/grpc/internal/status"
         },
         {
-          "name":  "context.withCancel",
+          "name":  "google.golang.org/protobuf/proto.Equal",
           "site":  {
-            "filename":  "context.go",
-            "line":  "241",
-            "column":  "17"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.cancelCtx).propagateCancel",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "278",
-            "column":  "19"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.afterFuncCtx).cancel",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "486",
-            "column":  "15"
-          },
-          "package":  "context"
-        },
-        {
-          "name":  "(*context.afterFuncCtx).cancel$1",
-          "package":  "context"
-        },
-        {
-          "name":  "(*crypto/tls.Conn).handshakeContext$1",
-          "site":  {
-            "filename":  "context.go",
-            "line":  "358",
-            "column":  "3"
-          },
-          "package":  "crypto/tls"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.chanConn).Close",
-          "site":  {
-            "filename":  "conn.go",
-            "line":  "1539",
+            "filename":  "status.go",
+            "line":  "227",
             "column":  "20"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "google.golang.org/protobuf/proto"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.channel).Close",
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.channel).sendMessage",
+          "name":  "google.golang.org/protobuf/internal/impl.equal",
           "site":  {
-            "filename":  "channel.go",
-            "line":  "564",
+            "filename":  "equal.go",
+            "line":  "60",
+            "column":  "19"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.equalMessage",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "16",
+            "column":  "51"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "(google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "26",
+            "column":  "18"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "511",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "91",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadFileDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "142",
+            "column":  "26"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "io.ReadAll",
+          "site":  {
+            "filename":  "legacy_file.go",
+            "line":  "54",
             "column":  "23"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "io"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.channel).writePacket",
+          "name":  "(*bufio.Reader).Read",
           "site":  {
-            "filename":  "channel.go",
-            "line":  "229",
-            "column":  "23"
+            "filename":  "io.go",
+            "line":  "722",
+            "column":  "19"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "bufio"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).writePacket",
+          "name":  "(*github.com/klauspost/compress/zstd.Decoder).Read",
           "site":  {
-            "filename":  "channel.go",
-            "line":  "217",
-            "column":  "32"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).pushPacket",
-          "site":  {
-            "filename":  "handshake.go",
-            "line":  "629",
+            "filename":  "bufio.go",
+            "line":  "231",
             "column":  "24"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "github.com/klauspost/compress/zstd"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.transport).writePacket",
+          "name":  "(*github.com/klauspost/compress/zstd.Decoder).nextBlock",
           "site":  {
-            "filename":  "handshake.go",
-            "line":  "267",
-            "column":  "27"
+            "filename":  "decoder.go",
+            "line":  "140",
+            "column":  "19"
           },
-          "package":  "golang.org/x/crypto/ssh"
+          "package":  "github.com/klauspost/compress/zstd"
         },
         {
-          "name":  "(*golang.org/x/crypto/ssh.connectionState).writePacket",
+          "name":  "github.com/klauspost/compress/zstd/internal/xxhash.Sum64",
           "site":  {
-            "filename":  "transport.go",
-            "line":  "186",
-            "column":  "29"
+            "filename":  "decoder.go",
+            "line":  "458",
+            "column":  "60"
           },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket",
-          "site":  {
-            "filename":  "transport.go",
-            "line":  "192",
-            "column":  "41"
-          },
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "(*crypto/internal/fips140/hmac.HMAC).Reset",
-          "site":  {
-            "filename":  "cipher.go",
-            "line":  "623",
-            "column":  "14"
-          },
-          "package":  "crypto/internal/fips140/hmac"
-        },
-        {
-          "name":  "(*github.com/pjbgf/sha1cd.digest).Write",
-          "site":  {
-            "filename":  "hmac.go",
-            "line":  "91",
-            "column":  "15"
-          },
-          "package":  "github.com/pjbgf/sha1cd"
-        },
-        {
-          "name":  "github.com/pjbgf/sha1cd.block",
-          "site":  {
-            "filename":  "sha1cd.go",
-            "line":  "143",
-            "column":  "9"
-          },
-          "package":  "github.com/pjbgf/sha1cd"
-        },
-        {
-          "name":  "github.com/pjbgf/sha1cd.blockAMD64",
-          "site":  {
-            "filename":  "sha1cdblock_amd64.go",
-            "line":  "39",
-            "column":  "13"
-          },
-          "package":  "github.com/pjbgf/sha1cd"
+          "package":  "github.com/klauspost/compress/zstd/internal/xxhash"
         }
       ],
       "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
@@ -1409,7 +1495,7 @@
           "name":  "(*golang.org/x/crypto/ssh.Certificate).Marshal",
           "site":  {
             "filename":  "keys.go",
-            "line":  "1820",
+            "line":  "1913",
             "column":  "43"
           },
           "package":  "golang.org/x/crypto/ssh"
@@ -1418,7 +1504,7 @@
           "name":  "golang.org/x/crypto/ssh.Marshal",
           "site":  {
             "filename":  "certs.go",
-            "line":  "558",
+            "line":  "574",
             "column":  "30"
           },
           "package":  "golang.org/x/crypto/ssh"
@@ -1449,72 +1535,238 @@
       "packageName":  "main",
       "capabilityName":  "EXEC",
       "capability":  "CAPABILITY_EXEC",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute github.com/git-pkgs/silo/cmd/silo.newAdminRepoCmd$1 github.com/git-pkgs/silo/internal/store.Open (*database/sql.DB).Close (*os/exec.Cmd).writerDescriptor$1",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry errors.Is errors.is (*google.golang.org/grpc/internal/status.Error).Is google.golang.org/protobuf/proto.Equal google.golang.org/protobuf/internal/impl.equal google.golang.org/protobuf/internal/impl.equalMessage (google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc google.golang.org/protobuf/internal/impl.legacyLoadFileDesc io.ReadAll (*bufio.Reader).Read (*crypto/tls.Conn).Read (*crypto/tls.Conn).handlePostHandshakeMessage (*crypto/tls.Conn).handleRenegotiation (*crypto/tls.Conn).clientHandshake (*crypto/tls.clientHandshakeState).handshake (*crypto/tls.clientHandshakeState).doFullHandshake (*crypto/tls.Conn).getClientCertificate (*cloud.google.com/go/auth/internal/transport/cert.secureConnectSource).getClientCertificate$bound (*cloud.google.com/go/auth/internal/transport/cert.secureConnectSource).getClientCertificate os/exec.Command",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).Execute",
-          "site":  {
-            "filename":  "main.go",
-            "line":  "14",
-            "column":  "32"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*github.com/spf13/cobra.Command).ExecuteC",
-          "site":  {
-            "filename":  "command.go",
-            "line":  "1071",
-            "column":  "22"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*github.com/spf13/cobra.Command).execute",
-          "site":  {
-            "filename":  "command.go",
-            "line":  "1148",
-            "column":  "19"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.newAdminRepoCmd$1",
-          "site":  {
-            "filename":  "command.go",
-            "line":  "1015",
-            "column":  "19"
-          },
-          "package":  "github.com/git-pkgs/silo/cmd/silo"
-        },
-        {
-          "name":  "github.com/git-pkgs/silo/internal/store.Open",
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
           "site":  {
             "filename":  "admin.go",
-            "line":  "83",
-            "column":  "25"
+            "line":  "68",
+            "column":  "23"
           },
           "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "(*database/sql.DB).Close",
+          "name":  "(*database/sql.DB).Exec",
           "site":  {
             "filename":  "store.go",
-            "line":  "32",
-            "column":  "15"
+            "line":  "88",
+            "column":  "23"
           },
           "package":  "database/sql"
         },
         {
-          "name":  "(*os/exec.Cmd).writerDescriptor$1",
+          "name":  "(*database/sql.DB).ExecContext",
           "site":  {
             "filename":  "sql.go",
-            "line":  "945",
-            "column":  "13"
+            "line":  "1685",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).retry",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1671",
+            "column":  "16"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "errors.Is",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1578",
+            "column":  "30"
+          },
+          "package":  "errors"
+        },
+        {
+          "name":  "errors.is",
+          "site":  {
+            "filename":  "wrap.go",
+            "line":  "51",
+            "column":  "11"
+          },
+          "package":  "errors"
+        },
+        {
+          "name":  "(*google.golang.org/grpc/internal/status.Error).Is",
+          "site":  {
+            "filename":  "wrap.go",
+            "line":  "59",
+            "column":  "60"
+          },
+          "package":  "google.golang.org/grpc/internal/status"
+        },
+        {
+          "name":  "google.golang.org/protobuf/proto.Equal",
+          "site":  {
+            "filename":  "status.go",
+            "line":  "227",
+            "column":  "20"
+          },
+          "package":  "google.golang.org/protobuf/proto"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.equal",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "60",
+            "column":  "19"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.equalMessage",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "16",
+            "column":  "51"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "(google.golang.org/protobuf/internal/impl.aberrantMessage).Descriptor",
+          "site":  {
+            "filename":  "equal.go",
+            "line":  "26",
+            "column":  "18"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.LegacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "511",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadMessageDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "91",
+            "column":  "30"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "google.golang.org/protobuf/internal/impl.legacyLoadFileDesc",
+          "site":  {
+            "filename":  "legacy_message.go",
+            "line":  "142",
+            "column":  "26"
+          },
+          "package":  "google.golang.org/protobuf/internal/impl"
+        },
+        {
+          "name":  "io.ReadAll",
+          "site":  {
+            "filename":  "legacy_file.go",
+            "line":  "54",
+            "column":  "23"
+          },
+          "package":  "io"
+        },
+        {
+          "name":  "(*bufio.Reader).Read",
+          "site":  {
+            "filename":  "io.go",
+            "line":  "722",
+            "column":  "19"
+          },
+          "package":  "bufio"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).Read",
+          "site":  {
+            "filename":  "bufio.go",
+            "line":  "231",
+            "column":  "24"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).handlePostHandshakeMessage",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1397",
+            "column":  "42"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).handleRenegotiation",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1307",
+            "column":  "31"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).clientHandshake",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1297",
+            "column":  "39"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.clientHandshakeState).handshake",
+          "site":  {
+            "filename":  "handshake_client.go",
+            "line":  "349",
+            "column":  "21"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.clientHandshakeState).doFullHandshake",
+          "site":  {
+            "filename":  "handshake_client.go",
+            "line":  "593",
+            "column":  "31"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).getClientCertificate",
+          "site":  {
+            "filename":  "handshake_client.go",
+            "line":  "728",
+            "column":  "47"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*cloud.google.com/go/auth/internal/transport/cert.secureConnectSource).getClientCertificate$bound",
+          "site":  {
+            "filename":  "handshake_client.go",
+            "line":  "1266",
+            "column":  "39"
+          },
+          "package":  "cloud.google.com/go/auth/internal/transport/cert"
+        },
+        {
+          "name":  "(*cloud.google.com/go/auth/internal/transport/cert.secureConnectSource).getClientCertificate",
+          "package":  "cloud.google.com/go/auth/internal/transport/cert"
+        },
+        {
+          "name":  "os/exec.Command",
+          "site":  {
+            "filename":  "secureconnect_cert.go",
+            "line":  "102",
+            "column":  "27"
           },
           "package":  "os/exec"
         }
@@ -1525,24 +1777,188 @@
   ],
   "moduleInfo":  [
     {
-      "path":  "dario.cat/mergo",
+      "path":  "cloud.google.com/go/auth",
+      "version":  "v0.20.0"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/oauth2adapt",
+      "version":  "v0.2.8"
+    },
+    {
+      "path":  "cloud.google.com/go/compute/metadata",
+      "version":  "v0.9.0"
+    },
+    {
+      "path":  "cloud.google.com/go/iam",
+      "version":  "v1.11.0"
+    },
+    {
+      "path":  "cloud.google.com/go/kms",
+      "version":  "v1.31.0"
+    },
+    {
+      "path":  "cloud.google.com/go/longrunning",
       "version":  "v1.0.0"
     },
     {
+      "path":  "dario.cat/mergo",
+      "version":  "v1.0.2"
+    },
+    {
+      "path":  "filippo.io/edwards25519",
+      "version":  "v1.2.0"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore",
+      "version":  "v1.21.1"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azidentity",
+      "version":  "v1.13.1"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal",
+      "version":  "v1.12.0"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys",
+      "version":  "v1.5.0"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal",
+      "version":  "v1.2.0"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go",
+      "version":  "v1.7.2"
+    },
+    {
       "path":  "github.com/ProtonMail/go-crypto",
-      "version":  "v1.1.6"
+      "version":  "v1.4.1"
     },
     {
       "path":  "github.com/anmitsu/go-shlex",
       "version":  "v0.0.0-20200514113438-38f4b401e2be"
     },
     {
+      "path":  "github.com/asaskevich/govalidator",
+      "version":  "v0.0.0-20230301143203-a9d515a09cc2"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2",
+      "version":  "v1.41.7"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/config",
+      "version":  "v1.32.18"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials",
+      "version":  "v1.19.17"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/feature/ec2/imds",
+      "version":  "v1.18.23"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/configsources",
+      "version":  "v1.4.23"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/endpoints/v2",
+      "version":  "v2.7.23"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/v4a",
+      "version":  "v1.4.24"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding",
+      "version":  "v1.13.9"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/internal/presigned-url",
+      "version":  "v1.13.23"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/kms",
+      "version":  "v1.52.0"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/signin",
+      "version":  "v1.0.11"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sso",
+      "version":  "v1.30.17"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/ssooidc",
+      "version":  "v1.36.0"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sts",
+      "version":  "v1.42.1"
+    },
+    {
+      "path":  "github.com/aws/smithy-go",
+      "version":  "v1.25.1"
+    },
+    {
+      "path":  "github.com/blang/semver",
+      "version":  "v3.5.1+incompatible"
+    },
+    {
+      "path":  "github.com/cenkalti/backoff/v4",
+      "version":  "v4.3.0"
+    },
+    {
+      "path":  "github.com/cenkalti/backoff/v5",
+      "version":  "v5.0.3"
+    },
+    {
+      "path":  "github.com/cespare/xxhash/v2",
+      "version":  "v2.3.0"
+    },
+    {
       "path":  "github.com/cloudflare/circl",
       "version":  "v1.6.3"
     },
     {
+      "path":  "github.com/coreos/go-oidc/v3",
+      "version":  "v3.18.0"
+    },
+    {
+      "path":  "github.com/cyberphone/json-canonicalization",
+      "version":  "v0.0.0-20241213102144-19d51d7fe467"
+    },
+    {
       "path":  "github.com/cyphar/filepath-securejoin",
       "version":  "v0.6.1"
+    },
+    {
+      "path":  "github.com/danwakefield/fnmatch",
+      "version":  "v0.0.0-20160403171240-cbb64ac3d964"
+    },
+    {
+      "path":  "github.com/davecgh/go-spew",
+      "version":  "v1.1.2-0.20180830191138-d8f796af33cc"
+    },
+    {
+      "path":  "github.com/digitorus/pkcs7",
+      "version":  "v0.0.0-20250730155240-ffadbf3f398c"
+    },
+    {
+      "path":  "github.com/digitorus/timestamp",
+      "version":  "v0.0.0-20250524132541-c45532741eea"
+    },
+    {
+      "path":  "github.com/docker/cli",
+      "version":  "v29.4.3+incompatible"
+    },
+    {
+      "path":  "github.com/docker/docker-credential-helpers",
+      "version":  "v0.9.5"
     },
     {
       "path":  "github.com/dustin/go-humanize",
@@ -1553,8 +1969,24 @@
       "version":  "v1.18.1"
     },
     {
+      "path":  "github.com/felixge/httpsnoop",
+      "version":  "v1.0.4"
+    },
+    {
+      "path":  "github.com/github/smimesign",
+      "version":  "v0.2.0"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf",
+      "version":  "v0.14.2-0.20260614183827-6f382ee5c029"
+    },
+    {
       "path":  "github.com/gliderlabs/ssh",
       "version":  "v0.3.8"
+    },
+    {
+      "path":  "github.com/go-chi/chi/v5",
+      "version":  "v5.3.0"
     },
     {
       "path":  "github.com/go-git/gcfg",
@@ -1569,40 +2001,384 @@
       "version":  "v5.19.1"
     },
     {
+      "path":  "github.com/go-jose/go-jose/v4",
+      "version":  "v4.1.4"
+    },
+    {
+      "path":  "github.com/go-logr/logr",
+      "version":  "v1.4.3"
+    },
+    {
+      "path":  "github.com/go-logr/stdr",
+      "version":  "v1.2.2"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis",
+      "version":  "v0.25.2"
+    },
+    {
+      "path":  "github.com/go-openapi/errors",
+      "version":  "v0.22.7"
+    },
+    {
+      "path":  "github.com/go-openapi/jsonpointer",
+      "version":  "v0.23.1"
+    },
+    {
+      "path":  "github.com/go-openapi/jsonreference",
+      "version":  "v0.21.6"
+    },
+    {
+      "path":  "github.com/go-openapi/loads",
+      "version":  "v0.23.3"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime",
+      "version":  "v0.32.3"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/server-middleware",
+      "version":  "v0.30.0"
+    },
+    {
+      "path":  "github.com/go-openapi/spec",
+      "version":  "v0.22.5"
+    },
+    {
+      "path":  "github.com/go-openapi/strfmt",
+      "version":  "v0.26.3"
+    },
+    {
+      "path":  "github.com/go-openapi/swag",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/cmdutils",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/conv",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/fileutils",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/jsonname",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/jsonutils",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/loading",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/mangling",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/netutils",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/stringutils",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/typeutils",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/yamlutils",
+      "version":  "v0.26.0"
+    },
+    {
+      "path":  "github.com/go-openapi/validate",
+      "version":  "v0.25.3"
+    },
+    {
+      "path":  "github.com/go-viper/mapstructure/v2",
+      "version":  "v2.5.0"
+    },
+    {
+      "path":  "github.com/golang-jwt/jwt/v5",
+      "version":  "v5.3.1"
+    },
+    {
       "path":  "github.com/golang/groupcache",
       "version":  "v0.0.0-20241129210726-2c02b8208cf8"
+    },
+    {
+      "path":  "github.com/golang/snappy",
+      "version":  "v1.0.0"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go",
+      "version":  "v1.3.3"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry",
+      "version":  "v0.21.6"
+    },
+    {
+      "path":  "github.com/google/go-github/v61",
+      "version":  "v61.0.0"
+    },
+    {
+      "path":  "github.com/google/go-querystring",
+      "version":  "v1.2.0"
+    },
+    {
+      "path":  "github.com/google/s2a-go",
+      "version":  "v0.1.9"
+    },
+    {
+      "path":  "github.com/google/trillian",
+      "version":  "v1.7.3"
     },
     {
       "path":  "github.com/google/uuid",
       "version":  "v1.6.0"
     },
     {
+      "path":  "github.com/googleapis/enterprise-certificate-proxy",
+      "version":  "v0.3.15"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2",
+      "version":  "v2.22.0"
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/go-grpc-middleware",
+      "version":  "v1.4.0"
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/grpc-gateway/v2",
+      "version":  "v2.29.0"
+    },
+    {
+      "path":  "github.com/hashicorp/errwrap",
+      "version":  "v1.1.0"
+    },
+    {
+      "path":  "github.com/hashicorp/go-cleanhttp",
+      "version":  "v0.5.2"
+    },
+    {
+      "path":  "github.com/hashicorp/go-multierror",
+      "version":  "v1.1.1"
+    },
+    {
+      "path":  "github.com/hashicorp/go-retryablehttp",
+      "version":  "v0.7.8"
+    },
+    {
+      "path":  "github.com/hashicorp/go-rootcerts",
+      "version":  "v1.0.2"
+    },
+    {
+      "path":  "github.com/hashicorp/go-secure-stdlib/parseutil",
+      "version":  "v0.2.0"
+    },
+    {
+      "path":  "github.com/hashicorp/go-secure-stdlib/strutil",
+      "version":  "v0.1.2"
+    },
+    {
+      "path":  "github.com/hashicorp/go-sockaddr",
+      "version":  "v1.0.7"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl",
+      "version":  "v1.0.1-vault-7"
+    },
+    {
+      "path":  "github.com/hashicorp/vault/api",
+      "version":  "v1.22.0"
+    },
+    {
+      "path":  "github.com/hiddeco/sshsig",
+      "version":  "v0.2.0"
+    },
+    {
+      "path":  "github.com/in-toto/attestation",
+      "version":  "v1.2.0"
+    },
+    {
+      "path":  "github.com/in-toto/in-toto-golang",
+      "version":  "v0.11.0"
+    },
+    {
       "path":  "github.com/jbenet/go-context",
       "version":  "v0.0.0-20150711004518-d14ea06fba99"
     },
     {
+      "path":  "github.com/jedisct1/go-minisign",
+      "version":  "v0.0.0-20241212093149-d2f9f49435c7"
+    },
+    {
+      "path":  "github.com/jellydator/ttlcache/v3",
+      "version":  "v3.4.0"
+    },
+    {
+      "path":  "github.com/jonboulle/clockwork",
+      "version":  "v0.5.0"
+    },
+    {
       "path":  "github.com/kevinburke/ssh_config",
-      "version":  "v1.2.0"
+      "version":  "v1.4.0"
+    },
+    {
+      "path":  "github.com/klauspost/compress",
+      "version":  "v1.18.6"
     },
     {
       "path":  "github.com/klauspost/cpuid/v2",
       "version":  "v2.3.0"
     },
     {
+      "path":  "github.com/kylelemons/godebug",
+      "version":  "v1.1.0"
+    },
+    {
+      "path":  "github.com/letsencrypt/boulder",
+      "version":  "v0.20260309.0"
+    },
+    {
+      "path":  "github.com/mitchellh/go-homedir",
+      "version":  "v1.1.0"
+    },
+    {
+      "path":  "github.com/mitchellh/mapstructure",
+      "version":  "v1.5.1-0.20231216201459-8508981c8b6c"
+    },
+    {
+      "path":  "github.com/moby/term",
+      "version":  "v0.5.2"
+    },
+    {
+      "path":  "github.com/natefinch/atomic",
+      "version":  "v1.0.1"
+    },
+    {
+      "path":  "github.com/nozzle/throttler",
+      "version":  "v0.0.0-20180817012639-2ea982251481"
+    },
+    {
+      "path":  "github.com/oklog/ulid/v2",
+      "version":  "v2.1.1"
+    },
+    {
+      "path":  "github.com/opencontainers/go-digest",
+      "version":  "v1.0.0"
+    },
+    {
+      "path":  "github.com/opencontainers/image-spec",
+      "version":  "v1.1.1"
+    },
+    {
       "path":  "github.com/pjbgf/sha1cd",
       "version":  "v0.6.0"
+    },
+    {
+      "path":  "github.com/pkg/browser",
+      "version":  "v0.0.0-20240102092130-5ac0b6a4141c"
+    },
+    {
+      "path":  "github.com/pkg/errors",
+      "version":  "v0.9.1"
+    },
+    {
+      "path":  "github.com/pmezard/go-difflib",
+      "version":  "v1.0.1-0.20181226105442-5d4384ee4fb2"
     },
     {
       "path":  "github.com/remyoudompheng/bigfft",
       "version":  "v0.0.0-20230129092748-24d4a6f8daec"
     },
     {
+      "path":  "github.com/ryanuber/go-glob",
+      "version":  "v1.0.0"
+    },
+    {
+      "path":  "github.com/sassoftware/relic",
+      "version":  "v7.2.1+incompatible"
+    },
+    {
+      "path":  "github.com/secure-systems-lab/go-securesystemslib",
+      "version":  "v0.11.0"
+    },
+    {
       "path":  "github.com/sergi/go-diff",
-      "version":  "v1.3.2-0.20230802210424-5b0b94c5c0d3"
+      "version":  "v1.4.0"
+    },
+    {
+      "path":  "github.com/shibumi/go-pathspec",
+      "version":  "v1.3.0"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3",
+      "version":  "v3.1.0"
+    },
+    {
+      "path":  "github.com/sigstore/fulcio",
+      "version":  "v1.8.7"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign",
+      "version":  "v0.16.0"
+    },
+    {
+      "path":  "github.com/sigstore/protobuf-specs",
+      "version":  "v0.5.1"
+    },
+    {
+      "path":  "github.com/sigstore/rekor",
+      "version":  "v1.5.2"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2",
+      "version":  "v2.2.2-0.20260601073857-5d098a2b6443"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore",
+      "version":  "v1.10.8"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go",
+      "version":  "v1.2.0"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/aws",
+      "version":  "v1.10.8"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/azure",
+      "version":  "v1.10.8"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/gcp",
+      "version":  "v1.10.8"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/hashivault",
+      "version":  "v1.10.8"
+    },
+    {
+      "path":  "github.com/sigstore/timestamp-authority/v2",
+      "version":  "v2.1.2"
+    },
+    {
+      "path":  "github.com/sirupsen/logrus",
+      "version":  "v1.9.4"
     },
     {
       "path":  "github.com/skeema/knownhosts",
-      "version":  "v1.3.1"
+      "version":  "v1.3.2"
     },
     {
       "path":  "github.com/spf13/cobra",
@@ -1610,27 +2386,175 @@
     },
     {
       "path":  "github.com/spf13/pflag",
-      "version":  "v1.0.9"
+      "version":  "v1.0.10"
+    },
+    {
+      "path":  "github.com/stretchr/testify",
+      "version":  "v1.11.1"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb",
+      "version":  "v1.0.1-0.20220721030215-126854af5e6d"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf",
+      "version":  "v0.7.0"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/v2",
+      "version":  "v2.4.2-0.20260407074541-7e8f69f906ef"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go-awskms/v3",
+      "version":  "v3.0.0"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go-gcpkms/v2",
+      "version":  "v2.2.0"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2",
+      "version":  "v2.6.0"
+    },
+    {
+      "path":  "github.com/titanous/rocacheck",
+      "version":  "v0.0.0-20171023193734-afe73141d399"
+    },
+    {
+      "path":  "github.com/transparency-dev/formats",
+      "version":  "v0.1.1"
+    },
+    {
+      "path":  "github.com/transparency-dev/merkle",
+      "version":  "v0.0.2"
     },
     {
       "path":  "github.com/xanzy/ssh-agent",
       "version":  "v0.3.3"
     },
     {
-      "path":  "golang.org/x/crypto",
-      "version":  "v0.50.0"
+      "path":  "github.com/youmark/pkcs8",
+      "version":  "v0.0.0-20240726163527-a2c0da244d78"
     },
     {
-      "path":  "golang.org/x/net",
+      "path":  "github.com/yuin/gopher-lua",
+      "version":  "v1.1.2"
+    },
+    {
+      "path":  "go.opentelemetry.io/auto/sdk",
+      "version":  "v1.2.1"
+    },
+    {
+      "path":  "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc",
+      "version":  "v0.68.0"
+    },
+    {
+      "path":  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp",
+      "version":  "v0.68.0"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel",
+      "version":  "v1.44.0"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/metric",
+      "version":  "v1.44.0"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/trace",
+      "version":  "v1.44.0"
+    },
+    {
+      "path":  "go.step.sm/crypto",
+      "version":  "v0.81.0"
+    },
+    {
+      "path":  "go.uber.org/multierr",
+      "version":  "v1.11.0"
+    },
+    {
+      "path":  "go.uber.org/zap",
+      "version":  "v1.28.0"
+    },
+    {
+      "path":  "go.yaml.in/yaml/v2",
+      "version":  "v2.4.4"
+    },
+    {
+      "path":  "go.yaml.in/yaml/v3",
+      "version":  "v3.0.4"
+    },
+    {
+      "path":  "golang.org/x/crypto",
       "version":  "v0.53.0"
     },
     {
+      "path":  "golang.org/x/mod",
+      "version":  "v0.36.0"
+    },
+    {
+      "path":  "golang.org/x/net",
+      "version":  "v0.55.0"
+    },
+    {
+      "path":  "golang.org/x/oauth2",
+      "version":  "v0.36.0"
+    },
+    {
+      "path":  "golang.org/x/sync",
+      "version":  "v0.21.0"
+    },
+    {
       "path":  "golang.org/x/sys",
-      "version":  "v0.43.0"
+      "version":  "v0.46.0"
+    },
+    {
+      "path":  "golang.org/x/term",
+      "version":  "v0.44.0"
+    },
+    {
+      "path":  "golang.org/x/text",
+      "version":  "v0.38.0"
+    },
+    {
+      "path":  "golang.org/x/time",
+      "version":  "v0.15.0"
+    },
+    {
+      "path":  "google.golang.org/api",
+      "version":  "v0.280.0"
+    },
+    {
+      "path":  "google.golang.org/genproto",
+      "version":  "v0.0.0-20260406210006-6f92a3bedf2d"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/api",
+      "version":  "v0.0.0-20260526163538-3dc84a4a5aaa"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/rpc",
+      "version":  "v0.0.0-20260523011958-0a33c5d7ca68"
+    },
+    {
+      "path":  "google.golang.org/grpc",
+      "version":  "v1.81.1"
+    },
+    {
+      "path":  "google.golang.org/protobuf",
+      "version":  "v1.36.12-0.20260120151049-f2248ac996af"
     },
     {
       "path":  "gopkg.in/warnings.v0",
       "version":  "v0.1.2"
+    },
+    {
+      "path":  "gopkg.in/yaml.v3",
+      "version":  "v3.0.1"
+    },
+    {
+      "path":  "k8s.io/klog/v2",
+      "version":  "v2.140.0"
     },
     {
       "path":  "modernc.org/libc",
@@ -1647,11 +2571,287 @@
     {
       "path":  "modernc.org/sqlite",
       "version":  "v1.52.0"
+    },
+    {
+      "path":  "sigs.k8s.io/yaml",
+      "version":  "v1.6.0"
     }
   ],
   "packageInfo":  [
     {
+      "path":  "cloud.google.com/go/auth"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/credentials"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/credentials/internal/externalaccount"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/credentials/internal/externalaccountuser"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/credentials/internal/gdch"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/credentials/internal/impersonate"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/credentials/internal/stsexchange"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/grpctransport"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/httptransport"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/compute",
+      "ignoredFiles":  [
+        "manufacturer.go",
+        "manufacturer_windows.go"
+      ]
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/credsfile"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/jwt"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/retry"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/transport"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/transport/cert"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/transport/headers"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/internal/trustboundary"
+    },
+    {
+      "path":  "cloud.google.com/go/auth/oauth2adapt"
+    },
+    {
+      "path":  "cloud.google.com/go/compute/metadata",
+      "ignoredFiles":  [
+        "syscheck.go",
+        "syscheck_windows.go"
+      ]
+    },
+    {
+      "path":  "cloud.google.com/go/iam"
+    },
+    {
+      "path":  "cloud.google.com/go/iam/apiv1/iampb"
+    },
+    {
+      "path":  "cloud.google.com/go/kms/apiv1"
+    },
+    {
+      "path":  "cloud.google.com/go/kms/apiv1/kmspb"
+    },
+    {
+      "path":  "cloud.google.com/go/kms/internal"
+    },
+    {
+      "path":  "cloud.google.com/go/longrunning",
+      "ignoredFiles":  [
+        "tidyfix.go"
+      ]
+    },
+    {
+      "path":  "cloud.google.com/go/longrunning/autogen"
+    },
+    {
+      "path":  "cloud.google.com/go/longrunning/autogen/longrunningpb"
+    },
+    {
+      "path":  "cloud.google.com/go/longrunning/internal"
+    },
+    {
       "path":  "dario.cat/mergo"
+    },
+    {
+      "path":  "filippo.io/edwards25519"
+    },
+    {
+      "path":  "filippo.io/edwards25519/field",
+      "ignoredFiles":  [
+        "fe_amd64_noasm.go"
+      ]
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/internal/resource"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/policy"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/arm/runtime"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/cloud"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/exported"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/log"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/pollers"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/pollers/async"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/pollers/body"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/pollers/fake"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/pollers/loc"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/pollers/op"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/internal/shared"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/log"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/runtime",
+      "ignoredFiles":  [
+        "transport_default_dialer_wasm.go"
+      ]
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/streaming"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azcore/tracing"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azidentity",
+      "ignoredFiles":  [
+        "developer_credential_util_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/azidentity/internal"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal/diag"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal/errorinfo"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal/exported"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal/log"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal/poller"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal/temporal"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/internal/uuid"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
+    },
+    {
+      "path":  "github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/cache"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/confidential"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/errors"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/base"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/base/storage"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/exported"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/json"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/json/types/time"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/local"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth/ops"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth/ops/accesstokens"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth/ops/authority"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth/ops/internal/comm"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth/ops/internal/grant"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth/ops/wstrust"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/oauth/ops/wstrust/defs"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/options"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/shared"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/internal/version"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/managedidentity"
+    },
+    {
+      "path":  "github.com/AzureAD/microsoft-authentication-library-for-go/apps/public"
     },
     {
       "path":  "github.com/ProtonMail/go-crypto/bitcurves"
@@ -1723,6 +2923,316 @@
       "path":  "github.com/anmitsu/go-shlex"
     },
     {
+      "path":  "github.com/asaskevich/govalidator"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws",
+      "ignoredFiles":  [
+        "generate.go",
+        "logging_generate.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/defaults"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/middleware",
+      "ignoredFiles":  [
+        "osname_go115.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/protocol/query"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/protocol/restjson"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/protocol/xml"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/ratelimit"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/retry"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/signer/internal/v4"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/aws/transport/http"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/config",
+      "ignoredFiles":  [
+        "shared_config_windows_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/config/internal/ini"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials/ec2rolecreds",
+      "ignoredFiles":  [
+        "integration_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials/endpointcreds"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials/endpointcreds/internal/client"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials/logincreds"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials/processcreds"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials/ssocreds"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/credentials/stscreds"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/feature/ec2/imds",
+      "ignoredFiles":  [
+        "integration_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/feature/ec2/imds/internal/config"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/auth"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/auth/smithy"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/configsources"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/context"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/endpoints"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/endpoints/awsrulesfn",
+      "ignoredFiles":  [
+        "generate.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/endpoints/v2"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/rand"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/sdk"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/sdkio"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/shareddefaults",
+      "ignoredFiles":  [
+        "shared_config_windows_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/strings"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/sync/singleflight"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/timeconv"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/v4a"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/v4a/internal/crypto"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/internal/v4a/internal/v4"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/internal/presigned-url"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/kms",
+      "ignoredFiles":  [
+        "snapshot_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/kms/internal/endpoints"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/kms/types"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/signin",
+      "ignoredFiles":  [
+        "snapshot_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/signin/internal/endpoints"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/signin/types"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sso",
+      "ignoredFiles":  [
+        "snapshot_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sso/internal/endpoints"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sso/types"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/ssooidc",
+      "ignoredFiles":  [
+        "snapshot_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/ssooidc/internal/endpoints"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/ssooidc/types"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sts",
+      "ignoredFiles":  [
+        "snapshot_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sts/internal/endpoints"
+    },
+    {
+      "path":  "github.com/aws/aws-sdk-go-v2/service/sts/types"
+    },
+    {
+      "path":  "github.com/aws/smithy-go"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/auth"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/auth/bearer"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/context"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/document"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/encoding"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/encoding/httpbinding"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/encoding/json"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/encoding/xml"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/endpoints"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/endpoints/private/bdd"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/endpoints/private/rulesfn"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/internal/sync/singleflight"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/io"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/logging"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/metrics"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/middleware",
+      "ignoredFiles":  [
+        "generate.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/smithy-go/private/requestcompression"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/ptr",
+      "ignoredFiles":  [
+        "gen_scalars.go",
+        "generate.go"
+      ]
+    },
+    {
+      "path":  "github.com/aws/smithy-go/rand"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/time"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/tracing"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/transport/http"
+    },
+    {
+      "path":  "github.com/aws/smithy-go/transport/http/internal/io"
+    },
+    {
+      "path":  "github.com/blang/semver"
+    },
+    {
+      "path":  "github.com/cenkalti/backoff/v4"
+    },
+    {
+      "path":  "github.com/cenkalti/backoff/v5",
+      "ignoredFiles":  [
+        "tries_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/cespare/xxhash/v2",
+      "ignoredFiles":  [
+        "xxhash_other.go",
+        "xxhash_safe.go",
+        "xxhash_arm64.s"
+      ]
+    },
+    {
       "path":  "github.com/cloudflare/circl/dh/x25519",
       "ignoredFiles":  [
         "curve_noasm.go"
@@ -1780,6 +3290,12 @@
       "path":  "github.com/cloudflare/circl/sign/ed448"
     },
     {
+      "path":  "github.com/coreos/go-oidc/v3/oidc"
+    },
+    {
+      "path":  "github.com/cyberphone/json-canonicalization/go/src/webpki.org/jsoncanonicalizer"
+    },
+    {
       "path":  "github.com/cyphar/filepath-securejoin",
       "ignoredFiles":  [
         "join_windows_test.go"
@@ -1787,6 +3303,55 @@
     },
     {
       "path":  "github.com/cyphar/filepath-securejoin/internal/consts"
+    },
+    {
+      "path":  "github.com/danwakefield/fnmatch"
+    },
+    {
+      "path":  "github.com/davecgh/go-spew/spew",
+      "ignoredFiles":  [
+        "bypasssafe.go",
+        "dumpcgo_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/digitorus/pkcs7",
+      "ignoredFiles":  [
+        "sign_legacy_test.go",
+        "verify_legacy_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/digitorus/timestamp"
+    },
+    {
+      "path":  "github.com/docker/cli/cli/config"
+    },
+    {
+      "path":  "github.com/docker/cli/cli/config/configfile",
+      "ignoredFiles":  [
+        "file_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/docker/cli/cli/config/credentials",
+      "ignoredFiles":  [
+        "default_store_darwin.go",
+        "default_store_unsupported.go",
+        "default_store_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/docker/cli/cli/config/memorystore"
+    },
+    {
+      "path":  "github.com/docker/cli/cli/config/types"
+    },
+    {
+      "path":  "github.com/docker/docker-credential-helpers/client"
+    },
+    {
+      "path":  "github.com/docker/docker-credential-helpers/credentials"
     },
     {
       "path":  "github.com/dustin/go-humanize"
@@ -1810,6 +3375,13 @@
       "path":  "github.com/emirpasic/gods/utils"
     },
     {
+      "path":  "github.com/felixge/httpsnoop",
+      "ignoredFiles":  [
+        "wrap_generated_lt_1.8.go",
+        "wrap_generated_lt_1.8_test.go"
+      ]
+    },
+    {
       "path":  "github.com/git-pkgs/silo/cmd/silo"
     },
     {
@@ -1819,10 +3391,19 @@
       "path":  "github.com/git-pkgs/silo/internal/gitstore"
     },
     {
+      "path":  "github.com/git-pkgs/silo/internal/gittuf"
+    },
+    {
+      "path":  "github.com/git-pkgs/silo/internal/hooks"
+    },
+    {
       "path":  "github.com/git-pkgs/silo/internal/http/git"
     },
     {
       "path":  "github.com/git-pkgs/silo/internal/receive"
+    },
+    {
+      "path":  "github.com/git-pkgs/silo/internal/signer"
     },
     {
       "path":  "github.com/git-pkgs/silo/internal/ssh"
@@ -1831,7 +3412,133 @@
       "path":  "github.com/git-pkgs/silo/internal/store"
     },
     {
+      "path":  "github.com/github/smimesign/ietf-cms/oid"
+    },
+    {
+      "path":  "github.com/github/smimesign/ietf-cms/protocol"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/attest"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/github"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/hooks"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/root"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/rsl"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/trustpolicy"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/verify"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/experimental/gittuf/options/verifymergeable"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/attestations"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/attestations/authorizations"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/attestations/authorizations/v01"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/attestations/authorizations/v02"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/attestations/common"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/attestations/github"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/attestations/github/v01"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/cache"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/common/set"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/dev"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/luasandbox"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/luasandbox/options/luasandbox"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/policy"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/policy/options/policy"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/rsl"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/signerverifier/common"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/signerverifier/dsse"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/signerverifier/gpg"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/signerverifier/sigstore"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/signerverifier/sigstore/options/signer"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/signerverifier/sigstore/options/verifier"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/signerverifier/ssh"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/testartifacts"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/third_party/go-securesystemslib/dsse"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/tuf"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/tuf/migrations"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/tuf/v01"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/internal/tuf/v02"
+    },
+    {
+      "path":  "github.com/gittuf/gittuf/pkg/gitinterface"
+    },
+    {
       "path":  "github.com/gliderlabs/ssh"
+    },
+    {
+      "path":  "github.com/go-chi/chi/v5"
+    },
+    {
+      "path":  "github.com/go-chi/chi/v5/middleware"
     },
     {
       "path":  "github.com/go-git/gcfg"
@@ -2029,7 +3736,420 @@
       "path":  "github.com/go-git/go-git/v5/utils/trace"
     },
     {
+      "path":  "github.com/go-jose/go-jose/v4"
+    },
+    {
+      "path":  "github.com/go-jose/go-jose/v4/cipher"
+    },
+    {
+      "path":  "github.com/go-jose/go-jose/v4/json"
+    },
+    {
+      "path":  "github.com/go-jose/go-jose/v4/jwt"
+    },
+    {
+      "path":  "github.com/go-logr/logr",
+      "ignoredFiles":  [
+        "context_noslog.go"
+      ]
+    },
+    {
+      "path":  "github.com/go-logr/logr/funcr"
+    },
+    {
+      "path":  "github.com/go-logr/stdr"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis/internal/debug"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis/internal/flatten/normalize"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis/internal/flatten/operations"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis/internal/flatten/replace"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis/internal/flatten/schutils"
+    },
+    {
+      "path":  "github.com/go-openapi/analysis/internal/flatten/sortref"
+    },
+    {
+      "path":  "github.com/go-openapi/errors"
+    },
+    {
+      "path":  "github.com/go-openapi/jsonpointer"
+    },
+    {
+      "path":  "github.com/go-openapi/jsonreference"
+    },
+    {
+      "path":  "github.com/go-openapi/jsonreference/internal"
+    },
+    {
+      "path":  "github.com/go-openapi/loads"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/client"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/client/internal/request"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/logger"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/middleware",
+      "ignoredFiles":  [
+        "context_skipauth_enabled.go",
+        "context_skipauth_enabled_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/middleware/denco"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/middleware/untyped"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/security"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/server-middleware/docui"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/server-middleware/mediatype"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/server-middleware/negotiate"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/server-middleware/negotiate/header"
+    },
+    {
+      "path":  "github.com/go-openapi/runtime/yamlpc"
+    },
+    {
+      "path":  "github.com/go-openapi/spec",
+      "ignoredFiles":  [
+        "normalizer_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/go-openapi/strfmt"
+    },
+    {
+      "path":  "github.com/go-openapi/strfmt/internal/bsonlite"
+    },
+    {
+      "path":  "github.com/go-openapi/swag"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/cmdutils"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/conv"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/fileutils"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/jsonname"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/jsonutils"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/jsonutils/adapters"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/jsonutils/adapters/ifaces"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/jsonutils/adapters/stdlib/json"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/loading"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/mangling"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/netutils"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/stringutils"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/typeutils"
+    },
+    {
+      "path":  "github.com/go-openapi/swag/yamlutils"
+    },
+    {
+      "path":  "github.com/go-openapi/validate",
+      "ignoredFiles":  [
+        "pools_debug.go",
+        "pools_debug_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/go-viper/mapstructure/v2",
+      "ignoredFiles":  [
+        "reflect_go1_19.go"
+      ]
+    },
+    {
+      "path":  "github.com/go-viper/mapstructure/v2/internal/errors",
+      "ignoredFiles":  [
+        "join_go1_19.go"
+      ]
+    },
+    {
+      "path":  "github.com/golang-jwt/jwt/v5"
+    },
+    {
       "path":  "github.com/golang/groupcache/lru"
+    },
+    {
+      "path":  "github.com/golang/snappy",
+      "ignoredFiles":  [
+        "decode_other.go",
+        "encode_other.go",
+        "decode_arm64.s",
+        "encode_arm64.s"
+      ]
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/asn1"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/client"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/client/configpb"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/ctutil"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/gossip/minimal/x509ext"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/jsonclient"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/loglist3"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/tls"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/x509",
+      "ignoredFiles":  [
+        "ptr_sysptr_windows.go",
+        "ptr_uint_windows.go",
+        "root_aix.go",
+        "root_bsd.go",
+        "root_cgo_darwin.go",
+        "root_darwin.go",
+        "root_darwin_arm_gen.go",
+        "root_darwin_armx.go",
+        "root_darwin_test.go",
+        "root_js.go",
+        "root_nocgo_darwin.go",
+        "root_plan9.go",
+        "root_solaris.go",
+        "root_wasip1.go",
+        "root_windows.go",
+        "root_zos.go",
+        "x509_test_import.go"
+      ]
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/x509/pkix"
+    },
+    {
+      "path":  "github.com/google/certificate-transparency-go/x509util"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/and"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/compression"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/gzip"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/redact"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/retry"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/retry/wait"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/verify"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/internal/zstd"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/authn"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/compression"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/logs"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/name"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/empty"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/layout"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/match"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/mutate"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/partial"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/remote",
+      "ignoredFiles":  [
+        "check_e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/remote/internal/authchallenge"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/remote/transport"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/static"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/stream"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/tarball"
+    },
+    {
+      "path":  "github.com/google/go-containerregistry/pkg/v1/types"
+    },
+    {
+      "path":  "github.com/google/go-github/v61/github",
+      "ignoredFiles":  [
+        "gen-accessors.go",
+        "gen-stringify-test.go",
+        "with_appengine.go"
+      ]
+    },
+    {
+      "path":  "github.com/google/go-querystring/query"
+    },
+    {
+      "path":  "github.com/google/s2a-go"
+    },
+    {
+      "path":  "github.com/google/s2a-go/fallback"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/authinfo"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/handshaker"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/handshaker/service"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/proto/common_go_proto"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/proto/s2a_context_go_proto"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/proto/s2a_go_proto"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/proto/v2/common_go_proto"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/proto/v2/s2a_context_go_proto"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/proto/v2/s2a_go_proto"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/record"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/record/internal/aeadcrypter"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/record/internal/halfconn"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/tokenmanager"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/v2"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/v2/certverifier"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/v2/remotesigner"
+    },
+    {
+      "path":  "github.com/google/s2a-go/internal/v2/tlsconfigstore"
+    },
+    {
+      "path":  "github.com/google/s2a-go/retry"
+    },
+    {
+      "path":  "github.com/google/s2a-go/stream"
+    },
+    {
+      "path":  "github.com/google/trillian"
+    },
+    {
+      "path":  "github.com/google/trillian/client"
+    },
+    {
+      "path":  "github.com/google/trillian/client/backoff"
+    },
+    {
+      "path":  "github.com/google/trillian/types"
+    },
+    {
+      "path":  "github.com/google/trillian/types/internal/tls"
     },
     {
       "path":  "github.com/google/uuid",
@@ -2038,12 +4158,228 @@
       ]
     },
     {
+      "path":  "github.com/googleapis/enterprise-certificate-proxy/client"
+    },
+    {
+      "path":  "github.com/googleapis/enterprise-certificate-proxy/client/util"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/apierror"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/apierror/internal/proto"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/callctx"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/internal"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/internallog"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/internallog/grpclog"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/internallog/internal"
+    },
+    {
+      "path":  "github.com/googleapis/gax-go/v2/iterator"
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/go-grpc-middleware/retry"
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/go-grpc-middleware/util/backoffutils"
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/go-grpc-middleware/util/metautils"
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/grpc-gateway/v2/internal/httprule",
+      "ignoredFiles":  [
+        "fuzz.go"
+      ]
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options",
+      "ignoredFiles":  [
+        "annotations_protoopaque.pb.go",
+        "openapiv2_protoopaque.pb.go"
+      ]
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+    },
+    {
+      "path":  "github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
+    },
+    {
+      "path":  "github.com/hashicorp/errwrap"
+    },
+    {
+      "path":  "github.com/hashicorp/go-cleanhttp"
+    },
+    {
+      "path":  "github.com/hashicorp/go-multierror"
+    },
+    {
+      "path":  "github.com/hashicorp/go-retryablehttp",
+      "ignoredFiles":  [
+        "cert_error_go119.go"
+      ]
+    },
+    {
+      "path":  "github.com/hashicorp/go-rootcerts",
+      "ignoredFiles":  [
+        "rootcerts_darwin.go",
+        "rootcerts_darwin_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/hashicorp/go-secure-stdlib/parseutil"
+    },
+    {
+      "path":  "github.com/hashicorp/go-secure-stdlib/strutil"
+    },
+    {
+      "path":  "github.com/hashicorp/go-sockaddr",
+      "ignoredFiles":  [
+        "route_info_aix.go",
+        "route_info_android.go",
+        "route_info_bsd.go",
+        "route_info_default.go",
+        "route_info_solaris.go",
+        "route_info_test_windows.go",
+        "route_info_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/hashicorp/hcl"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/hcl/ast"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/hcl/parser"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/hcl/scanner"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/hcl/strconv"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/hcl/token"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/json/parser"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/json/scanner"
+    },
+    {
+      "path":  "github.com/hashicorp/hcl/json/token"
+    },
+    {
+      "path":  "github.com/hashicorp/vault/api"
+    },
+    {
+      "path":  "github.com/hashicorp/vault/api/cliconfig"
+    },
+    {
+      "path":  "github.com/hashicorp/vault/api/tokenhelper"
+    },
+    {
+      "path":  "github.com/hiddeco/sshsig"
+    },
+    {
+      "path":  "github.com/in-toto/attestation/go/predicates/provenance/v02"
+    },
+    {
+      "path":  "github.com/in-toto/attestation/go/predicates/provenance/v1"
+    },
+    {
+      "path":  "github.com/in-toto/attestation/go/v1"
+    },
+    {
+      "path":  "github.com/in-toto/in-toto-golang/in_toto",
+      "ignoredFiles":  [
+        "util_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/common"
+    },
+    {
+      "path":  "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/v0.1"
+    },
+    {
+      "path":  "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/v0.2"
+    },
+    {
+      "path":  "github.com/in-toto/in-toto-golang/in_toto/slsa_provenance/v1"
+    },
+    {
       "path":  "github.com/jbenet/go-context/io"
+    },
+    {
+      "path":  "github.com/jedisct1/go-minisign"
+    },
+    {
+      "path":  "github.com/jellydator/ttlcache/v3"
+    },
+    {
+      "path":  "github.com/jonboulle/clockwork"
     },
     {
       "path":  "github.com/kevinburke/ssh_config",
       "ignoredFiles":  [
         "fuzz_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/klauspost/compress"
+    },
+    {
+      "path":  "github.com/klauspost/compress/fse"
+    },
+    {
+      "path":  "github.com/klauspost/compress/huff0",
+      "ignoredFiles":  [
+        "decompress_generic.go"
+      ]
+    },
+    {
+      "path":  "github.com/klauspost/compress/internal/cpuinfo"
+    },
+    {
+      "path":  "github.com/klauspost/compress/internal/le",
+      "ignoredFiles":  [
+        "unsafe_disabled.go"
+      ]
+    },
+    {
+      "path":  "github.com/klauspost/compress/internal/snapref"
+    },
+    {
+      "path":  "github.com/klauspost/compress/zstd",
+      "ignoredFiles":  [
+        "fse_decoder_generic.go",
+        "matchlen_generic.go",
+        "race_enabled_test.go",
+        "seqdec_generic.go"
+      ]
+    },
+    {
+      "path":  "github.com/klauspost/compress/zstd/internal/xxhash",
+      "ignoredFiles":  [
+        "xxhash_other.go",
+        "xxhash_arm64.s"
       ]
     },
     {
@@ -2062,6 +4398,66 @@
       ]
     },
     {
+      "path":  "github.com/kylelemons/godebug/diff"
+    },
+    {
+      "path":  "github.com/kylelemons/godebug/pretty"
+    },
+    {
+      "path":  "github.com/letsencrypt/boulder/core"
+    },
+    {
+      "path":  "github.com/letsencrypt/boulder/core/proto"
+    },
+    {
+      "path":  "github.com/letsencrypt/boulder/goodkey"
+    },
+    {
+      "path":  "github.com/letsencrypt/boulder/identifier"
+    },
+    {
+      "path":  "github.com/letsencrypt/boulder/probs"
+    },
+    {
+      "path":  "github.com/letsencrypt/boulder/revocation"
+    },
+    {
+      "path":  "github.com/mitchellh/go-homedir"
+    },
+    {
+      "path":  "github.com/mitchellh/mapstructure"
+    },
+    {
+      "path":  "github.com/moby/term",
+      "ignoredFiles":  [
+        "term_windows.go",
+        "termios_bsd.go",
+        "termios_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/natefinch/atomic",
+      "ignoredFiles":  [
+        "file_windows.go",
+        "zfile_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/nozzle/throttler"
+    },
+    {
+      "path":  "github.com/oklog/ulid/v2"
+    },
+    {
+      "path":  "github.com/opencontainers/go-digest"
+    },
+    {
+      "path":  "github.com/opencontainers/image-spec/specs-go"
+    },
+    {
+      "path":  "github.com/opencontainers/image-spec/specs-go/v1"
+    },
+    {
       "path":  "github.com/pjbgf/sha1cd",
       "ignoredFiles":  [
         "sha1cdblock_arm64.go",
@@ -2076,10 +4472,435 @@
       "path":  "github.com/pjbgf/sha1cd/ubc"
     },
     {
+      "path":  "github.com/pkg/browser",
+      "ignoredFiles":  [
+        "browser_darwin.go",
+        "browser_freebsd.go",
+        "browser_netbsd.go",
+        "browser_openbsd.go",
+        "browser_unsupported.go",
+        "browser_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/pkg/errors"
+    },
+    {
+      "path":  "github.com/pmezard/go-difflib/difflib"
+    },
+    {
       "path":  "github.com/remyoudompheng/bigfft"
     },
     {
+      "path":  "github.com/ryanuber/go-glob"
+    },
+    {
+      "path":  "github.com/sassoftware/relic/lib/pkcs7"
+    },
+    {
+      "path":  "github.com/sassoftware/relic/lib/x509tools"
+    },
+    {
+      "path":  "github.com/secure-systems-lab/go-securesystemslib/cjson"
+    },
+    {
+      "path":  "github.com/secure-systems-lab/go-securesystemslib/dsse"
+    },
+    {
+      "path":  "github.com/secure-systems-lab/go-securesystemslib/encrypted"
+    },
+    {
+      "path":  "github.com/secure-systems-lab/go-securesystemslib/signerverifier"
+    },
+    {
       "path":  "github.com/sergi/go-diff/diffmatchpatch"
+    },
+    {
+      "path":  "github.com/shibumi/go-pathspec"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/internal/pkg/cosign"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/internal/pkg/cosign/payload/size"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/internal/pkg/now"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/internal/pkg/oci/remote"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/internal/ui"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/blob"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/cosign"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/cosign/attestation"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/cosign/bundle"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/cosign/env"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/cosign/fulcioverifier/ctutil"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/oci"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/oci/empty"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/oci/internal/signature"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/oci/layout"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/oci/remote"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/oci/signed"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/oci/static"
+    },
+    {
+      "path":  "github.com/sigstore/cosign/v3/pkg/types"
+    },
+    {
+      "path":  "github.com/sigstore/fulcio/pkg/generated/protobuf"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign/internal/config"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign/internal/fork/ietf-cms"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign/internal/fork/ietf-cms/timestamp"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign/internal/fulcio/fulcioroots"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign/internal/rekor/oid"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign/pkg/git"
+    },
+    {
+      "path":  "github.com/sigstore/gitsign/pkg/rekor"
+    },
+    {
+      "path":  "github.com/sigstore/protobuf-specs/gen/pb-go/bundle/v1"
+    },
+    {
+      "path":  "github.com/sigstore/protobuf-specs/gen/pb-go/common/v1"
+    },
+    {
+      "path":  "github.com/sigstore/protobuf-specs/gen/pb-go/dsse"
+    },
+    {
+      "path":  "github.com/sigstore/protobuf-specs/gen/pb-go/rekor/v1"
+    },
+    {
+      "path":  "github.com/sigstore/protobuf-specs/gen/pb-go/trustroot/v1"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/internal/algorithmregistry"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/internal/safeint"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/client"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/client/write"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/generated/protobuf"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/note"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/types/hashedrekord"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/types/verifier"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/verifier"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/verifier/certificate"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/verifier/identity"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/verifier/publickey"
+    },
+    {
+      "path":  "github.com/sigstore/rekor-tiles/v2/pkg/verify"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/client"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/generated/client"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/generated/client/entries"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/generated/client/index"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/generated/client/pubkey"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/generated/client/tlog"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/generated/models"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/internal/log"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/log"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/identity"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/minisign",
+      "ignoredFiles":  [
+        "minisign_e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/pgp"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/pkcs7"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/pkitypes"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/ssh",
+      "ignoredFiles":  [
+        "e2e_test.go",
+        "ssh_e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/tuf",
+      "ignoredFiles":  [
+        "e2e_test.go",
+        "tuf_e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/pki/x509",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/sharding"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/signer"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/tle"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/trillianclient",
+      "ignoredFiles":  [
+        "dial_helper.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/dsse"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/dsse/v0.0.1",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/hashedrekord"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/hashedrekord/v0.0.1",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/intoto",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/intoto/v0.0.1"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/intoto/v0.0.2"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/rekord",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/types/rekord/v0.0.1"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/util"
+    },
+    {
+      "path":  "github.com/sigstore/rekor/pkg/verify"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/internal/limits"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/bundle"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/fulcio/certificate"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/root"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/sign"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/tlog"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/tuf"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/util"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore-go/pkg/verify"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/cryptoutils"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/cryptoutils/goodkey"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/fulcioroots"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/oauth"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/oauthflow",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/dsse"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/aws",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/azure",
+      "ignoredFiles":  [
+        "integration_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/cliplugin",
+      "ignoredFiles":  [
+        "signer_program_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/cliplugin/common"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/cliplugin/encoding"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/cliplugin/internal/signerverifier"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/gcp"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/kms/hashivault",
+      "ignoredFiles":  [
+        "e2e_test.go"
+      ]
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/options"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/payload"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/signature/tink"
+    },
+    {
+      "path":  "github.com/sigstore/sigstore/pkg/tuf"
+    },
+    {
+      "path":  "github.com/sigstore/timestamp-authority/v2/pkg/verification"
+    },
+    {
+      "path":  "github.com/sirupsen/logrus",
+      "ignoredFiles":  [
+        "terminal_check_appengine.go",
+        "terminal_check_bsd.go",
+        "terminal_check_js.go",
+        "terminal_check_no_terminal.go",
+        "terminal_check_solaris.go",
+        "terminal_check_wasi.go",
+        "terminal_check_wasip1.go",
+        "terminal_check_windows.go"
+      ]
     },
     {
       "path":  "github.com/skeema/knownhosts"
@@ -2094,11 +4915,411 @@
       "path":  "github.com/spf13/pflag"
     },
     {
+      "path":  "github.com/stretchr/testify/assert"
+    },
+    {
+      "path":  "github.com/stretchr/testify/assert/yaml",
+      "ignoredFiles":  [
+        "yaml_custom.go",
+        "yaml_fail.go"
+      ]
+    },
+    {
+      "path":  "github.com/stretchr/testify/require"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/cache"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/comparer"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/errors"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/filter"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/iterator"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/journal"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/memdb"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/opt",
+      "ignoredFiles":  [
+        "options_darwin.go"
+      ]
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/storage",
+      "ignoredFiles":  [
+        "file_storage_nacl.go",
+        "file_storage_plan9.go",
+        "file_storage_solaris.go",
+        "file_storage_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/table"
+    },
+    {
+      "path":  "github.com/syndtr/goleveldb/leveldb/util"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/client"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/client/leveldbstore"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/data"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/internal/fsutil",
+      "ignoredFiles":  [
+        "perm_windows.go"
+      ]
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/internal/roles"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/internal/sets"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/internal/signer"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/pkg/keys"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/pkg/targets"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/sign"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/util"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/v2/metadata"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/v2/metadata/config"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/v2/metadata/fetcher"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/v2/metadata/trustedmetadata"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/v2/metadata/updater"
+    },
+    {
+      "path":  "github.com/theupdateframework/go-tuf/verify"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go-awskms/v3/integration/awskms"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go-gcpkms/v2/integration/gcpkms"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/core/cryptofmt"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/core/registry"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/insecuresecretdataaccess"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/config"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/ec"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/internalapi"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/internalregistry"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/keygenregistry"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/legacykeymanager"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/monitoringutil"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/outputprefix"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/primitiveregistry"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/primitiveset"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/protoserialization"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/registryconfig/legacyprimitive"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/internal/signature/ecdsa"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/key"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/keyset"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/monitoring"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/proto/common_go_proto"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/proto/ecdsa_go_proto"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/proto/ed25519_go_proto"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/proto/tink_go_proto"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/secretdata"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/signature/ecdsa"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/signature/ed25519"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/subtle/random"
+    },
+    {
+      "path":  "github.com/tink-crypto/tink-go/v2/tink"
+    },
+    {
+      "path":  "github.com/titanous/rocacheck"
+    },
+    {
+      "path":  "github.com/transparency-dev/formats/log"
+    },
+    {
+      "path":  "github.com/transparency-dev/merkle"
+    },
+    {
+      "path":  "github.com/transparency-dev/merkle/compact"
+    },
+    {
+      "path":  "github.com/transparency-dev/merkle/proof"
+    },
+    {
+      "path":  "github.com/transparency-dev/merkle/rfc6962"
+    },
+    {
       "path":  "github.com/xanzy/ssh-agent",
       "ignoredFiles":  [
         "pageant_windows.go",
         "sshagent_windows.go"
       ]
+    },
+    {
+      "path":  "github.com/youmark/pkcs8"
+    },
+    {
+      "path":  "github.com/yuin/gopher-lua"
+    },
+    {
+      "path":  "github.com/yuin/gopher-lua/ast"
+    },
+    {
+      "path":  "github.com/yuin/gopher-lua/parse"
+    },
+    {
+      "path":  "github.com/yuin/gopher-lua/pm"
+    },
+    {
+      "path":  "go.opentelemetry.io/auto/sdk"
+    },
+    {
+      "path":  "go.opentelemetry.io/auto/sdk/internal/telemetry"
+    },
+    {
+      "path":  "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+    },
+    {
+      "path":  "go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/internal"
+    },
+    {
+      "path":  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+    },
+    {
+      "path":  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/internal/request"
+    },
+    {
+      "path":  "go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/internal/semconv"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/attribute"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/attribute/internal"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/attribute/internal/xxhash"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/baggage"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/codes"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/internal/baggage"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/internal/errorhandler"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/internal/global"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/metric"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/metric/embedded"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/metric/noop"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/propagation"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/semconv/v1.37.0"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/semconv/v1.37.0/rpcconv"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/semconv/v1.40.0"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/semconv/v1.40.0/httpconv"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/semconv/v1.40.0/rpcconv"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/semconv/v1.41.0"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/trace"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/trace/embedded"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/trace/internal/telemetry"
+    },
+    {
+      "path":  "go.opentelemetry.io/otel/trace/noop"
+    },
+    {
+      "path":  "go.step.sm/crypto/fingerprint"
+    },
+    {
+      "path":  "go.step.sm/crypto/internal/bcrypt_pbkdf"
+    },
+    {
+      "path":  "go.step.sm/crypto/internal/emoji"
+    },
+    {
+      "path":  "go.step.sm/crypto/internal/utils/file"
+    },
+    {
+      "path":  "go.step.sm/crypto/internal/utils/utfbom"
+    },
+    {
+      "path":  "go.step.sm/crypto/keyutil"
+    },
+    {
+      "path":  "go.step.sm/crypto/pemutil"
+    },
+    {
+      "path":  "go.step.sm/crypto/randutil"
+    },
+    {
+      "path":  "go.step.sm/crypto/x25519"
+    },
+    {
+      "path":  "go.uber.org/multierr",
+      "ignoredFiles":  [
+        "error_pre_go120.go"
+      ]
+    },
+    {
+      "path":  "go.uber.org/zap",
+      "ignoredFiles":  [
+        "sink_windows_test.go"
+      ]
+    },
+    {
+      "path":  "go.uber.org/zap/buffer"
+    },
+    {
+      "path":  "go.uber.org/zap/internal"
+    },
+    {
+      "path":  "go.uber.org/zap/internal/bufferpool"
+    },
+    {
+      "path":  "go.uber.org/zap/internal/color"
+    },
+    {
+      "path":  "go.uber.org/zap/internal/exit"
+    },
+    {
+      "path":  "go.uber.org/zap/internal/pool"
+    },
+    {
+      "path":  "go.uber.org/zap/internal/stacktrace"
+    },
+    {
+      "path":  "go.uber.org/zap/zapcore"
+    },
+    {
+      "path":  "go.yaml.in/yaml/v2"
+    },
+    {
+      "path":  "go.yaml.in/yaml/v3"
     },
     {
       "path":  "golang.org/x/crypto/argon2",
@@ -2130,6 +5351,13 @@
       ]
     },
     {
+      "path":  "golang.org/x/crypto/chacha20poly1305",
+      "ignoredFiles":  [
+        "chacha20poly1305_noasm.go",
+        "fips140only_compat.go"
+      ]
+    },
+    {
       "path":  "golang.org/x/crypto/cryptobyte"
     },
     {
@@ -2137,6 +5365,9 @@
     },
     {
       "path":  "golang.org/x/crypto/curve25519"
+    },
+    {
+      "path":  "golang.org/x/crypto/ed25519"
     },
     {
       "path":  "golang.org/x/crypto/hkdf"
@@ -2158,6 +5389,48 @@
       ]
     },
     {
+      "path":  "golang.org/x/crypto/nacl/secretbox"
+    },
+    {
+      "path":  "golang.org/x/crypto/ocsp"
+    },
+    {
+      "path":  "golang.org/x/crypto/openpgp"
+    },
+    {
+      "path":  "golang.org/x/crypto/openpgp/armor"
+    },
+    {
+      "path":  "golang.org/x/crypto/openpgp/elgamal"
+    },
+    {
+      "path":  "golang.org/x/crypto/openpgp/errors"
+    },
+    {
+      "path":  "golang.org/x/crypto/openpgp/packet"
+    },
+    {
+      "path":  "golang.org/x/crypto/openpgp/s2k"
+    },
+    {
+      "path":  "golang.org/x/crypto/pbkdf2"
+    },
+    {
+      "path":  "golang.org/x/crypto/pkcs12"
+    },
+    {
+      "path":  "golang.org/x/crypto/pkcs12/internal/rc2"
+    },
+    {
+      "path":  "golang.org/x/crypto/salsa20/salsa",
+      "ignoredFiles":  [
+        "salsa20_noasm.go"
+      ]
+    },
+    {
+      "path":  "golang.org/x/crypto/scrypt"
+    },
+    {
       "path":  "golang.org/x/crypto/sha3"
     },
     {
@@ -2173,13 +5446,101 @@
       "path":  "golang.org/x/crypto/ssh/knownhosts"
     },
     {
+      "path":  "golang.org/x/crypto/ssh/terminal"
+    },
+    {
+      "path":  "golang.org/x/mod/semver"
+    },
+    {
+      "path":  "golang.org/x/mod/sumdb/note"
+    },
+    {
       "path":  "golang.org/x/net/context"
+    },
+    {
+      "path":  "golang.org/x/net/http/httpguts"
+    },
+    {
+      "path":  "golang.org/x/net/http2",
+      "ignoredFiles":  [
+        "client_priority_go127.go",
+        "clientconn_go125_test.go",
+        "clientconn_wrap_test.go",
+        "config_go125.go",
+        "export_wrap_test.go",
+        "server_wrap.go",
+        "transport_wrap.go",
+        "wrap_test.go"
+      ]
+    },
+    {
+      "path":  "golang.org/x/net/http2/hpack",
+      "ignoredFiles":  [
+        "gen.go"
+      ]
+    },
+    {
+      "path":  "golang.org/x/net/idna",
+      "ignoredFiles":  [
+        "tables17.0.0.go"
+      ]
+    },
+    {
+      "path":  "golang.org/x/net/internal/httpcommon"
+    },
+    {
+      "path":  "golang.org/x/net/internal/httpsfv"
     },
     {
       "path":  "golang.org/x/net/internal/socks"
     },
     {
+      "path":  "golang.org/x/net/internal/timeseries"
+    },
+    {
       "path":  "golang.org/x/net/proxy"
+    },
+    {
+      "path":  "golang.org/x/net/trace"
+    },
+    {
+      "path":  "golang.org/x/oauth2"
+    },
+    {
+      "path":  "golang.org/x/oauth2/authhandler"
+    },
+    {
+      "path":  "golang.org/x/oauth2/google"
+    },
+    {
+      "path":  "golang.org/x/oauth2/google/externalaccount"
+    },
+    {
+      "path":  "golang.org/x/oauth2/google/internal/externalaccountauthorizeduser"
+    },
+    {
+      "path":  "golang.org/x/oauth2/google/internal/impersonate"
+    },
+    {
+      "path":  "golang.org/x/oauth2/google/internal/stsexchange"
+    },
+    {
+      "path":  "golang.org/x/oauth2/internal"
+    },
+    {
+      "path":  "golang.org/x/oauth2/jws"
+    },
+    {
+      "path":  "golang.org/x/oauth2/jwt"
+    },
+    {
+      "path":  "golang.org/x/sync/errgroup"
+    },
+    {
+      "path":  "golang.org/x/sync/semaphore"
+    },
+    {
+      "path":  "golang.org/x/sync/singleflight"
     },
     {
       "path":  "golang.org/x/sys/cpu",
@@ -2218,6 +5579,8 @@
         "cpu_s390x.go",
         "cpu_s390x_test.go",
         "cpu_wasm.go",
+        "cpu_windows.go",
+        "cpu_windows_arm64.go",
         "cpu_zos.go",
         "cpu_zos_s390x.go",
         "endian_big.go",
@@ -2226,6 +5589,7 @@
         "syscall_aix_ppc64_gc.go",
         "syscall_darwin_arm64_gc.go",
         "syscall_darwin_x86_gc.go",
+        "zcpu_windows.go",
         "asm_aix_ppc64.s",
         "asm_darwin_arm64_gc.s",
         "asm_darwin_x86_gc.s",
@@ -2559,7 +5923,493 @@
       ]
     },
     {
+      "path":  "golang.org/x/term",
+      "ignoredFiles":  [
+        "term_plan9.go",
+        "term_unix_bsd.go",
+        "term_unsupported.go",
+        "term_windows.go"
+      ]
+    },
+    {
+      "path":  "golang.org/x/text/secure/bidirule"
+    },
+    {
+      "path":  "golang.org/x/text/transform"
+    },
+    {
+      "path":  "golang.org/x/text/unicode/bidi",
+      "ignoredFiles":  [
+        "gen.go",
+        "gen_ranges.go",
+        "gen_trieval.go",
+        "tables17.0.0.go"
+      ]
+    },
+    {
+      "path":  "golang.org/x/text/unicode/norm",
+      "ignoredFiles":  [
+        "data17.0.0_test.go",
+        "forminfo_test.go",
+        "maketables.go",
+        "tables17.0.0.go",
+        "triegen.go"
+      ]
+    },
+    {
+      "path":  "golang.org/x/time/rate"
+    },
+    {
+      "path":  "google.golang.org/api/cloudkms/v1"
+    },
+    {
+      "path":  "google.golang.org/api/googleapi"
+    },
+    {
+      "path":  "google.golang.org/api/googleapi/transport"
+    },
+    {
+      "path":  "google.golang.org/api/internal"
+    },
+    {
+      "path":  "google.golang.org/api/internal/cert"
+    },
+    {
+      "path":  "google.golang.org/api/internal/credentialstype"
+    },
+    {
+      "path":  "google.golang.org/api/internal/gensupport"
+    },
+    {
+      "path":  "google.golang.org/api/internal/impersonate"
+    },
+    {
+      "path":  "google.golang.org/api/internal/third_party/uritemplates"
+    },
+    {
+      "path":  "google.golang.org/api/iterator"
+    },
+    {
+      "path":  "google.golang.org/api/option"
+    },
+    {
+      "path":  "google.golang.org/api/option/internaloption"
+    },
+    {
+      "path":  "google.golang.org/api/transport/grpc"
+    },
+    {
+      "path":  "google.golang.org/api/transport/http"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/api"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/api/annotations"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/api/httpbody"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/cloud/location"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/rpc/code"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/rpc/errdetails"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/rpc/status"
+    },
+    {
+      "path":  "google.golang.org/genproto/googleapis/type/expr"
+    },
+    {
+      "path":  "google.golang.org/grpc",
+      "ignoredFiles":  [
+        "trace_notrace.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/grpc/attributes"
+    },
+    {
+      "path":  "google.golang.org/grpc/backoff"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/base"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/endpointsharding"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/grpclb"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/grpclb/grpc_lb_v1"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/grpclb/state"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/pickfirst"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/pickfirst/internal"
+    },
+    {
+      "path":  "google.golang.org/grpc/balancer/roundrobin"
+    },
+    {
+      "path":  "google.golang.org/grpc/binarylog/grpc_binarylog_v1"
+    },
+    {
+      "path":  "google.golang.org/grpc/channelz"
+    },
+    {
+      "path":  "google.golang.org/grpc/codes"
+    },
+    {
+      "path":  "google.golang.org/grpc/connectivity"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/alts"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/alts/internal"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/alts/internal/authinfo"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/alts/internal/conn"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/alts/internal/handshaker"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/alts/internal/handshaker/service"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/alts/internal/proto/grpc_gcp"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/google"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/insecure"
+    },
+    {
+      "path":  "google.golang.org/grpc/credentials/oauth"
+    },
+    {
+      "path":  "google.golang.org/grpc/encoding"
+    },
+    {
+      "path":  "google.golang.org/grpc/encoding/internal"
+    },
+    {
+      "path":  "google.golang.org/grpc/encoding/proto"
+    },
+    {
+      "path":  "google.golang.org/grpc/experimental/stats"
+    },
+    {
+      "path":  "google.golang.org/grpc/grpclog"
+    },
+    {
+      "path":  "google.golang.org/grpc/grpclog/internal"
+    },
+    {
+      "path":  "google.golang.org/grpc/health/grpc_health_v1"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal",
+      "ignoredFiles":  [
+        "tcp_keepalive_others.go",
+        "tcp_keepalive_windows.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/backoff"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/balancer/gracefulswitch"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/balancer/weight"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/balancerload"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/binarylog"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/buffer"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/channelz",
+      "ignoredFiles":  [
+        "syscall_nonlinux.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/credentials"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/envconfig"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/googlecloud",
+      "ignoredFiles":  [
+        "manufacturer.go",
+        "manufacturer_windows.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/grpclog"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/grpcsync"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/grpcutil"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/idle"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/mem"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/metadata"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/pretty"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/proxyattributes"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/resolver"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/resolver/delegatingresolver"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/resolver/dns"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/resolver/dns/internal"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/resolver/passthrough"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/resolver/unix"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/serviceconfig"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/stats"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/status"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/syscall",
+      "ignoredFiles":  [
+        "syscall_nonlinux.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/transport"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/transport/networktype"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/transport/readyreader",
+      "ignoredFiles":  [
+        "raw_conn_nonlinux.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/xds"
+    },
+    {
+      "path":  "google.golang.org/grpc/internal/xds/clients"
+    },
+    {
+      "path":  "google.golang.org/grpc/keepalive"
+    },
+    {
+      "path":  "google.golang.org/grpc/mem"
+    },
+    {
+      "path":  "google.golang.org/grpc/metadata"
+    },
+    {
+      "path":  "google.golang.org/grpc/peer"
+    },
+    {
+      "path":  "google.golang.org/grpc/resolver"
+    },
+    {
+      "path":  "google.golang.org/grpc/resolver/dns"
+    },
+    {
+      "path":  "google.golang.org/grpc/resolver/manual"
+    },
+    {
+      "path":  "google.golang.org/grpc/serviceconfig"
+    },
+    {
+      "path":  "google.golang.org/grpc/stats"
+    },
+    {
+      "path":  "google.golang.org/grpc/status"
+    },
+    {
+      "path":  "google.golang.org/grpc/tap"
+    },
+    {
+      "path":  "google.golang.org/protobuf/encoding/protojson"
+    },
+    {
+      "path":  "google.golang.org/protobuf/encoding/prototext"
+    },
+    {
+      "path":  "google.golang.org/protobuf/encoding/protowire"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/descfmt"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/descopts"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/detrand"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/editiondefaults"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/encoding/defval"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/encoding/json"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/encoding/messageset"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/encoding/tag"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/encoding/text"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/errors"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/filedesc"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/filetype"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/flags",
+      "ignoredFiles":  [
+        "proto_legacy_enable.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/genid"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/impl",
+      "ignoredFiles":  [
+        "bitmap_race.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/order"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/pragma"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/protolazy"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/set"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/strs"
+    },
+    {
+      "path":  "google.golang.org/protobuf/internal/version"
+    },
+    {
+      "path":  "google.golang.org/protobuf/proto",
+      "ignoredFiles":  [
+        "proto_reflect.go"
+      ]
+    },
+    {
+      "path":  "google.golang.org/protobuf/protoadapt"
+    },
+    {
+      "path":  "google.golang.org/protobuf/reflect/protoreflect"
+    },
+    {
+      "path":  "google.golang.org/protobuf/reflect/protoregistry"
+    },
+    {
+      "path":  "google.golang.org/protobuf/runtime/protoiface"
+    },
+    {
+      "path":  "google.golang.org/protobuf/runtime/protoimpl"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/descriptorpb"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/known/anypb"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/known/durationpb"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/known/emptypb"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/known/fieldmaskpb"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/known/structpb"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/known/timestamppb"
+    },
+    {
+      "path":  "google.golang.org/protobuf/types/known/wrapperspb"
+    },
+    {
       "path":  "gopkg.in/warnings.v0"
+    },
+    {
+      "path":  "gopkg.in/yaml.v3"
     },
     {
       "path":  "internal/runtime/syscall/linux",
@@ -2583,6 +6433,33 @@
         "asm_linux_riscv64.s",
         "asm_linux_s390x.s"
       ]
+    },
+    {
+      "path":  "k8s.io/klog/v2",
+      "ignoredFiles":  [
+        "klog_file_windows.go"
+      ]
+    },
+    {
+      "path":  "k8s.io/klog/v2/internal/buffer"
+    },
+    {
+      "path":  "k8s.io/klog/v2/internal/clock"
+    },
+    {
+      "path":  "k8s.io/klog/v2/internal/dbg"
+    },
+    {
+      "path":  "k8s.io/klog/v2/internal/serialize",
+      "ignoredFiles":  [
+        "keyvalues_no_slog.go"
+      ]
+    },
+    {
+      "path":  "k8s.io/klog/v2/internal/severity"
+    },
+    {
+      "path":  "k8s.io/klog/v2/internal/sloghandler"
     },
     {
       "path":  "modernc.org/libc",
@@ -2842,6 +6719,9 @@
     },
     {
       "path":  "modernc.org/sqlite/vtab"
+    },
+    {
+      "path":  "sigs.k8s.io/yaml"
     }
   ]
 }

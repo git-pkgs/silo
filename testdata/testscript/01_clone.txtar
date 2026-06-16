@@ -1,6 +1,7 @@
 # 01_clone: anonymous HTTP clone of a pre-seeded bare repo
+exec silo keygen --data $SILO_DATA
 silo-test-seed $SILO_DATA/repos/alice/demo.git
-exec silo serve --data $SILO_DATA --http $SILO_HTTP &
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH &
 waitfor $SILO_HTTP
 
 exec git clone http://$SILO_HTTP/alice/demo.git out

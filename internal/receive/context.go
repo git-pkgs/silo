@@ -22,3 +22,17 @@ func PusherFrom(ctx context.Context) (Pusher, bool) {
 	p, ok := ctx.Value(pusherKey{}).(Pusher)
 	return p, ok
 }
+
+type repoPathKey struct{}
+
+// WithRepoPath returns a context carrying the bare-repo filesystem path, for
+// hooks that need to open the repo via something other than go-git (gittuf).
+func WithRepoPath(ctx context.Context, path string) context.Context {
+	return context.WithValue(ctx, repoPathKey{}, path)
+}
+
+// RepoPathFrom returns the bare-repo path stored in ctx, if any.
+func RepoPathFrom(ctx context.Context) (string, bool) {
+	p, ok := ctx.Value(repoPathKey{}).(string)
+	return p, ok
+}

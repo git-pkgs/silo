@@ -1,4 +1,7 @@
-# 02_push: SSH push lands, HTTP clone sees it
+# 02_push: SSH transport delivers bytes to receive-pack.
+# With gittuf hooks active, pushes to refs/gittuf/* are allowed without
+# policy; pushes to other refs are gated (covered by 03_gittuf).
+exec silo keygen --data $SILO_DATA
 exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
 exec silo admin repo create alice/demo --data $SILO_DATA
 exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH &
@@ -8,16 +11,23 @@ env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKno
 exec git init -b main repo
 exec git -C repo commit --allow-empty -m one
 exec git -C repo remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
-exec git -C repo push origin main
-stderr 'main -> main'
 
-exec git clone http://$SILO_HTTP/alice/demo.git out
-exec git -C out log --oneline
-stdout 'one'
+# push to a non-gittuf ref before policy is rejected (gate works over SSH)
+! exec git -C repo push origin main
+stderr 'repo not initialised'
 
-# unknown key rejected
+# push to refs/gittuf/* is allowed without policy
+exec git -C repo push origin main:refs/gittuf/policy-staging
+stderr 'refs/gittuf/policy-staging'
+
+# clone over HTTP sees the pushed ref
+exec git clone --mirror http://$SILO_HTTP/alice/demo.git out.git
+exec git -C out.git for-each-ref refs/gittuf/policy-staging
+stdout 'refs/gittuf/policy-staging'
+
+# unknown key rejected at the SSH layer
 env 'GIT_SSH_COMMAND=ssh -i '$WORK'/mallory -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
-! exec git -C repo push origin main:refs/heads/x
+! exec git -C repo push origin main:refs/gittuf/x
 stderr 'Permission denied|publickey'
 
 # bad exec command rejected

@@ -26,6 +26,11 @@ func newRootCmd() *cobra.Command {
 	}
 	root.PersistentFlags().StringVar(&cfg.DataDir, "data", cfg.DataDir, "data directory ($SILO_DATA)")
 
-	root.AddCommand(newServeCmd(&cfg), newAdminCmd(&cfg))
+	root.AddCommand(
+		newServeCmd(&cfg),
+		newAdminCmd(&cfg),
+		newKeygenCmd(&cfg),
+		newPubkeyCmd(&cfg),
+	)
 	return root
 }

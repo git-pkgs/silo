@@ -32,6 +32,36 @@ gittuf: pkg/gitinterface/repository.go:48-52
 silo:   internal/gittuf
 `IsBare()` returns `!strings.HasSuffix(r.gitDirPath, ".git")`. For a bare repo at `/data/repos/owner/name.git`, `rev-parse --git-dir` returns that path, which ends in `.git`, so `IsBare()` returns false. The convention for bare repos is exactly to name the directory `<name>.git`. `git rev-parse --is-bare-repository` would give the right answer.
 
+## GetGoGitRepository fails on bare repositories
+
+kind: bug
+gittuf: pkg/gitinterface/repository.go:38-40
+silo:   internal/gitstore/gitstore.go (workaround), internal/hooks/builtin.go (caller)
+
+`GetGoGitRepository()` opens with `git.PlainOpenWithOptions(r.gitDirPath, &git.PlainOpenOptions{DetectDotGit: true})`. `r.gitDirPath` is already the resolved git dir (set via `git rev-parse --git-dir`). With `DetectDotGit: true`, go-git's `dotGitToOSFilesystems` looks for a `.git` entry inside that path and walks up if absent; a bare repo has no `.git` entry, so it returns `ErrRepositoryNotExists`. Every caller of `GetGoGitRepository` then fails on bare repos: `verifyCommitSignature` (commit.go:163), tag verification, etc. The error surfaces as the generic `verifying Git namespace policies failed`.
+
+Reproduction: `git init --bare /tmp/b && cd /tmp/b && go run -mod=mod github.com/gittuf/gittuf verify-ref refs/heads/x` against any bare repo with policy/RSL fails at signature verification; the same repo cloned to a working tree verifies.
+
+Upstream fix (one line): change `DetectDotGit: true` to `false` at repository.go:39. The path is already the git dir, so detection is never needed and `false` opens both bare and working layouts.
+
+silo workaround: `gitstore.Init` writes `.git` containing `gitdir: .` inside each bare repo. go-git's gitfile resolver then dereferences it back to the bare dir itself, and `DetectDotGit: true` succeeds. System git ignores a `.git` gitfile inside what it already knows is a bare repo, so nothing else changes. Remove the workaround once the upstream fix lands.
+
+## RecordRSLEntryForReference takes signing config from git, not a Signer
+
+kind: friction
+gittuf: experimental/gittuf/rsl.go:39-45, pkg/gitinterface/repository.go (CanSign)
+silo:   internal/hooks/builtin.go PostReceive
+
+`RecordRSLEntryForReference(ctx, ref, signCommit, opts)` checks `r.r.CanSign()` which reads `user.signingKey`/`gpg.format` from the repo's git config. There is no way to pass a `dsse.SignerVerifier` directly. A forge wanting to witness with its own key must write that key's path into each bare repo's git config, which couples on-disk state to the forge process and conflicts if two silo instances share storage. silo's `Witness` is a no-op pending either an upstream `WithSigner(s)` RecordOption or a per-repo config-write shim; the witness role is not policy-required so verification still passes without it.
+
+## VerifyRef returns only error, not which rule failed
+
+kind: opportunity
+gittuf: experimental/gittuf/verify.go:28
+silo:   internal/hooks/builtin.go buildRejection
+
+`VerifyRef` returns `error` with a generic message. To produce a useful rejection (`rule 'protect-main' requires 1 of: alice`) silo calls `ListRules` separately and pattern-matches the failing ref. A `VerifyRef` that returned `(Verdict{Rule, Threshold, Principals, Approvals}, error)` would let any forge build its rejection message without re-deriving policy state.
+
 ## Principal keys are embedded by value
 kind: opportunity
 gittuf: internal/tuf/tuf.go:84, internal/tuf/v02/tuf.go:33-38

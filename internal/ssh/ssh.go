@@ -23,12 +23,16 @@ import (
 	"github.com/git-pkgs/silo/internal/store"
 )
 
+// HooksFactory returns a fresh Hooks instance per push, since some hook
+// implementations hold per-push state (the flock handle).
+type HooksFactory func() receive.Hooks
+
 // Serve listens on addr and handles git-over-SSH sessions until ctx is
 // cancelled. hostKey is the server's private host key.
-func Serve(ctx context.Context, addr string, hostKey gssh.Signer, st *store.Store, gst *gitstore.Store, hooks receive.Hooks, limits receive.Limits) error {
+func Serve(ctx context.Context, addr string, hostKey gssh.Signer, st *store.Store, gst *gitstore.Store, hf HooksFactory, limits receive.Limits) error {
 	srv := &gssh.Server{
 		Addr:             addr,
-		Handler:          handler(gst, hooks, limits),
+		Handler:          handler(gst, hf, limits),
 		PublicKeyHandler: publicKeyHandler(st),
 	}
 	srv.AddHostKey(hostKey)
@@ -66,7 +70,7 @@ func publicKeyHandler(st *store.Store) gssh.PublicKeyHandler {
 	}
 }
 
-func handler(gst *gitstore.Store, hooks receive.Hooks, limits receive.Limits) gssh.Handler {
+func handler(gst *gitstore.Store, hf HooksFactory, limits receive.Limits) gssh.Handler {
 	upSrv := server.NewServer(&loader{gst: gst})
 
 	return func(s gssh.Session) {
@@ -80,6 +84,7 @@ func handler(gst *gitstore.Store, hooks receive.Hooks, limits receive.Limits) gs
 			fail(s, "repository not found")
 			return
 		}
+		repoPath, _ := gst.Path(owner, name)
 
 		switch cmd {
 		case cmdUploadPack:
@@ -98,11 +103,12 @@ func handler(gst *gitstore.Store, hooks receive.Hooks, limits receive.Limits) gs
 			if p, ok := rctx.Value(ctxUserKey).(receive.Pusher); ok {
 				rctx = receive.WithPusher(rctx, p)
 			}
+			rctx = receive.WithRepoPath(rctx, repoPath)
 			if err := receive.Advertise(repo, s); err != nil {
 				slog.Warn("advertise", "err", err)
 				return
 			}
-			if err := receive.ReceivePack(rctx, repo, s, s, hooks, limits); err != nil {
+			if err := receive.ReceivePack(rctx, repo, s, s, hf(), limits); err != nil {
 				slog.Warn("receive-pack", "repo", owner+"/"+name, "err", err)
 			}
 		}

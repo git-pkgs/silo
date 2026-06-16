@@ -356,6 +356,17 @@ func TestPusherContext(t *testing.T) {
 	}
 }
 
+func TestRepoPathContext(t *testing.T) {
+	if _, ok := RepoPathFrom(context.Background()); ok {
+		t.Error("RepoPathFrom on empty context returned ok")
+	}
+	ctx := WithRepoPath(context.Background(), "/x/y.git")
+	got, ok := RepoPathFrom(ctx)
+	if !ok || got != "/x/y.git" {
+		t.Errorf("RepoPathFrom = %q, %v", got, ok)
+	}
+}
+
 // demuxSideband splits a sideband-wrapped response into progress text and the
 // band-1 report bytes.
 func demuxSideband(t *testing.T, b []byte) (progress string, report []byte) {

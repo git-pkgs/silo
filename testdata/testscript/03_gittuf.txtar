@@ -1,0 +1,56 @@
+# 03_gittuf: policy gates pushes; a verifying clone passes without trusting silo.
+exec silo keygen --data $SILO_DATA
+exec silo pubkey --data $SILO_DATA
+exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
+exec silo admin user create bob --ssh-key $WORK/bob.pub --data $SILO_DATA
+exec silo admin repo create alice/demo --data $SILO_DATA
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH --base-url http://$SILO_HTTP &
+waitfor $SILO_SSH
+
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+
+# alice sets up a working repo with gittuf root + policy signed by her key
+exec git init -b main repo
+cd repo
+exec git config user.signingKey $WORK/alice
+exec git config gpg.format ssh
+exec git commit --allow-empty -m one
+exec git remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
+
+# push before policy: refused with the init message
+! exec git push origin main
+stderr 'repo not initialised'
+stderr 'gittuf trust init'
+
+# owner signs root and policy, adds a rule protecting main, applies it
+exec gittuf trust init -k $WORK/alice
+exec gittuf trust add-policy-key -k $WORK/alice --policy-key $WORK/alice.pub
+exec gittuf policy init -k $WORK/alice --policy-name targets
+exec gittuf policy add-person -k $WORK/alice --person-ID alice --public-key $WORK/alice.pub
+exec gittuf policy add-rule -k $WORK/alice --rule-name protect-main --rule-pattern 'git:refs/heads/main' --authorize alice
+exec gittuf policy stage --local-only
+exec gittuf policy apply --local-only
+
+# record an RSL entry for main signed by alice and push everything together
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+stderr 'main -> main'
+
+# fresh clone verifies without trusting silo
+cd ..
+exec git clone http://$SILO_HTTP/alice/demo.git verify
+exec git -C verify fetch origin 'refs/gittuf/*:refs/gittuf/*'
+exec git -C verify for-each-ref refs/gittuf/reference-state-log
+stdout 'refs/gittuf/reference-state-log'
+cd verify
+exec gittuf verify-ref main
+cd ..
+
+# bob is not in policy: push to main is rejected with the multi-line format
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/bob -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+exec git -C repo commit --allow-empty -m two
+! exec git -C repo push origin main
+stderr 'silo: rejected refs/heads/main'
+stderr 'protect-main'
+stderr 'you pushed as: bob'
+stderr '/alice/demo/policy#'
