@@ -95,3 +95,27 @@ In silo: replace `internal/receive.ReceivePack` with a thin wrapper that builds 
 ## Upstreaming
 
 Each milestone's fork commit is a standalone patch. Open PRs after silo's suite proves them, in this order: gittuf `DetectDotGit` (one line, easy review), gittuf `os.Chdir` (mechanical), go-git receive hook (references their own TODO and #2185), gittuf `WithSigner`. Don't open any until asked.
+
+## Findings
+
+All five milestones landed. silo builds against `github.com/git-pkgs/{gittuf,go-git}@silo` via `replace`; no local checkout needed.
+
+`git-pkgs/gittuf@silo` (5 commits over upstream `6f382ee`):
+
+- `87d7697` `DetectDotGit:false` in `GetGoGitRepository` — bare repos open via go-git. silo dropped the `.git` gitfile.
+- `07c6e23` `executor.withDir` replaces `os.Chdir` at four sites; `LoadRepository` uses `rev-parse --absolute-git-dir`. silo dropped `loadMu`. New `TestLoadRepositoryConcurrent` passes under `-race`.
+- `08784f8` `WithRecordSigningKeyBytes` / `WithAnnotateSigningKeyBytes` route through the existing `CommitUsingSpecificKey` path. silo's `PostReceive` now writes a forge-signed witness annotation; `gittuf verify-ref` in a fresh clone still passes with it present.
+- `2f700e9` go-git v5 → v6 (`PGPSignature`→`Signature`, `config.user` literal). `verifyGitsignSignature` moved behind `//go:build gitsign` so the default build doesn't link `sigstore/gitsign` → go-git v5. This is what gets the binary to one go-git.
+- `02de542` `replace go-git/v6 => ../go-git-fork` (ignored when consumed as a module; silo's top-level replace governs).
+
+`git-pkgs/go-git@silo` (1 commit over `v6.0.0-alpha.4`):
+
+- `9661cc6` `ReceivePackHooks{PreReceive, PostReceive}` on `ReceivePackRequest`. `PreReceive` runs after unpack, before `updateReferences`, with a band-2 progress writer; non-nil error fills every ref's `ng` status. Replaces the `// TODO: support hooks` comment.
+
+silo deltas: `internal/receive` collapsed from ~260 to 121 lines (adapter over `transport.ReceivePack`); `Advertise` gone; `internal/http/git` and `internal/ssh` rewritten on `transport.UploadPack` (dropped session/loader/`decodeHaves`). Net across the v6 port + collapse: -909 lines. `hooks.Builtin.PreReceive` now applies refs, runs `VerifyRef`, then rolls back before returning so go-git's `updateReferences` (which rejects Create-on-existing) applies cleanly; the flock spans through `PostReceive` so the gap is invisible.
+
+Verified: all three txtar pass, `-race -shuffle=on` green, lint/govulncheck/deadcode/gosec clean, `go version -m` on the binary shows exactly `go-git/v6 => git-pkgs/go-git/v6` and `gittuf => git-pkgs/gittuf`, no v5.
+
+Incidental: gittuf's `TestCanSign/explicit_ssh,_no_key` fails on hosts with a global `user.signingKey` set (test isolation leak, pre-existing, not caused by these changes). go-git v6's `Worktree.Commit` reads global `commit.gpgSign` and errors without an `ObjectSigner` plugin; silo's test helpers set `cfg.Commit.GpgSign = NewOptBool(false)` locally.
+
+Not yet done: upstream PRs (waiting on ask). `testscript_test.go` still builds the gittuf CLI from `../gittuf-fork`; works while the sibling checkout exists, swap to `go install github.com/git-pkgs/gittuf@silo` for full portability.
