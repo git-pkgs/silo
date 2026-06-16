@@ -48,7 +48,7 @@ func (h *handler) policyHistory(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, "policy_history", struct {
 		page
 		Changes []policyChange
-	}{h.page(r, gr, repoPath, fsPath, "policy", ""), changes})
+	}{h.page(r, gr, repoPath, fsPath, "policy/history", ""), changes})
 }
 
 func metadataDiff(c *object.Commit) ([]string, template.HTML) {

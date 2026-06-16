@@ -113,7 +113,7 @@ func (h *handler) tree(w http.ResponseWriter, r *http.Request) {
 		Crumbs  []crumb
 		Entries []treeEntry
 		Readme  template.HTML
-	}{h.page(r, gr, repoPath, fsPath, "overview", ref), p, crumbs(p), entries, readme})
+	}{h.page(r, gr, repoPath, fsPath, "code", ref), p, crumbs(p), entries, readme})
 }
 
 const blobMaxBytes = 512 << 10
@@ -163,7 +163,7 @@ func (h *handler) blob(w http.ResponseWriter, r *http.Request) {
 		Content    string
 		LineCount  int
 	}{
-		h.page(r, gr, repoPath, fsPath, "overview", ref),
+		h.page(r, gr, repoPath, fsPath, "code", ref),
 		p, crumbs(p), path.Dir(p), humanSize(f.Size), f.Mode.String(),
 		binary, truncated, rendered, string(data), countLines(data),
 	})
@@ -236,7 +236,7 @@ func (h *handler) fileHistory(w http.ResponseWriter, r *http.Request) {
 		Path    string
 		Crumbs  []crumb
 		Commits []commitRow
-	}{h.page(r, gr, repoPath, fsPath, "log", ref), p, crumbs(p), rows})
+	}{h.page(r, gr, repoPath, fsPath, "commits/log", ref), p, crumbs(p), rows})
 }
 
 type blameLine struct {
@@ -270,7 +270,7 @@ func (h *handler) blame(w http.ResponseWriter, r *http.Request) {
 		Path   string
 		Crumbs []crumb
 		Lines  []blameLine
-	}{h.page(r, gr, repoPath, fsPath, "overview", ref), p, crumbs(p), lines})
+	}{h.page(r, gr, repoPath, fsPath, "code", ref), p, crumbs(p), lines})
 }
 
 const tarFilePerm = 0o644
@@ -363,7 +363,7 @@ func (h *handler) contributors(w http.ResponseWriter, r *http.Request) {
 		page
 		Rows  []contributor
 		Total int
-	}{h.page(r, gr, repoPath, fsPath, "overview", ""), rows, n})
+	}{h.page(r, gr, repoPath, fsPath, "commits/contributors", ""), rows, n})
 }
 
 type searchHit struct{ Path, Hash string }
@@ -395,7 +395,7 @@ func (h *handler) search(w http.ResponseWriter, r *http.Request) {
 		page
 		Q    string
 		Hits []searchHit
-	}{h.page(r, gr, repoPath, fsPath, "overview", ref), q, hits})
+	}{h.page(r, gr, repoPath, fsPath, "code", ref), q, hits})
 }
 
 func humanSize(n int64) string {

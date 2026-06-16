@@ -116,7 +116,7 @@ func (h *handler) principal(w http.ResponseWriter, r *http.Request) {
 		Keys   []string
 		Rules  []gt.Rule
 		Signed []rslRow
-	}{h.page(r, gr, repoPath, fsPath, "policy", ""), id, keyList, rules, signed})
+	}{h.page(r, gr, repoPath, fsPath, "policy/rules", ""), id, keyList, rules, signed})
 }
 
 // attestations lists the contents of refs/gittuf/attestations as a tree.
@@ -140,7 +140,7 @@ func (h *handler) attestations(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, "attestations", struct {
 		page
 		Rows []att
-	}{h.page(r, gr, repoPath, fsPath, "rsl", ""), rows})
+	}{h.page(r, gr, repoPath, fsPath, "policy/attestations", ""), rows})
 }
 
 // hooks lists in-policy Lua hooks.
@@ -164,7 +164,7 @@ func (h *handler) hooks(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, "hooks", struct {
 		page
 		Hooks []gt.Hook
-	}{h.page(r, gr, repoPath, fsPath, "policy", ""), hs})
+	}{h.page(r, gr, repoPath, fsPath, "policy/hooks", ""), hs})
 }
 
 type activityRow struct {

@@ -71,10 +71,14 @@ type handler struct {
 	t          map[string]*template.Template
 }
 
+type navLink struct{ Label, Href, Icon string }
+
 type page struct {
 	Repo      string
 	BaseURL   string
 	Active    string
+	SubActive string
+	SubNav    []navLink
 	Ref       string
 	Refs      []refRow
 	RefGroups refGroups
@@ -83,15 +87,39 @@ type page struct {
 
 func (h *handler) page(r *http.Request, gr *git.Repository, repoPath, fsPath, active, ref string) page {
 	refs := listRefs(gr)
+	top, sub, _ := strings.Cut(active, "/")
 	return page{
 		Repo:      repoPath,
 		BaseURL:   h.baseURL,
-		Active:    active,
+		Active:    top,
+		SubActive: sub,
+		SubNav:    subNavFor(top, repoPath),
 		Ref:       ref,
 		Refs:      refs,
 		RefGroups: groupRefs(refs),
 		VerifyBad: h.verifyBadge(r.Context(), gr, fsPath),
 	}
+}
+
+func subNavFor(top, repo string) []navLink {
+	p := "/" + repo
+	switch top {
+	case "commits":
+		return []navLink{
+			{"log", p + "/log/HEAD", "history"},
+			{"branches", p + "/branches", "git-branch"},
+			{"tags", p + "/tags", "tag"},
+			{"contributors", p + "/contributors", "users"},
+		}
+	case "policy":
+		return []navLink{
+			{"rules", p + "/policy", "shield"},
+			{"history", p + "/policy/history", "scroll"},
+			{"hooks", p + "/hooks", "braces"},
+			{"attestations", p + "/attestations", "file-check"},
+		}
+	}
+	return nil
 }
 
 func (h *handler) render(w http.ResponseWriter, r *http.Request, name string, data any) {
@@ -181,7 +209,7 @@ func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
 		page
 		DefaultRef string
 		Readme     template.HTML
-	}{h.page(r, gr, repoPath, fsPath, "overview", ""), defaultRef, readReadme(gr)})
+	}{h.page(r, gr, repoPath, fsPath, "code", ""), defaultRef, readReadme(gr)})
 }
 
 var errStop = errors.New("stop")
@@ -234,7 +262,7 @@ func (h *handler) log(w http.ResponseWriter, r *http.Request) {
 		page
 		Commits []commitRow
 		Next    string
-	}{h.page(r, gr, repoPath, fsPath, "log", refName), rows, next})
+	}{h.page(r, gr, repoPath, fsPath, "commits/log", refName), rows, next})
 }
 
 func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
@@ -265,7 +293,7 @@ func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
 		RSL                                 []rslRow
 		Diff                                template.HTML
 	}{
-		h.page(r, gr, repoPath, fsPath, "log", ""),
+		h.page(r, gr, repoPath, fsPath, "commits/log", ""),
 		c.Hash.String(), c.Author.String(), c.Author.When.Format(time.RFC1123),
 		c.Message, gt.SignerFingerprint(c.Signature), parents, files,
 		h.rslForCommit(r, gr, fsPath, c.Hash.String()),
@@ -448,7 +476,7 @@ func (h *handler) policy(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, "policy", struct {
 		page
 		Policy *gt.PolicySummary
-	}{h.page(r, gr, repoPath, fsPath, "policy", ""), ps})
+	}{h.page(r, gr, repoPath, fsPath, "policy/rules", ""), ps})
 }
 
 var readmeNames = []string{"README.md", "README.org", "README", "readme.md"} //nolint:goconst

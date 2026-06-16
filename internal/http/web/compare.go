@@ -68,7 +68,7 @@ func (h *handler) compare(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, "compare", struct {
 		page
 		compareView
-	}{h.page(r, gr, repoPath, fsPath, "compare", head), v})
+	}{h.page(r, gr, repoPath, fsPath, "commits/branches", head), v})
 }
 
 func resolvePair(gr *git.Repository, a, b string) (*object.Commit, *object.Commit, error) {

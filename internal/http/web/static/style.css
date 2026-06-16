@@ -136,6 +136,11 @@ details > summary { cursor: pointer; color: var(--muted-foreground); }
 .nav-search { margin-left: auto; padding-bottom: 0.5rem; }
 .nav-search input { height: 2rem; font-size: 0.8125rem; }
 
+.sub-nav { border-bottom: 1px solid var(--border); }
+.sub-nav .container { padding-block: 0.5rem; }
+.sub-nav .tabs nav { background: transparent; padding: 0; height: auto; }
+.sub-nav [role="tab"] { font-size: 0.8125rem; }
+
 .table.blame th, .table.blame td { padding: 0.125rem 0.75rem; }
 .blame-meta { white-space: nowrap; border-right: 1px solid var(--border); }
 .blame-code { white-space: pre; font-size: 0.8125rem; }

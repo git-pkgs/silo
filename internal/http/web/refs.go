@@ -32,7 +32,7 @@ func (h *handler) branches(w http.ResponseWriter, r *http.Request) {
 		page
 		Default string
 		Rows    []refDetail
-	}{h.page(r, gr, repoPath, fsPath, "branches", ""), def, rows})
+	}{h.page(r, gr, repoPath, fsPath, "commits/branches", ""), def, rows})
 }
 
 func (h *handler) tags(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +45,7 @@ func (h *handler) tags(w http.ResponseWriter, r *http.Request) {
 	h.render(w, r, "tags", struct {
 		page
 		Rows []refDetail
-	}{h.page(r, gr, repoPath, fsPath, "tags", ""), rows})
+	}{h.page(r, gr, repoPath, fsPath, "commits/tags", ""), rows})
 }
 
 func (h *handler) refDetails(ctx context.Context, gr *git.Repository, fsPath, prefix, def string) []refDetail {
