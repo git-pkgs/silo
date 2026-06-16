@@ -10,6 +10,7 @@
   <dt>parent</dt>
   <dd><a class="mono" href="/{{$.Repo}}/commit/{{.}}">{{slice . 0 12}}</a></dd>
   {{end}}
+  <dt>tree</dt><dd><a class="mono" href="/{{.Repo}}/tree/{{.Hash}}">browse</a></dd>
 </dl>
 <pre class="panel">{{.Message}}</pre>
 
@@ -42,9 +43,18 @@
 
 {{if .Files}}
 <h2 class="section">Changed files</h2>
-<ul class="filelist mono">
-  {{range .Files}}<li>{{.}}</li>{{end}}
-</ul>
+<div class="panel">
+<table class="table">
+  <tbody>
+  {{range .Files}}
+    <tr>
+      <td><a href="/{{$.Repo}}/blob/{{$.Hash}}/{{.Name}}">{{.Name}}</a></td>
+      <td><span class="diff-add">+{{.Add}}</span> <span class="diff-del">-{{.Del}}</span></td>
+    </tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
 {{end}}
 
 {{if .Diff}}

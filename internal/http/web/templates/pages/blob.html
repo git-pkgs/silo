@@ -1,0 +1,18 @@
+{{template "base" .}}
+{{define "title"}}{{.Path}} · {{.Repo}}{{end}}
+{{define "content"}}
+{{template "breadcrumbs" .}}
+<p class="subhead">
+  {{.Mode}} · {{.Size}}{{if not .Binary}} · {{.LineCount}} lines{{end}}
+  · <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">raw</a>
+</p>
+
+{{if .Binary}}
+  <div class="panel"><pre class="diff">binary file — <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">download</a></pre></div>
+{{else if .Rendered}}
+  <div class="card"><section class="prose">{{.Rendered}}</section></div>
+{{else}}
+  <div class="panel"><pre class="blob">{{.Content}}</pre></div>
+{{end}}
+{{if .Truncated}}<p class="muted small">truncated at 512 KiB — use <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">raw</a> for the full file</p>{{end}}
+{{end}}

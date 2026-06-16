@@ -35,6 +35,9 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{$}", h.index)
 	mux.HandleFunc("GET /{owner}/{repo}", h.repo)
 	mux.HandleFunc("GET /{owner}/{repo}/{$}", h.repo)
+	mux.HandleFunc("GET /{owner}/{repo}/tree/{rest...}", h.tree)
+	mux.HandleFunc("GET /{owner}/{repo}/blob/{rest...}", h.blob)
+	mux.HandleFunc("GET /{owner}/{repo}/raw/{rest...}", h.raw)
 	mux.HandleFunc("GET /{owner}/{repo}/log/{ref...}", h.log)
 	mux.HandleFunc("GET /{owner}/{repo}/commit/{sha}", h.commit)
 	mux.HandleFunc("GET /{owner}/{repo}/rsl", h.rsl)
@@ -142,13 +145,23 @@ func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
 	if !ok {
 		return
 	}
+	defaultRef := "HEAD"
+	if head, err := gr.Head(); err == nil {
+		defaultRef = head.Name().String()
+	}
 	h.render(w, "repo", struct {
 		page
-		Readme template.HTML
-	}{h.page(gr, repoPath, "overview", ""), readReadme(gr)})
+		DefaultRef string
+		Readme     template.HTML
+	}{h.page(gr, repoPath, "overview", ""), defaultRef, readReadme(gr)})
 }
 
 type commitRow struct{ Hash, Author, When, Subject string }
+
+type fileStat struct {
+	Name     string
+	Add, Del int
+}
 
 const logPageSize = 50
 
@@ -204,19 +217,21 @@ func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	var parents, files []string
+	var parents []string
 	for _, p := range c.ParentHashes {
 		parents = append(parents, p.String())
 	}
+	var files []fileStat
 	if st, err := c.Stats(); err == nil {
 		for _, f := range st {
-			files = append(files, f.Name)
+			files = append(files, fileStat{Name: f.Name, Add: f.Addition, Del: f.Deletion})
 		}
 	}
 	h.render(w, "commit", struct {
 		page
 		Hash, Author, When, Message, Signer string
-		Parents, Files                      []string
+		Parents                             []string
+		Files                               []fileStat
 		RSL                                 []rslRow
 		Diff                                template.HTML
 	}{
@@ -405,6 +420,8 @@ func (h *handler) policy(w http.ResponseWriter, r *http.Request) {
 	}{h.page(gr, repoPath, "policy", ""), ps})
 }
 
+var readmeNames = []string{"README.md", "README.org", "README", "readme.md"} //nolint:goconst
+
 func readReadme(gr *git.Repository) template.HTML {
 	head, err := gr.Head()
 	if err != nil {
@@ -414,7 +431,7 @@ func readReadme(gr *git.Repository) template.HTML {
 	if err != nil {
 		return ""
 	}
-	for _, name := range []string{"README.md", "README", "readme.md"} {
+	for _, name := range readmeNames {
 		f, err := c.File(name)
 		if err != nil {
 			continue
@@ -423,8 +440,11 @@ func readReadme(gr *git.Repository) template.HTML {
 		if err != nil {
 			continue
 		}
-		b, _ := io.ReadAll(rd)
+		b, _ := io.ReadAll(io.LimitReader(rd, blobMaxBytes))
 		_ = rd.Close()
+		if html := renderMarkup(name, b); html != "" {
+			return html
+		}
 		return template.HTML("<pre class=\"readme\">" + template.HTMLEscapeString(string(b)) + "</pre>") // #nosec G203 -- escaped
 	}
 	return ""

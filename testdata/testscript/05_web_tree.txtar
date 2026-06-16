@@ -1,0 +1,89 @@
+# 05_web_tree: tree/blob/raw browsing.
+exec silo keygen --data $SILO_DATA
+exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
+exec silo admin repo create alice/demo --data $SILO_DATA
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH --base-url http://$SILO_HTTP &
+waitfor $SILO_SSH
+
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+exec git init -b main repo
+cd repo
+exec git config user.signingKey $WORK/alice
+exec git config gpg.format ssh
+mkdir pkg
+cp $WORK/files/README.md README.md
+cp $WORK/files/main.go pkg/main.go
+exec git add -A
+exec git commit -m initial
+exec git remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
+
+exec gittuf trust init -k $WORK/alice
+exec gittuf trust add-policy-key -k $WORK/alice --policy-key $WORK/alice.pub
+exec gittuf policy init -k $WORK/alice --policy-name targets
+exec gittuf policy add-person -k $WORK/alice --person-ID alice --public-key $WORK/alice.pub
+exec gittuf policy add-rule -k $WORK/alice --rule-name protect-main --rule-pattern 'git:refs/heads/main' --authorize alice
+exec gittuf policy stage --local-only
+exec gittuf policy apply --local-only
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+cd ..
+
+# tree at root: dirs first, README listed, README rendered below
+exec curl -fsS http://$SILO_HTTP/alice/demo/tree/refs/heads/main
+stdout 'pkg/'
+stdout 'README.md'
+stdout '<h1>demo</h1>'
+
+# subtree
+exec curl -fsS http://$SILO_HTTP/alice/demo/tree/refs/heads/main/pkg
+stdout 'main.go'
+stdout '\.\.'
+
+# blob: source rendered as <pre>
+exec curl -fsS http://$SILO_HTTP/alice/demo/blob/refs/heads/main/pkg/main.go
+stdout 'class="blob"'
+stdout 'package main'
+stdout '/raw/'
+
+# blob: markdown rendered + sanitized (the README's <script>alert is stripped)
+exec curl -fsS http://$SILO_HTTP/alice/demo/blob/refs/heads/main/README.md
+stdout '<h1>demo</h1>'
+! stdout 'alert..xss'
+
+# raw
+exec curl -fsS http://$SILO_HTTP/alice/demo/raw/refs/heads/main/pkg/main.go
+stdout '^package main'
+
+# tree by sha
+exec git -C repo rev-parse HEAD
+cp stdout sha.txt
+exec sh -c 'curl -fsS http://'$SILO_HTTP'/alice/demo/tree/$(tr -d "\n" < sha.txt)/pkg'
+stdout 'main.go'
+
+# overview links into tree and renders README via markup
+exec curl -fsS http://$SILO_HTTP/alice/demo
+stdout '/tree/refs/heads/main'
+stdout '<h1>demo</h1>'
+stdout 'gittuf -C'
+
+# commit page links files to blob with stats
+exec sh -c 'curl -fsS http://'$SILO_HTTP'/alice/demo/commit/$(tr -d "\n" < sha.txt)'
+stdout '/blob/'
+stdout 'diff-add'
+stdout '/tree/'
+
+# 404s
+! exec curl -fsS http://$SILO_HTTP/alice/demo/tree/refs/heads/main/missing
+! exec curl -fsS http://$SILO_HTTP/alice/demo/blob/refs/heads/main/missing
+! exec curl -fsS http://$SILO_HTTP/alice/demo/tree/refs/heads/missing
+
+-- files/README.md --
+# demo
+
+A test repository.
+
+<script>alert('xss')</script>
+-- files/main.go --
+package main
+
+func main() {}

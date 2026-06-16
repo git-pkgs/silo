@@ -4,9 +4,25 @@ import (
 	"embed"
 	"html/template"
 	"io/fs"
+	"path"
 	"path/filepath"
 	"strings"
 )
+
+var funcs = template.FuncMap{
+	"join": func(a, b string) string {
+		if a == "" {
+			return b
+		}
+		return a + "/" + b
+	},
+	"dir": func(p string) string {
+		if d := path.Dir(p); d != "." {
+			return d
+		}
+		return ""
+	},
+}
 
 //go:embed templates/layout/*.html templates/pages/*.html
 var templatesFS embed.FS
@@ -25,7 +41,7 @@ func loadTemplates() (map[string]*template.Template, error) {
 	out := map[string]*template.Template{}
 	for _, p := range pages {
 		name := strings.TrimSuffix(filepath.Base(p), ".html")
-		t, err := template.New(name).ParseFS(templatesFS, append(layouts, p)...)
+		t, err := template.New(name).Funcs(funcs).ParseFS(templatesFS, append(layouts, p)...)
 		if err != nil {
 			return nil, err
 		}

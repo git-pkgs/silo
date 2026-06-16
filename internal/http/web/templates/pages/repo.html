@@ -1,17 +1,21 @@
 {{template "base" .}}
 {{define "title"}}{{.Repo}} · silo{{end}}
 {{define "content"}}
-<p class="subhead">clone: <code class="mono">git clone {{.BaseURL}}/{{.Repo}}.git</code></p>
+<div class="clonebox panel">
+  <div><code class="mono">git clone {{.BaseURL}}/{{.Repo}}.git</code></div>
+  <div><code class="mono">git -C {{.Repo}} fetch origin '+refs/gittuf/*:refs/gittuf/*' &amp;&amp; gittuf -C {{.Repo}} verify-ref {{.DefaultRef}}</code></div>
+</div>
 
 <h2 class="section">References</h2>
 <div class="panel">
 <table class="table">
-  <thead><tr><th>name</th><th>target</th></tr></thead>
+  <thead><tr><th>name</th><th>target</th><th></th></tr></thead>
   <tbody>
   {{range .Refs}}
     <tr>
       <td><a href="/{{$.Repo}}/log/{{.Name}}">{{.Name}}</a></td>
       <td><a href="/{{$.Repo}}/commit/{{.Hash}}">{{slice .Hash 0 12}}</a></td>
+      <td><a class="muted" href="/{{$.Repo}}/tree/{{.Name}}">browse</a></td>
     </tr>
   {{end}}
   </tbody>
@@ -21,7 +25,7 @@
 {{if .Readme}}
 <div class="card">
   <header><h2>README</h2></header>
-  <section>{{.Readme}}</section>
+  <section class="prose">{{.Readme}}</section>
 </div>
 {{end}}
 {{end}}

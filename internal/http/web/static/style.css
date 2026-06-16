@@ -95,3 +95,36 @@ pre.readme { white-space: pre-wrap; font-size: 0.875rem; margin: 0; }
 .diff .h { color: var(--muted-foreground); }
 .diff .a { color: oklch(0.55 0.14 150); }
 .diff .d { color: oklch(0.55 0.18 25); }
+
+.clonebox { padding: 0.75rem 1rem; font-size: 0.8125rem; }
+.clonebox div + div { margin-top: 0.375rem; color: var(--muted-foreground); }
+
+.diff-add { color: oklch(0.55 0.14 150); }
+.diff-del { color: oklch(0.55 0.18 25); }
+
+.crumbs { font-size: 0.875rem; margin: 0 0 0.75rem; }
+.crumbs a { text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+
+pre.blob {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  white-space: pre;
+  overflow-x: auto;
+  padding: 1rem;
+  margin: 0;
+  tab-size: 4;
+}
+
+.prose { font-size: 0.9375rem; line-height: 1.6; }
+.prose h1, .prose h2, .prose h3 { margin: 1.25em 0 0.5em; font-weight: 600; }
+.prose h1 { font-size: 1.5rem; }
+.prose h2 { font-size: 1.25rem; }
+.prose h3 { font-size: 1.0625rem; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose table { margin: 0 0 1em; }
+.prose ul, .prose ol { padding-left: 1.5rem; }
+.prose code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.875em; }
+.prose pre { background: var(--muted); padding: 0.75rem; border-radius: var(--radius); overflow-x: auto; }
+.prose a { color: var(--primary); }
+.prose blockquote { border-left: 3px solid var(--border); padding-left: 1rem; color: var(--muted-foreground); }
+.prose table th, .prose table td { border: 1px solid var(--border); padding: 0.4rem 0.6rem; }

@@ -1,1 +1,8 @@
 {{define "signer"}}{{if .SignerName}}<span class="signer-known">{{.SignerName}}</span>{{else if .SignerKeyID}}<span class="signer-unknown">{{.SignerKeyID}}</span>{{else}}<span class="muted">unsigned</span>{{end}}{{end}}
+
+{{define "breadcrumbs"}}
+<nav class="crumbs mono">
+  <a href="/{{.Repo}}/tree/{{.Ref}}">{{.Ref}}</a>
+  {{range .Crumbs}} / <a href="/{{$.Repo}}/tree/{{$.Ref}}/{{.Path}}">{{.Name}}</a>{{end}}
+</nav>
+{{end}}

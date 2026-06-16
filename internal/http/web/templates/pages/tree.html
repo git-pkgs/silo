@@ -1,0 +1,38 @@
+{{template "base" .}}
+{{define "title"}}{{if .Path}}{{.Path}} · {{end}}{{.Repo}}{{end}}
+{{define "content"}}
+{{template "breadcrumbs" .}}
+<div class="panel">
+<table class="table">
+  <thead><tr><th>name</th><th>mode</th><th>size</th><th>hash</th></tr></thead>
+  <tbody>
+  {{if .Path}}
+    <tr><td><a href="/{{$.Repo}}/tree/{{$.Ref}}/{{dir .Path}}">..</a></td><td></td><td></td><td></td></tr>
+  {{end}}
+  {{range .Entries}}
+    <tr>
+      <td>
+        {{if .IsDir}}
+          <a href="/{{$.Repo}}/tree/{{$.Ref}}/{{join $.Path .Name}}">{{.Name}}/</a>
+        {{else}}
+          <a href="/{{$.Repo}}/blob/{{$.Ref}}/{{join $.Path .Name}}">{{.Name}}</a>
+        {{end}}
+      </td>
+      <td class="muted">{{.Mode}}</td>
+      <td class="muted">{{.Size}}</td>
+      <td class="muted xsmall">{{slice .Hash 0 12}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="4" class="muted">empty</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+
+{{if .Readme}}
+<div class="card">
+  <header><h2>README</h2></header>
+  <section class="prose">{{.Readme}}</section>
+</div>
+{{end}}
+{{end}}
