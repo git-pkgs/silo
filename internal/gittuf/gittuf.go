@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"path"
 	"strings"
-	"sync"
 
 	expgittuf "github.com/gittuf/gittuf/experimental/gittuf"
 )
@@ -25,10 +24,6 @@ const (
 // IsGittufRef reports whether name is under refs/gittuf/.
 func IsGittufRef(name string) bool { return strings.HasPrefix(name, RefPrefix) }
 
-// loadMu serialises expgittuf.LoadRepository, which calls os.Chdir.
-// See GITTUF-NOTES.md "LoadRepository changes process working directory".
-var loadMu sync.Mutex
-
 // Repo wraps an experimental/gittuf Repository for one bare repo.
 type Repo struct {
 	r    *expgittuf.Repository
@@ -37,8 +32,6 @@ type Repo struct {
 
 // Open loads the gittuf state for the bare repository at repoPath.
 func Open(repoPath string) (*Repo, error) {
-	loadMu.Lock()
-	defer loadMu.Unlock()
 	r, err := expgittuf.LoadRepository(repoPath)
 	if err != nil {
 		return nil, fmt.Errorf("gittuf: load %s: %w", repoPath, err)

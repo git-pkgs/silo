@@ -26,7 +26,7 @@ go-git on main covers every read operation `gitinterface` shells out for except 
 
 `GetGoGitRepository()` already exists; routing the reads through it is the change.
 
-**silo workaround:** a package mutex around `LoadRepository` for the chdir race; accepts the `git` binary requirement.
+The `os.Chdir` race specifically is fixed on `git-pkgs/gittuf@silo` by adding `executor.withDir` (sets `cmd.Dir`) and switching `LoadRepository` to `rev-parse --absolute-git-dir`; the binary requirement and `IsBare` remain until the broader backend change.
 
 ---
 
