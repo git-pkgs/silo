@@ -1,6 +1,9 @@
 package web
 
 import (
+	"archive/tar"
+	"compress/gzip"
+	"fmt"
 	"html/template"
 	"io"
 	"mime"
@@ -9,6 +12,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 	"unicode/utf8"
 
 	"github.com/go-git/go-git/v6"
@@ -194,6 +198,165 @@ func (h *handler) raw(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Length", strconv.FormatInt(f.Size, 10))
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	_, _ = io.Copy(w, rd)
+}
+
+type blameLine struct {
+	Hash, Author, When, Text string
+}
+
+func (h *handler) blame(w http.ResponseWriter, r *http.Request) {
+	gr, repoPath, fsPath, ok := h.open(w, r)
+	if !ok {
+		return
+	}
+	ref, c, p, ok := splitRefPath(gr, r.PathValue("rest"))
+	if !ok || p == "" {
+		http.NotFound(w, r)
+		return
+	}
+	res, err := git.Blame(c, p)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	lines := make([]blameLine, 0, len(res.Lines))
+	for _, l := range res.Lines {
+		lines = append(lines, blameLine{
+			Hash: l.Hash.String(), Author: l.AuthorName,
+			When: l.Date.Format(time.DateOnly), Text: l.Text,
+		})
+	}
+	h.render(w, "blame", struct {
+		page
+		Path   string
+		Crumbs []crumb
+		Lines  []blameLine
+	}{h.page(r, gr, repoPath, fsPath, "overview", ref), p, crumbs(p), lines})
+}
+
+const tarFilePerm = 0o644
+
+func (h *handler) archive(w http.ResponseWriter, r *http.Request) {
+	gr, _, _, ok := h.open(w, r)
+	if !ok {
+		return
+	}
+	ref := strings.TrimSuffix(r.PathValue("rest"), ".tar.gz")
+	hh, err := gr.ResolveRevision(plumbing.Revision(ref))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	c, err := gr.CommitObject(*hh)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	t, err := c.Tree()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	name := r.PathValue("repo") + "-" + shortRef(ref)
+	w.Header().Set("Content-Type", "application/gzip")
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s.tar.gz"`, name))
+	gz := gzip.NewWriter(w)
+	tw := tar.NewWriter(gz)
+	_ = t.Files().ForEach(func(f *object.File) error {
+		mode := int64(tarFilePerm)
+		if m, err := f.Mode.ToOSFileMode(); err == nil {
+			mode = int64(m.Perm())
+		}
+		if err := tw.WriteHeader(&tar.Header{
+			Name: name + "/" + f.Name, Mode: mode, Size: f.Size,
+			ModTime: c.Committer.When,
+		}); err != nil {
+			return err
+		}
+		rd, err := f.Reader()
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(tw, rd)
+		_ = rd.Close()
+		return err
+	})
+	_ = tw.Close()
+	_ = gz.Close()
+}
+
+type contributor struct {
+	Name, Email string
+	Commits     int
+}
+
+func (h *handler) contributors(w http.ResponseWriter, r *http.Request) {
+	gr, repoPath, fsPath, ok := h.open(w, r)
+	if !ok {
+		return
+	}
+	head, err := gr.Head()
+	if err != nil {
+		http.Error(w, "no HEAD", http.StatusNotFound)
+		return
+	}
+	iter, _ := gr.Log(&git.LogOptions{From: head.Hash()})
+	by := map[string]*contributor{}
+	n := 0
+	_ = iter.ForEach(func(c *object.Commit) error {
+		if n >= aheadCap*10 {
+			return errStop
+		}
+		n++
+		k := c.Author.Email
+		if by[k] == nil {
+			by[k] = &contributor{Name: c.Author.Name, Email: k}
+		}
+		by[k].Commits++
+		return nil
+	})
+	rows := make([]contributor, 0, len(by))
+	for _, v := range by {
+		rows = append(rows, *v)
+	}
+	sort.Slice(rows, func(i, j int) bool { return rows[i].Commits > rows[j].Commits })
+	h.render(w, "contributors", struct {
+		page
+		Rows  []contributor
+		Total int
+	}{h.page(r, gr, repoPath, fsPath, "overview", ""), rows, n})
+}
+
+type searchHit struct{ Path, Hash string }
+
+func (h *handler) search(w http.ResponseWriter, r *http.Request) {
+	gr, repoPath, fsPath, ok := h.open(w, r)
+	if !ok {
+		return
+	}
+	ref := r.PathValue("ref")
+	q := strings.ToLower(r.URL.Query().Get("q"))
+	hh, err := gr.ResolveRevision(plumbing.Revision(ref))
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	c, _ := gr.CommitObject(*hh)
+	t, _ := c.Tree()
+	var hits []searchHit
+	if q != "" {
+		_ = t.Files().ForEach(func(f *object.File) error {
+			if strings.Contains(strings.ToLower(f.Name), q) {
+				hits = append(hits, searchHit{Path: f.Name, Hash: f.Hash.String()})
+			}
+			return nil
+		})
+	}
+	h.render(w, "search", struct {
+		page
+		Q    string
+		Hits []searchHit
+	}{h.page(r, gr, repoPath, fsPath, "overview", ref), q, hits})
 }
 
 func humanSize(n int64) string {

@@ -1,6 +1,8 @@
 package web
 
 import (
+	"archive/tar"
+	"compress/gzip"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -73,6 +75,10 @@ func TestHandler_Routes(t *testing.T) {
 		{"/alice/demo/hooks", http.StatusOK, "Hooks"},
 		{"/alice/demo/principal/nobody", http.StatusNotFound, ""},
 		{"/activity", http.StatusOK, "Activity"},
+		{"/alice/demo/blame/refs/heads/main/README.md", http.StatusOK, "hello"},
+		{"/alice/demo/contributors", http.StatusOK, "alice"},
+		{"/alice/demo/search/refs/heads/main?q=read", http.StatusOK, "README.md"},
+		{"/alice/demo/search/refs/heads/main?q=nope", http.StatusOK, "no matches"},
 		{"/nobody/nothing", http.StatusNotFound, ""},
 		{"/alice/demo/log/refs/heads/absent", http.StatusNotFound, ""},
 		{"/alice/demo/commit/0000000000000000000000000000000000000000", http.StatusNotFound, ""},
@@ -97,6 +103,40 @@ func TestHandler_Routes(t *testing.T) {
 				t.Errorf("body does not contain %q:\n%s", tc.contains, body)
 			}
 		})
+	}
+}
+
+func TestArchive(t *testing.T) {
+	dir := t.TempDir()
+	st, _ := store.Open(dir)
+	t.Cleanup(func() { _ = st.Close() })
+	gst, _ := gitstore.Open(dir)
+	_, _ = st.CreateRepo("a", "r")
+	repo, _ := gst.Init("a", "r")
+	seedCommit(t, repo)
+	srv := httptest.NewServer(Handler(st, gst, "http://x", ""))
+	t.Cleanup(srv.Close)
+
+	resp, err := srv.Client().Get(srv.URL + "/a/r/archive/refs/heads/main.tar.gz")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+	if resp.StatusCode != http.StatusOK || resp.Header.Get("Content-Type") != "application/gzip" {
+		t.Fatalf("status=%d ct=%s", resp.StatusCode, resp.Header.Get("Content-Type"))
+	}
+	gz, err := gzip.NewReader(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	tr := tar.NewReader(gz)
+	hdr, err := tr.Next()
+	if err != nil || hdr.Name != "r-main/README.md" {
+		t.Fatalf("first entry = %v, %v", hdr, err)
+	}
+	b, _ := io.ReadAll(tr)
+	if string(b) != "# hello\n" {
+		t.Errorf("content = %q", b)
 	}
 }
 

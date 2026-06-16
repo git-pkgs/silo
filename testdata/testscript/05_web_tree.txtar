@@ -65,6 +65,26 @@ exec curl -fsS http://$SILO_HTTP/alice/demo
 stdout '/tree/refs/heads/main'
 stdout '<h1>demo</h1>'
 stdout 'gittuf -C'
+stdout '/archive/refs/heads/main\.tar\.gz'
+
+# blame
+exec curl -fsS http://$SILO_HTTP/alice/demo/blame/refs/heads/main/pkg/main.go
+stdout 'package main'
+stdout 'blame-meta'
+
+# contributors
+exec curl -fsS http://$SILO_HTTP/alice/demo/contributors
+stdout '1 author'
+
+# search
+exec curl -fsS 'http://'$SILO_HTTP'/alice/demo/search/refs/heads/main?q=main'
+stdout 'pkg/main.go'
+
+# archive
+exec curl -fsS -o out.tar.gz http://$SILO_HTTP/alice/demo/archive/refs/heads/main.tar.gz
+exec tar -tzf out.tar.gz
+stdout 'demo-main/README.md'
+stdout 'demo-main/pkg/main.go'
 
 # commit page links files to blob with stats
 exec sh -c 'curl -fsS http://'$SILO_HTTP'/alice/demo/commit/$(tr -d "\n" < sha.txt)'

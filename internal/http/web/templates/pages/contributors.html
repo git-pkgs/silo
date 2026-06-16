@@ -1,0 +1,12 @@
+{{template "base" .}}
+{{define "title"}}contributors · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Contributors</h1>
+<p class="subhead">{{len .Rows}} author{{if ne (len .Rows) 1}}s{{end}} · {{.Total}} commits on default branch</p>
+<div class="panel"><table class="table">
+  <thead><tr><th>name</th><th>email</th><th>commits</th></tr></thead>
+  <tbody>
+  {{range .Rows}}<tr><td>{{.Name}}</td><td class="muted">{{.Email}}</td><td>{{.Commits}}</td></tr>{{end}}
+  </tbody>
+</table></div>
+{{end}}

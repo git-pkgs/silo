@@ -5,6 +5,7 @@
 <p class="subhead">
   {{.Mode}} · {{.Size}}{{if not .Binary}} · {{.LineCount}} lines{{end}}
   · <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">raw</a>
+  · <a href="/{{.Repo}}/blame/{{.Ref}}/{{.Path}}">blame</a>
 </p>
 
 {{if .Binary}}

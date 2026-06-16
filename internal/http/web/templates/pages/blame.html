@@ -1,0 +1,22 @@
+{{template "base" .}}
+{{define "title"}}blame {{.Path}} · {{.Repo}}{{end}}
+{{define "content"}}
+{{template "breadcrumbs" .}}
+<p class="subhead"><a href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}">view</a> · <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">raw</a></p>
+<div class="panel">
+<table class="table blame">
+  <tbody>
+  {{$prev := ""}}
+  {{range .Lines}}
+    <tr>
+      {{if ne .Hash $prev}}
+      <td class="xsmall blame-meta"><a href="/{{$.Repo}}/commit/{{.Hash}}">{{slice .Hash 0 8}}</a> {{.Author}} <span class="muted">{{.When}}</span></td>
+      {{else}}<td class="blame-meta"></td>{{end}}
+      <td class="blame-code">{{.Text}}</td>
+    </tr>
+    {{$prev = .Hash}}
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

@@ -131,3 +131,11 @@ pre.blob {
 
 .card { margin-bottom: 1rem; }
 details > summary { cursor: pointer; color: var(--muted-foreground); }
+
+.nav-tabs { flex-direction: row; align-items: center; gap: 1rem; }
+.nav-search { margin-left: auto; padding-bottom: 0.5rem; }
+.nav-search input { height: 2rem; font-size: 0.8125rem; }
+
+.table.blame th, .table.blame td { padding: 0.125rem 0.75rem; }
+.blame-meta { white-space: nowrap; border-right: 1px solid var(--border); }
+.blame-code { white-space: pre; font-size: 0.8125rem; }

@@ -1,0 +1,16 @@
+{{template "base" .}}
+{{define "title"}}search · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Search files</h1>
+<form method="get" action="/{{.Repo}}/search/{{.Ref}}" class="subhead">
+  <input class="input" name="q" value="{{.Q}}" placeholder="filename" autofocus>
+  <button type="submit" class="btn-sm">search</button>
+</form>
+{{if .Q}}
+<p class="subhead">{{len .Hits}} match{{if ne (len .Hits) 1}}es{{end}} for <span class="mono">{{.Q}}</span> at <span class="mono">{{.Ref}}</span></p>
+<div class="panel"><table class="table"><tbody>
+  {{range .Hits}}<tr><td><a href="/{{$.Repo}}/blob/{{$.Ref}}/{{.Path}}">{{.Path}}</a></td><td class="xsmall muted">{{slice .Hash 0 12}}</td></tr>
+  {{else}}<tr><td class="muted">no matches</td></tr>{{end}}
+</tbody></table></div>
+{{end}}
+{{end}}

@@ -36,7 +36,7 @@
       </div>
       {{end}}
     </div>
-    <div class="tabs">
+    <div class="tabs nav-tabs">
       <nav role="tablist">
         <a role="tab" href="/{{.Repo}}" aria-selected="{{if eq .Active "overview"}}true{{else}}false{{end}}"><i data-lucide="book-open"></i>overview</a>
         <a role="tab" href="/{{.Repo}}/rsl" aria-selected="{{if eq .Active "rsl"}}true{{else}}false{{end}}"><i data-lucide="scroll-text"></i>rsl</a>
@@ -45,7 +45,11 @@
         <a role="tab" href="/{{.Repo}}/branches" aria-selected="{{if eq .Active "branches"}}true{{else}}false{{end}}"><i data-lucide="git-branch"></i>branches</a>
         <a role="tab" href="/{{.Repo}}/tags" aria-selected="{{if eq .Active "tags"}}true{{else}}false{{end}}"><i data-lucide="tag"></i>tags</a>
         <a role="tab" href="/{{.Repo}}/verify" aria-selected="{{if eq .Active "verify"}}true{{else}}false{{end}}"><i data-lucide="badge-check"></i>verify{{if gt .VerifyBad 0}}<span class="badge-destructive">{{.VerifyBad}}</span>{{end}}</a>
+        <a role="tab" href="/{{.Repo}}/contributors" aria-selected="{{if eq .Active "contributors"}}true{{else}}false{{end}}"><i data-lucide="users"></i>contributors</a>
       </nav>
+      <form method="get" action="/{{.Repo}}/search/{{if .Ref}}{{.Ref}}{{else}}HEAD{{end}}" class="nav-search">
+        <input class="input" name="q" placeholder="find file">
+      </form>
     </div>
   </div>
 </div>
