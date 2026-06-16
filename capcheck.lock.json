@@ -4,127 +4,95 @@
       "packageName":  "main",
       "capabilityName":  "FILES",
       "capability":  "CAPABILITY_FILES",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.init github.com/git-pkgs/silo/internal/http/git.init github.com/go-git/go-git/v5/plumbing/transport/server.init github.com/go-git/go-billy/v5/osfs.New github.com/go-git/go-billy/v5/osfs.newChrootOS path/filepath.EvalSymlinks path/filepath.evalSymlinks path/filepath.walkSymlinks os.Lstat",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey os.ReadFile",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.init",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "github.com/git-pkgs/silo/internal/http/git.init",
-          "package":  "github.com/git-pkgs/silo/internal/http/git"
-        },
-        {
-          "name":  "github.com/go-git/go-git/v5/plumbing/transport/server.init",
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/server"
-        },
-        {
-          "name":  "github.com/go-git/go-billy/v5/osfs.New",
+          "name":  "os.ReadFile",
           "site":  {
-            "filename":  "loader.go",
-            "line":  "14",
-            "column":  "49"
-          },
-          "package":  "github.com/go-git/go-billy/v5/osfs"
-        },
-        {
-          "name":  "github.com/go-git/go-billy/v5/osfs.newChrootOS",
-          "site":  {
-            "filename":  "os.go",
-            "line":  "42",
-            "column":  "20"
-          },
-          "package":  "github.com/go-git/go-billy/v5/osfs"
-        },
-        {
-          "name":  "path/filepath.EvalSymlinks",
-          "site":  {
-            "filename":  "os_chroot.go",
-            "line":  "30",
-            "column":  "41"
-          },
-          "package":  "path/filepath"
-        },
-        {
-          "name":  "path/filepath.evalSymlinks",
-          "site":  {
-            "filename":  "path.go",
-            "line":  "148",
-            "column":  "21"
-          },
-          "package":  "path/filepath"
-        },
-        {
-          "name":  "path/filepath.walkSymlinks",
-          "site":  {
-            "filename":  "symlink_unix.go",
-            "line":  "10",
-            "column":  "21"
-          },
-          "package":  "path/filepath"
-        },
-        {
-          "name":  "os.Lstat",
-          "site":  {
-            "filename":  "symlink.go",
-            "line":  "85",
-            "column":  "22"
+            "filename":  "admin.go",
+            "line":  "60",
+            "column":  "23"
           },
           "package":  "os"
         }
       ],
       "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
-      "capabilityType":  "CAPABILITY_TYPE_TRANSITIVE"
+      "capabilityType":  "CAPABILITY_TYPE_DIRECT"
     },
     {
       "packageName":  "main",
       "capabilityName":  "NETWORK",
       "capability":  "CAPABILITY_NETWORK",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.init github.com/git-pkgs/silo/internal/gitstore.init github.com/go-git/go-git/v5.init github.com/go-git/go-git/v5/plumbing/transport/client.init github.com/go-git/go-git/v5/plumbing/transport/ssh.init golang.org/x/crypto/ssh.init golang.org/x/crypto/ssh.init#1 slices.DeleteFunc[[]string string] net/http.adjustNextProtos$1",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry errors.Is errors.is (*net/http.timeoutError).Is",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.init",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "github.com/git-pkgs/silo/internal/gitstore.init",
-          "package":  "github.com/git-pkgs/silo/internal/gitstore"
-        },
-        {
-          "name":  "github.com/go-git/go-git/v5.init",
-          "package":  "github.com/go-git/go-git/v5"
-        },
-        {
-          "name":  "github.com/go-git/go-git/v5/plumbing/transport/client.init",
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/client"
-        },
-        {
-          "name":  "github.com/go-git/go-git/v5/plumbing/transport/ssh.init",
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/ssh"
-        },
-        {
-          "name":  "golang.org/x/crypto/ssh.init",
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "golang.org/x/crypto/ssh.init#1",
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "slices.DeleteFunc[[]string string]",
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
           "site":  {
-            "filename":  "cipher.go",
-            "line":  "114",
-            "column":  "37"
+            "filename":  "admin.go",
+            "line":  "68",
+            "column":  "23"
           },
-          "package":  "slices"
+          "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "net/http.adjustNextProtos$1",
+          "name":  "(*database/sql.DB).Exec",
           "site":  {
-            "filename":  "slices.go",
-            "line":  "246",
-            "column":  "21"
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).ExecContext",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).retry",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1671",
+            "column":  "16"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "errors.Is",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1578",
+            "column":  "30"
+          },
+          "package":  "errors"
+        },
+        {
+          "name":  "errors.is",
+          "site":  {
+            "filename":  "wrap.go",
+            "line":  "51",
+            "column":  "11"
+          },
+          "package":  "errors"
+        },
+        {
+          "name":  "(*net/http.timeoutError).Is",
+          "site":  {
+            "filename":  "wrap.go",
+            "line":  "59",
+            "column":  "60"
           },
           "package":  "net/http"
         }
@@ -136,117 +104,198 @@
       "packageName":  "main",
       "capabilityName":  "RUNTIME",
       "capability":  "CAPABILITY_RUNTIME",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute github.com/git-pkgs/silo/cmd/silo.newServeCmd$1 github.com/git-pkgs/silo/cmd/silo.serve log/slog.Info (*log/slog.Logger).log (*log/slog.defaultHandler).Handle (*log/slog.commonHandler).newHandleState (*sync.Pool).Get internal/poll.newPoolPipe runtime.AddCleanup[internal/poll.splicePipe internal/poll.splicePipeFields]",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 database/sql.rowsiFromStatement database/sql.ctxDriverStmtQuery (*modernc.org/sqlite.stmt).Query (*modernc.org/sqlite.stmt).query (*modernc.org/sqlite.conn).step modernc.org/sqlite/lib.Xsqlite3_step modernc.org/sqlite/lib._sqlite3Step modernc.org/sqlite/lib._sqlite3VdbeExec modernc.org/sqlite/lib._sqlite3VdbeSorterRewind modernc.org/sqlite/lib._vdbeSorterFlushPMA modernc.org/sqlite/lib._vdbeSorterCreateThread modernc.org/sqlite/lib._sqlite3ThreadCreate modernc.org/libc.Xpthread_create modernc.org/libc.Xpthread_create$1 modernc.org/libc.Xpthread_exit runtime.Goexit",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).Execute",
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
           "site":  {
-            "filename":  "main.go",
-            "line":  "14",
-            "column":  "32"
+            "filename":  "admin.go",
+            "line":  "68",
+            "column":  "23"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).ExecuteC",
+          "name":  "(*database/sql.DB).Exec",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1071",
-            "column":  "22"
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "database/sql"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).execute",
+          "name":  "(*database/sql.DB).ExecContext",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1148",
-            "column":  "19"
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "database/sql"
         },
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.newServeCmd$1",
+          "name":  "(*database/sql.DB).retry",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1015",
-            "column":  "19"
-          },
-          "package":  "github.com/git-pkgs/silo/cmd/silo"
-        },
-        {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.serve",
-          "site":  {
-            "filename":  "serve.go",
-            "line":  "27",
+            "filename":  "sql.go",
+            "line":  "1671",
             "column":  "16"
           },
-          "package":  "github.com/git-pkgs/silo/cmd/silo"
+          "package":  "database/sql"
         },
         {
-          "name":  "log/slog.Info",
+          "name":  "(*database/sql.Stmt).QueryContext$1",
           "site":  {
-            "filename":  "serve.go",
-            "line":  "61",
-            "column":  "11"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*log/slog.Logger).log",
-          "site":  {
-            "filename":  "logger.go",
-            "line":  "291",
-            "column":  "15"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*log/slog.defaultHandler).Handle",
-          "site":  {
-            "filename":  "logger.go",
-            "line":  "256",
-            "column":  "24"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*log/slog.commonHandler).newHandleState",
-          "site":  {
-            "filename":  "handler.go",
-            "line":  "119",
-            "column":  "30"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*sync.Pool).Get",
-          "site":  {
-            "filename":  "handler.go",
-            "line":  "405",
-            "column":  "27"
-          },
-          "package":  "sync"
-        },
-        {
-          "name":  "internal/poll.newPoolPipe",
-          "site":  {
-            "filename":  "pool.go",
-            "line":  "155",
+            "filename":  "sql.go",
+            "line":  "1576",
             "column":  "12"
           },
-          "package":  "internal/poll"
+          "package":  "database/sql"
         },
         {
-          "name":  "runtime.AddCleanup[internal/poll.splicePipe internal/poll.splicePipeFields]",
+          "name":  "database/sql.rowsiFromStatement",
           "site":  {
-            "filename":  "splice_linux.go",
-            "line":  "197",
+            "filename":  "sql.go",
+            "line":  "2798",
+            "column":  "34"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "database/sql.ctxDriverStmtQuery",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2848",
+            "column":  "27"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*modernc.org/sqlite.stmt).Query",
+          "site":  {
+            "filename":  "ctxutil.go",
+            "line":  "94",
+            "column":  "17"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "(*modernc.org/sqlite.stmt).query",
+          "site":  {
+            "filename":  "stmt.go",
+            "line":  "282",
+            "column":  "16"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "(*modernc.org/sqlite.conn).step",
+          "site":  {
+            "filename":  "stmt.go",
+            "line":  "337",
+            "column":  "22"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "modernc.org/sqlite/lib.Xsqlite3_step",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "381",
+            "column":  "37"
+          },
+          "package":  "modernc.org/sqlite/lib"
+        },
+        {
+          "name":  "modernc.org/sqlite/lib._sqlite3Step",
+          "site":  {
+            "filename":  "sqlite_linux_amd64.go",
+            "line":  "61779",
+            "column":  "20"
+          },
+          "package":  "modernc.org/sqlite/lib"
+        },
+        {
+          "name":  "modernc.org/sqlite/lib._sqlite3VdbeExec",
+          "site":  {
+            "filename":  "sqlite_linux_amd64.go",
+            "line":  "61716",
+            "column":  "24"
+          },
+          "package":  "modernc.org/sqlite/lib"
+        },
+        {
+          "name":  "modernc.org/sqlite/lib._sqlite3VdbeSorterRewind",
+          "site":  {
+            "filename":  "sqlite_linux_amd64.go",
+            "line":  "69434",
+            "column":  "33"
+          },
+          "package":  "modernc.org/sqlite/lib"
+        },
+        {
+          "name":  "modernc.org/sqlite/lib._vdbeSorterFlushPMA",
+          "site":  {
+            "filename":  "sqlite_linux_amd64.go",
+            "line":  "75019",
+            "column":  "26"
+          },
+          "package":  "modernc.org/sqlite/lib"
+        },
+        {
+          "name":  "modernc.org/sqlite/lib._vdbeSorterCreateThread",
+          "site":  {
+            "filename":  "sqlite_linux_amd64.go",
+            "line":  "74116",
             "column":  "32"
+          },
+          "package":  "modernc.org/sqlite/lib"
+        },
+        {
+          "name":  "modernc.org/sqlite/lib._sqlite3ThreadCreate",
+          "site":  {
+            "filename":  "sqlite_linux_amd64.go",
+            "line":  "73399",
+            "column":  "29"
+          },
+          "package":  "modernc.org/sqlite/lib"
+        },
+        {
+          "name":  "modernc.org/libc.Xpthread_create",
+          "site":  {
+            "filename":  "sqlite_linux_amd64.go",
+            "line":  "17178",
+            "column":  "28"
+          },
+          "package":  "modernc.org/libc"
+        },
+        {
+          "name":  "modernc.org/libc.Xpthread_create$1",
+          "site":  {
+            "filename":  "pthread_musl.go",
+            "line":  "137",
+            "column":  "2"
+          },
+          "package":  "modernc.org/libc"
+        },
+        {
+          "name":  "modernc.org/libc.Xpthread_exit",
+          "site":  {
+            "filename":  "pthread_musl.go",
+            "line":  "138",
+            "column":  "16"
+          },
+          "package":  "modernc.org/libc"
+        },
+        {
+          "name":  "runtime.Goexit",
+          "site":  {
+            "filename":  "pthread_musl.go",
+            "line":  "180",
+            "column":  "16"
           },
           "package":  "runtime"
         }
@@ -258,36 +307,112 @@
       "packageName":  "main",
       "capabilityName":  "READ_SYSTEM_STATE",
       "capability":  "CAPABILITY_READ_SYSTEM_STATE",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main github.com/git-pkgs/silo/cmd/silo.newRootCmd github.com/git-pkgs/silo/internal/config.FromEnv os.Getenv",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.DB).Conn$1 (*database/sql.DB).conn (database/sql.dsnConnector).Connect (*modernc.org/sqlite.Driver).Open modernc.org/sqlite.newConn modernc.org/libc.NewTLS modernc.org/libc.NewTLS$1 os.Environ",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.newRootCmd",
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
           "site":  {
-            "filename":  "main.go",
-            "line":  "14",
-            "column":  "22"
-          },
-          "package":  "github.com/git-pkgs/silo/cmd/silo"
-        },
-        {
-          "name":  "github.com/git-pkgs/silo/internal/config.FromEnv",
-          "site":  {
-            "filename":  "main.go",
-            "line":  "20",
+            "filename":  "admin.go",
+            "line":  "68",
             "column":  "23"
           },
-          "package":  "github.com/git-pkgs/silo/internal/config"
+          "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "os.Getenv",
+          "name":  "(*database/sql.DB).Exec",
           "site":  {
-            "filename":  "config.go",
-            "line":  "29",
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).ExecContext",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).retry",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1671",
+            "column":  "16"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).Conn$1",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1576",
+            "column":  "12"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).conn",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1950",
+            "column":  "20"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(database/sql.dsnConnector).Connect",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1431",
+            "column":  "33"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*modernc.org/sqlite.Driver).Open",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "809",
+            "column":  "22"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "modernc.org/sqlite.newConn",
+          "site":  {
+            "filename":  "driver.go",
+            "line":  "96",
             "column":  "19"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "modernc.org/libc.NewTLS",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "66",
+            "column":  "29"
+          },
+          "package":  "modernc.org/libc"
+        },
+        {
+          "name":  "modernc.org/libc.NewTLS$1",
+          "package":  "modernc.org/libc"
+        },
+        {
+          "name":  "os.Environ",
+          "site":  {
+            "filename":  "libc_musl.go",
+            "line":  "283",
+            "column":  "41"
           },
           "package":  "os"
         }
@@ -299,36 +424,246 @@
       "packageName":  "main",
       "capabilityName":  "MODIFY_SYSTEM_STATE/SIGNALS",
       "capability":  "CAPABILITY_MODIFY_SYSTEM_STATE",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (os/signal.signalError).Error",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 (*database/sql.Rows).initContextClose context.WithCancel context.withCancel (*context.cancelCtx).propagateCancel (*context.afterFuncCtx).cancel (*context.afterFuncCtx).cancel$1 (*crypto/tls.Conn).handshakeContext$1 (*golang.org/x/crypto/ssh.chanConn).Close (*golang.org/x/crypto/ssh.channel).Close (*golang.org/x/crypto/ssh.channel).sendMessage (*golang.org/x/crypto/ssh.channel).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).pushPacket (*golang.org/x/crypto/ssh.transport).writePacket (*golang.org/x/crypto/ssh.connectionState).writePacket (*bufio.Writer).Flush (*crypto/tls.Conn).Write (*crypto/tls.Conn).Handshake (*crypto/tls.Conn).HandshakeContext (*crypto/tls.Conn).handshakeContext (*crypto/tls.Conn).clientHandshake$bound (*crypto/tls.Conn).clientHandshake (os/signal.signalError).Error",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).Execute",
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
           "site":  {
-            "filename":  "main.go",
-            "line":  "14",
-            "column":  "32"
+            "filename":  "admin.go",
+            "line":  "68",
+            "column":  "23"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).ExecuteC",
+          "name":  "(*database/sql.DB).Exec",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1071",
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).ExecContext",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).retry",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1671",
+            "column":  "16"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.Stmt).QueryContext$1",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1576",
+            "column":  "12"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.Rows).initContextClose",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2821",
+            "column":  "25"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "context.WithCancel",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2994",
+            "column":  "40"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "context.withCancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "241",
+            "column":  "17"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.cancelCtx).propagateCancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "278",
+            "column":  "19"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.afterFuncCtx).cancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "486",
+            "column":  "15"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.afterFuncCtx).cancel$1",
+          "package":  "context"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).handshakeContext$1",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "358",
+            "column":  "3"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.chanConn).Close",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1539",
+            "column":  "20"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).Close",
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).sendMessage",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "564",
+            "column":  "23"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).writePacket",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "229",
+            "column":  "23"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).writePacket",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "217",
+            "column":  "32"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).pushPacket",
+          "site":  {
+            "filename":  "handshake.go",
+            "line":  "629",
+            "column":  "24"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.transport).writePacket",
+          "site":  {
+            "filename":  "handshake.go",
+            "line":  "267",
+            "column":  "27"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.connectionState).writePacket",
+          "site":  {
+            "filename":  "transport.go",
+            "line":  "186",
+            "column":  "29"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*bufio.Writer).Flush",
+          "site":  {
+            "filename":  "transport.go",
+            "line":  "196",
+            "column":  "18"
+          },
+          "package":  "bufio"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).Write",
+          "site":  {
+            "filename":  "bufio.go",
+            "line":  "642",
             "column":  "22"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).Handshake",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1215",
+            "column":  "23"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).HandshakeContext",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1500",
+            "column":  "27"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).handshakeContext",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1516",
+            "column":  "27"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).clientHandshake$bound",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1562",
+            "column":  "32"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).clientHandshake",
+          "package":  "crypto/tls"
         },
         {
           "name":  "(os/signal.signalError).Error",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1160",
-            "column":  "43"
+            "filename":  "handshake_client.go",
+            "line":  "267",
+            "column":  "63"
           },
           "package":  "os/signal"
         }
@@ -340,84 +675,223 @@
       "packageName":  "main",
       "capabilityName":  "OPERATING_SYSTEM",
       "capability":  "CAPABILITY_OPERATING_SYSTEM",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute (*github.com/spf13/cobra.Command).InitDefaultCompletionCmd$3 (*github.com/spf13/cobra.Command).GenFishCompletion (*bytes.Buffer).WriteTo (*github.com/go-git/go-git/v5/utils/ioutil.writeCloser).Write (*github.com/go-git/go-git/v5/utils/ioutil.writerOnError).Write (*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError$bound (*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError (*github.com/go-git/go-git/v5/plumbing/transport/file.command).Kill (*os.Process).Kill",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 (*database/sql.Rows).initContextClose context.WithCancel context.withCancel (*context.cancelCtx).propagateCancel (*context.afterFuncCtx).cancel (*context.afterFuncCtx).cancel$1 (*crypto/tls.Conn).handshakeContext$1 (*golang.org/x/crypto/ssh.chanConn).Close (*golang.org/x/crypto/ssh.channel).Close (*golang.org/x/crypto/ssh.channel).sendMessage (*golang.org/x/crypto/ssh.channel).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).pushPacket (*golang.org/x/crypto/ssh.transport).writePacket (*golang.org/x/crypto/ssh.connectionState).writePacket (*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket io.ReadFull io.ReadAtLeast (*github.com/go-git/go-git/v5/utils/ioutil.readerOnError).Read (*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError$bound (*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError (*github.com/go-git/go-git/v5/plumbing/transport/file.command).Kill (*os.Process).Kill",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).Execute",
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
           "site":  {
-            "filename":  "main.go",
-            "line":  "14",
-            "column":  "32"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*github.com/spf13/cobra.Command).ExecuteC",
-          "site":  {
-            "filename":  "command.go",
-            "line":  "1071",
-            "column":  "22"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*github.com/spf13/cobra.Command).execute",
-          "site":  {
-            "filename":  "command.go",
-            "line":  "1148",
-            "column":  "19"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*github.com/spf13/cobra.Command).InitDefaultCompletionCmd$3",
-          "site":  {
-            "filename":  "command.go",
-            "line":  "1015",
-            "column":  "19"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*github.com/spf13/cobra.Command).GenFishCompletion",
-          "site":  {
-            "filename":  "completions.go",
-            "line":  "893",
-            "column":  "39"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*bytes.Buffer).WriteTo",
-          "site":  {
-            "filename":  "fish_completions.go",
-            "line":  "279",
+            "filename":  "admin.go",
+            "line":  "68",
             "column":  "23"
           },
-          "package":  "bytes"
+          "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "(*github.com/go-git/go-git/v5/utils/ioutil.writeCloser).Write",
+          "name":  "(*database/sql.DB).Exec",
           "site":  {
-            "filename":  "buffer.go",
-            "line":  "279",
-            "column":  "18"
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).ExecContext",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).retry",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1671",
+            "column":  "16"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.Stmt).QueryContext$1",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1576",
+            "column":  "12"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.Rows).initContextClose",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2821",
+            "column":  "25"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "context.WithCancel",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2994",
+            "column":  "40"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "context.withCancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "241",
+            "column":  "17"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.cancelCtx).propagateCancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "278",
+            "column":  "19"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.afterFuncCtx).cancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "486",
+            "column":  "15"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.afterFuncCtx).cancel$1",
+          "package":  "context"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).handshakeContext$1",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "358",
+            "column":  "3"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.chanConn).Close",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1539",
+            "column":  "20"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).Close",
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).sendMessage",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "564",
+            "column":  "23"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).writePacket",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "229",
+            "column":  "23"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).writePacket",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "217",
+            "column":  "32"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).pushPacket",
+          "site":  {
+            "filename":  "handshake.go",
+            "line":  "629",
+            "column":  "24"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.transport).writePacket",
+          "site":  {
+            "filename":  "handshake.go",
+            "line":  "267",
+            "column":  "27"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.connectionState).writePacket",
+          "site":  {
+            "filename":  "transport.go",
+            "line":  "186",
+            "column":  "29"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket",
+          "site":  {
+            "filename":  "transport.go",
+            "line":  "192",
+            "column":  "41"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "io.ReadFull",
+          "site":  {
+            "filename":  "cipher.go",
+            "line":  "618",
+            "column":  "26"
           },
           "package":  "io"
         },
         {
-          "name":  "(*github.com/go-git/go-git/v5/utils/ioutil.writerOnError).Write",
+          "name":  "io.ReadAtLeast",
+          "site":  {
+            "filename":  "io.go",
+            "line":  "354",
+            "column":  "20"
+          },
+          "package":  "io"
+        },
+        {
+          "name":  "(*github.com/go-git/go-git/v5/utils/ioutil.readerOnError).Read",
+          "site":  {
+            "filename":  "io.go",
+            "line":  "335",
+            "column":  "19"
+          },
           "package":  "github.com/go-git/go-git/v5/utils/ioutil"
         },
         {
           "name":  "(*github.com/go-git/go-git/v5/plumbing/transport/internal/common.session).onError$bound",
           "site":  {
             "filename":  "common.go",
-            "line":  "206",
+            "line":  "180",
             "column":  "11"
           },
           "package":  "github.com/go-git/go-git/v5/plumbing/transport/internal/common"
@@ -452,110 +926,137 @@
       "packageName":  "main",
       "capabilityName":  "SYSTEM_CALLS",
       "capability":  "CAPABILITY_SYSTEM_CALLS",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute github.com/git-pkgs/silo/cmd/silo.newServeCmd$1 github.com/git-pkgs/silo/cmd/silo.serve log/slog.Info (*log/slog.Logger).log (*log/slog.defaultHandler).Handle (*log/slog.commonHandler).newHandleState (*sync.Pool).Get syscall.init$2",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.DB).Conn$1 (*database/sql.DB).conn (database/sql.dsnConnector).Connect (*modernc.org/sqlite.Driver).Open modernc.org/sqlite.newConn modernc.org/libc.Xfree (*modernc.org/memory.Allocator).UintptrFree (*modernc.org/memory.Allocator).unmap modernc.org/memory.unmap golang.org/x/sys/unix.MunmapPtr",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.main",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).Execute",
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
           "site":  {
-            "filename":  "main.go",
-            "line":  "14",
-            "column":  "32"
+            "filename":  "admin.go",
+            "line":  "68",
+            "column":  "23"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).ExecuteC",
+          "name":  "(*database/sql.DB).Exec",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1071",
-            "column":  "22"
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "database/sql"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).execute",
+          "name":  "(*database/sql.DB).ExecContext",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1148",
-            "column":  "19"
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
           },
-          "package":  "github.com/spf13/cobra"
+          "package":  "database/sql"
         },
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.newServeCmd$1",
+          "name":  "(*database/sql.DB).retry",
           "site":  {
-            "filename":  "command.go",
-            "line":  "1015",
-            "column":  "19"
-          },
-          "package":  "github.com/git-pkgs/silo/cmd/silo"
-        },
-        {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.serve",
-          "site":  {
-            "filename":  "serve.go",
-            "line":  "27",
+            "filename":  "sql.go",
+            "line":  "1671",
             "column":  "16"
           },
-          "package":  "github.com/git-pkgs/silo/cmd/silo"
+          "package":  "database/sql"
         },
         {
-          "name":  "log/slog.Info",
+          "name":  "(*database/sql.DB).Conn$1",
           "site":  {
-            "filename":  "serve.go",
-            "line":  "61",
-            "column":  "11"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*log/slog.Logger).log",
-          "site":  {
-            "filename":  "logger.go",
-            "line":  "291",
-            "column":  "15"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*log/slog.defaultHandler).Handle",
-          "site":  {
-            "filename":  "logger.go",
-            "line":  "256",
-            "column":  "24"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*log/slog.commonHandler).newHandleState",
-          "site":  {
-            "filename":  "handler.go",
-            "line":  "119",
-            "column":  "30"
-          },
-          "package":  "log/slog"
-        },
-        {
-          "name":  "(*sync.Pool).Get",
-          "site":  {
-            "filename":  "handler.go",
-            "line":  "405",
-            "column":  "27"
-          },
-          "package":  "sync"
-        },
-        {
-          "name":  "syscall.init$2",
-          "site":  {
-            "filename":  "pool.go",
-            "line":  "155",
+            "filename":  "sql.go",
+            "line":  "1576",
             "column":  "12"
           },
-          "package":  "syscall"
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).conn",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1950",
+            "column":  "20"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(database/sql.dsnConnector).Connect",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1431",
+            "column":  "33"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*modernc.org/sqlite.Driver).Open",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "809",
+            "column":  "22"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "modernc.org/sqlite.newConn",
+          "site":  {
+            "filename":  "driver.go",
+            "line":  "96",
+            "column":  "19"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "modernc.org/libc.Xfree",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "94",
+            "column":  "2"
+          },
+          "package":  "modernc.org/libc"
+        },
+        {
+          "name":  "(*modernc.org/memory.Allocator).UintptrFree",
+          "site":  {
+            "filename":  "mem_musl.go",
+            "line":  "99",
+            "column":  "23"
+          },
+          "package":  "modernc.org/memory"
+        },
+        {
+          "name":  "(*modernc.org/memory.Allocator).unmap",
+          "site":  {
+            "filename":  "memory.go",
+            "line":  "202",
+            "column":  "17"
+          },
+          "package":  "modernc.org/memory"
+        },
+        {
+          "name":  "modernc.org/memory.unmap",
+          "site":  {
+            "filename":  "memory.go",
+            "line":  "161",
+            "column":  "14"
+          },
+          "package":  "modernc.org/memory"
+        },
+        {
+          "name":  "golang.org/x/sys/unix.MunmapPtr",
+          "site":  {
+            "filename":  "mmap_unix.go",
+            "line":  "25",
+            "column":  "23"
+          },
+          "package":  "golang.org/x/sys/unix"
         }
       ],
       "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
@@ -565,62 +1066,226 @@
       "packageName":  "main",
       "capabilityName":  "ARBITRARY_EXECUTION",
       "capability":  "CAPABILITY_ARBITRARY_EXECUTION",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.init github.com/git-pkgs/silo/internal/gitstore.init github.com/go-git/go-git/v5.init github.com/go-git/go-git/v5/plumbing/hash.init github.com/pjbgf/sha1cd.init github.com/klauspost/cpuid/v2.init github.com/klauspost/cpuid/v2.init#1 github.com/klauspost/cpuid/v2.Detect github.com/klauspost/cpuid/v2.addInfo github.com/klauspost/cpuid/v2.asmCpuid",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).QueryContext$1 (*database/sql.Rows).initContextClose context.WithCancel context.withCancel (*context.cancelCtx).propagateCancel (*context.afterFuncCtx).cancel (*context.afterFuncCtx).cancel$1 (*crypto/tls.Conn).handshakeContext$1 (*golang.org/x/crypto/ssh.chanConn).Close (*golang.org/x/crypto/ssh.channel).Close (*golang.org/x/crypto/ssh.channel).sendMessage (*golang.org/x/crypto/ssh.channel).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).writePacket (*golang.org/x/crypto/ssh.handshakeTransport).pushPacket (*golang.org/x/crypto/ssh.transport).writePacket (*golang.org/x/crypto/ssh.connectionState).writePacket (*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket (*crypto/internal/fips140/hmac.HMAC).Reset (*github.com/pjbgf/sha1cd.digest).Write github.com/pjbgf/sha1cd.block github.com/pjbgf/sha1cd.blockAMD64",
       "path":  [
         {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.init",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "github.com/git-pkgs/silo/internal/gitstore.init",
-          "package":  "github.com/git-pkgs/silo/internal/gitstore"
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
+          "site":  {
+            "filename":  "admin.go",
+            "line":  "68",
+            "column":  "23"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/store"
         },
         {
-          "name":  "github.com/go-git/go-git/v5.init",
-          "package":  "github.com/go-git/go-git/v5"
+          "name":  "(*database/sql.DB).Exec",
+          "site":  {
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
+          },
+          "package":  "database/sql"
         },
         {
-          "name":  "github.com/go-git/go-git/v5/plumbing/hash.init",
-          "package":  "github.com/go-git/go-git/v5/plumbing/hash"
+          "name":  "(*database/sql.DB).ExecContext",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
+          },
+          "package":  "database/sql"
         },
         {
-          "name":  "github.com/pjbgf/sha1cd.init",
+          "name":  "(*database/sql.DB).retry",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1671",
+            "column":  "16"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.Stmt).QueryContext$1",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1576",
+            "column":  "12"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.Rows).initContextClose",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2821",
+            "column":  "25"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "context.WithCancel",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2994",
+            "column":  "40"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "context.withCancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "241",
+            "column":  "17"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.cancelCtx).propagateCancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "278",
+            "column":  "19"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.afterFuncCtx).cancel",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "486",
+            "column":  "15"
+          },
+          "package":  "context"
+        },
+        {
+          "name":  "(*context.afterFuncCtx).cancel$1",
+          "package":  "context"
+        },
+        {
+          "name":  "(*crypto/tls.Conn).handshakeContext$1",
+          "site":  {
+            "filename":  "context.go",
+            "line":  "358",
+            "column":  "3"
+          },
+          "package":  "crypto/tls"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.chanConn).Close",
+          "site":  {
+            "filename":  "conn.go",
+            "line":  "1539",
+            "column":  "20"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).Close",
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).sendMessage",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "564",
+            "column":  "23"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.channel).writePacket",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "229",
+            "column":  "23"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).writePacket",
+          "site":  {
+            "filename":  "channel.go",
+            "line":  "217",
+            "column":  "32"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.handshakeTransport).pushPacket",
+          "site":  {
+            "filename":  "handshake.go",
+            "line":  "629",
+            "column":  "24"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.transport).writePacket",
+          "site":  {
+            "filename":  "handshake.go",
+            "line":  "267",
+            "column":  "27"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.connectionState).writePacket",
+          "site":  {
+            "filename":  "transport.go",
+            "line":  "186",
+            "column":  "29"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.cbcCipher).writeCipherPacket",
+          "site":  {
+            "filename":  "transport.go",
+            "line":  "192",
+            "column":  "41"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*crypto/internal/fips140/hmac.HMAC).Reset",
+          "site":  {
+            "filename":  "cipher.go",
+            "line":  "623",
+            "column":  "14"
+          },
+          "package":  "crypto/internal/fips140/hmac"
+        },
+        {
+          "name":  "(*github.com/pjbgf/sha1cd.digest).Write",
+          "site":  {
+            "filename":  "hmac.go",
+            "line":  "91",
+            "column":  "15"
+          },
           "package":  "github.com/pjbgf/sha1cd"
         },
         {
-          "name":  "github.com/klauspost/cpuid/v2.init",
-          "package":  "github.com/klauspost/cpuid/v2"
-        },
-        {
-          "name":  "github.com/klauspost/cpuid/v2.init#1",
-          "package":  "github.com/klauspost/cpuid/v2"
-        },
-        {
-          "name":  "github.com/klauspost/cpuid/v2.Detect",
+          "name":  "github.com/pjbgf/sha1cd.block",
           "site":  {
-            "filename":  "cpuid.go",
-            "line":  "394",
-            "column":  "8"
-          },
-          "package":  "github.com/klauspost/cpuid/v2"
-        },
-        {
-          "name":  "github.com/klauspost/cpuid/v2.addInfo",
-          "site":  {
-            "filename":  "cpuid.go",
-            "line":  "415",
+            "filename":  "sha1cd.go",
+            "line":  "143",
             "column":  "9"
           },
-          "package":  "github.com/klauspost/cpuid/v2"
+          "package":  "github.com/pjbgf/sha1cd"
         },
         {
-          "name":  "github.com/klauspost/cpuid/v2.asmCpuid",
+          "name":  "github.com/pjbgf/sha1cd.blockAMD64",
           "site":  {
-            "filename":  "detect_x86.go",
-            "line":  "40",
-            "column":  "28"
+            "filename":  "sha1cdblock_amd64.go",
+            "line":  "39",
+            "column":  "13"
           },
-          "package":  "github.com/klauspost/cpuid/v2"
+          "package":  "github.com/pjbgf/sha1cd"
         }
       ],
       "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
@@ -630,7 +1295,161 @@
       "packageName":  "main",
       "capabilityName":  "UNSAFE_POINTER",
       "capability":  "CAPABILITY_UNSAFE_POINTER",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute (*github.com/spf13/cobra.Command).InitDefaultCompletionCmd$3 (*github.com/spf13/cobra.Command).GenFishCompletion (*bytes.Buffer).WriteTo (*golang.org/x/crypto/sha3.state).Write (*golang.org/x/crypto/sha3.state).permute",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey (*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey (*database/sql.DB).Exec (*database/sql.DB).ExecContext (*database/sql.DB).retry (*database/sql.Stmt).ExecContext$1 database/sql.resultFromStatement database/sql.ctxDriverStmtExec (*modernc.org/sqlite.stmt).Exec (*modernc.org/sqlite.stmt).exec",
+      "path":  [
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "(*github.com/git-pkgs/silo/internal/store.Store).AddSSHKey",
+          "site":  {
+            "filename":  "admin.go",
+            "line":  "68",
+            "column":  "23"
+          },
+          "package":  "github.com/git-pkgs/silo/internal/store"
+        },
+        {
+          "name":  "(*database/sql.DB).Exec",
+          "site":  {
+            "filename":  "store.go",
+            "line":  "88",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).ExecContext",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1685",
+            "column":  "23"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.DB).retry",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1671",
+            "column":  "16"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*database/sql.Stmt).ExecContext$1",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "1576",
+            "column":  "12"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "database/sql.resultFromStatement",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2654",
+            "column":  "33"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "database/sql.ctxDriverStmtExec",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "2680",
+            "column":  "32"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*modernc.org/sqlite.stmt).Exec",
+          "site":  {
+            "filename":  "ctxutil.go",
+            "line":  "77",
+            "column":  "16"
+          },
+          "package":  "modernc.org/sqlite"
+        },
+        {
+          "name":  "(*modernc.org/sqlite.stmt).exec",
+          "site":  {
+            "filename":  "stmt.go",
+            "line":  "83",
+            "column":  "15"
+          },
+          "package":  "modernc.org/sqlite"
+        }
+      ],
+      "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
+      "capabilityType":  "CAPABILITY_TYPE_TRANSITIVE"
+    },
+    {
+      "packageName":  "main",
+      "capabilityName":  "REFLECT",
+      "capability":  "CAPABILITY_REFLECT",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.addKey golang.org/x/crypto/ssh.FingerprintSHA256 (*golang.org/x/crypto/ssh.Certificate).Marshal golang.org/x/crypto/ssh.Marshal golang.org/x/crypto/ssh.marshalStruct (reflect.Value).Interface",
+      "path":  [
+        {
+          "name":  "github.com/git-pkgs/silo/cmd/silo.addKey",
+          "package":  "github.com/git-pkgs/silo/cmd/silo"
+        },
+        {
+          "name":  "golang.org/x/crypto/ssh.FingerprintSHA256",
+          "site":  {
+            "filename":  "admin.go",
+            "line":  "68",
+            "column":  "54"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(*golang.org/x/crypto/ssh.Certificate).Marshal",
+          "site":  {
+            "filename":  "keys.go",
+            "line":  "1820",
+            "column":  "43"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "golang.org/x/crypto/ssh.Marshal",
+          "site":  {
+            "filename":  "certs.go",
+            "line":  "558",
+            "column":  "30"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "golang.org/x/crypto/ssh.marshalStruct",
+          "site":  {
+            "filename":  "messages.go",
+            "line":  "521",
+            "column":  "22"
+          },
+          "package":  "golang.org/x/crypto/ssh"
+        },
+        {
+          "name":  "(reflect.Value).Interface",
+          "site":  {
+            "filename":  "messages.go",
+            "line":  "542",
+            "column":  "79"
+          },
+          "package":  "reflect"
+        }
+      ],
+      "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
+      "capabilityType":  "CAPABILITY_TYPE_TRANSITIVE"
+    },
+    {
+      "packageName":  "main",
+      "capabilityName":  "EXEC",
+      "capability":  "CAPABILITY_EXEC",
+      "depPath":  "github.com/git-pkgs/silo/cmd/silo.main (*github.com/spf13/cobra.Command).Execute (*github.com/spf13/cobra.Command).ExecuteC (*github.com/spf13/cobra.Command).execute github.com/git-pkgs/silo/cmd/silo.newAdminRepoCmd$1 github.com/git-pkgs/silo/internal/store.Open (*database/sql.DB).Close (*os/exec.Cmd).writerDescriptor$1",
       "path":  [
         {
           "name":  "github.com/git-pkgs/silo/cmd/silo.main",
@@ -664,92 +1483,40 @@
           "package":  "github.com/spf13/cobra"
         },
         {
-          "name":  "(*github.com/spf13/cobra.Command).InitDefaultCompletionCmd$3",
+          "name":  "github.com/git-pkgs/silo/cmd/silo.newAdminRepoCmd$1",
           "site":  {
             "filename":  "command.go",
             "line":  "1015",
             "column":  "19"
           },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*github.com/spf13/cobra.Command).GenFishCompletion",
-          "site":  {
-            "filename":  "completions.go",
-            "line":  "893",
-            "column":  "39"
-          },
-          "package":  "github.com/spf13/cobra"
-        },
-        {
-          "name":  "(*bytes.Buffer).WriteTo",
-          "site":  {
-            "filename":  "fish_completions.go",
-            "line":  "279",
-            "column":  "23"
-          },
-          "package":  "bytes"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/sha3.state).Write",
-          "site":  {
-            "filename":  "buffer.go",
-            "line":  "279",
-            "column":  "18"
-          },
-          "package":  "golang.org/x/crypto/sha3"
-        },
-        {
-          "name":  "(*golang.org/x/crypto/sha3.state).permute",
-          "site":  {
-            "filename":  "legacy_hash.go",
-            "line":  "160",
-            "column":  "13"
-          },
-          "package":  "golang.org/x/crypto/sha3"
-        }
-      ],
-      "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
-      "capabilityType":  "CAPABILITY_TYPE_TRANSITIVE"
-    },
-    {
-      "packageName":  "main",
-      "capabilityName":  "REFLECT",
-      "capability":  "CAPABILITY_REFLECT",
-      "depPath":  "github.com/git-pkgs/silo/cmd/silo.init github.com/git-pkgs/silo/internal/gitstore.init github.com/go-git/go-git/v5.init github.com/go-git/go-git/v5/plumbing/transport/client.init github.com/go-git/go-git/v5/plumbing/transport/ssh.init golang.org/x/crypto/ssh.init reflect.TypeFor[*math/big.Int]",
-      "path":  [
-        {
-          "name":  "github.com/git-pkgs/silo/cmd/silo.init",
           "package":  "github.com/git-pkgs/silo/cmd/silo"
         },
         {
-          "name":  "github.com/git-pkgs/silo/internal/gitstore.init",
-          "package":  "github.com/git-pkgs/silo/internal/gitstore"
-        },
-        {
-          "name":  "github.com/go-git/go-git/v5.init",
-          "package":  "github.com/go-git/go-git/v5"
-        },
-        {
-          "name":  "github.com/go-git/go-git/v5/plumbing/transport/client.init",
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/client"
-        },
-        {
-          "name":  "github.com/go-git/go-git/v5/plumbing/transport/ssh.init",
-          "package":  "github.com/go-git/go-git/v5/plumbing/transport/ssh"
-        },
-        {
-          "name":  "golang.org/x/crypto/ssh.init",
-          "package":  "golang.org/x/crypto/ssh"
-        },
-        {
-          "name":  "reflect.TypeFor[*math/big.Int]",
+          "name":  "github.com/git-pkgs/silo/internal/store.Open",
           "site":  {
-            "filename":  "messages.go",
-            "line":  "795",
-            "column":  "43"
+            "filename":  "admin.go",
+            "line":  "83",
+            "column":  "25"
           },
-          "package":  "reflect"
+          "package":  "github.com/git-pkgs/silo/internal/store"
+        },
+        {
+          "name":  "(*database/sql.DB).Close",
+          "site":  {
+            "filename":  "store.go",
+            "line":  "32",
+            "column":  "15"
+          },
+          "package":  "database/sql"
+        },
+        {
+          "name":  "(*os/exec.Cmd).writerDescriptor$1",
+          "site":  {
+            "filename":  "sql.go",
+            "line":  "945",
+            "column":  "13"
+          },
+          "package":  "os/exec"
         }
       ],
       "packageDir":  "github.com/git-pkgs/silo/cmd/silo",
@@ -766,6 +1533,10 @@
       "version":  "v1.1.6"
     },
     {
+      "path":  "github.com/anmitsu/go-shlex",
+      "version":  "v0.0.0-20200514113438-38f4b401e2be"
+    },
+    {
       "path":  "github.com/cloudflare/circl",
       "version":  "v1.6.3"
     },
@@ -774,8 +1545,16 @@
       "version":  "v0.6.1"
     },
     {
+      "path":  "github.com/dustin/go-humanize",
+      "version":  "v1.0.1"
+    },
+    {
       "path":  "github.com/emirpasic/gods",
       "version":  "v1.18.1"
+    },
+    {
+      "path":  "github.com/gliderlabs/ssh",
+      "version":  "v0.3.8"
     },
     {
       "path":  "github.com/go-git/gcfg",
@@ -794,6 +1573,10 @@
       "version":  "v0.0.0-20241129210726-2c02b8208cf8"
     },
     {
+      "path":  "github.com/google/uuid",
+      "version":  "v1.6.0"
+    },
+    {
       "path":  "github.com/jbenet/go-context",
       "version":  "v0.0.0-20150711004518-d14ea06fba99"
     },
@@ -808,6 +1591,10 @@
     {
       "path":  "github.com/pjbgf/sha1cd",
       "version":  "v0.6.0"
+    },
+    {
+      "path":  "github.com/remyoudompheng/bigfft",
+      "version":  "v0.0.0-20230129092748-24d4a6f8daec"
     },
     {
       "path":  "github.com/sergi/go-diff",
@@ -844,6 +1631,22 @@
     {
       "path":  "gopkg.in/warnings.v0",
       "version":  "v0.1.2"
+    },
+    {
+      "path":  "modernc.org/libc",
+      "version":  "v1.72.3"
+    },
+    {
+      "path":  "modernc.org/mathutil",
+      "version":  "v1.7.1"
+    },
+    {
+      "path":  "modernc.org/memory",
+      "version":  "v1.11.0"
+    },
+    {
+      "path":  "modernc.org/sqlite",
+      "version":  "v1.52.0"
     }
   ],
   "packageInfo":  [
@@ -917,6 +1720,9 @@
       "path":  "github.com/ProtonMail/go-crypto/openpgp/x448"
     },
     {
+      "path":  "github.com/anmitsu/go-shlex"
+    },
+    {
       "path":  "github.com/cloudflare/circl/dh/x25519",
       "ignoredFiles":  [
         "curve_noasm.go"
@@ -983,6 +1789,9 @@
       "path":  "github.com/cyphar/filepath-securejoin/internal/consts"
     },
     {
+      "path":  "github.com/dustin/go-humanize"
+    },
+    {
       "path":  "github.com/emirpasic/gods/containers"
     },
     {
@@ -1011,6 +1820,18 @@
     },
     {
       "path":  "github.com/git-pkgs/silo/internal/http/git"
+    },
+    {
+      "path":  "github.com/git-pkgs/silo/internal/receive"
+    },
+    {
+      "path":  "github.com/git-pkgs/silo/internal/ssh"
+    },
+    {
+      "path":  "github.com/git-pkgs/silo/internal/store"
+    },
+    {
+      "path":  "github.com/gliderlabs/ssh"
     },
     {
       "path":  "github.com/go-git/gcfg"
@@ -1211,6 +2032,12 @@
       "path":  "github.com/golang/groupcache/lru"
     },
     {
+      "path":  "github.com/google/uuid",
+      "ignoredFiles":  [
+        "node_js.go"
+      ]
+    },
+    {
       "path":  "github.com/jbenet/go-context/io"
     },
     {
@@ -1247,6 +2074,9 @@
     },
     {
       "path":  "github.com/pjbgf/sha1cd/ubc"
+    },
+    {
+      "path":  "github.com/remyoudompheng/bigfft"
     },
     {
       "path":  "github.com/sergi/go-diff/diffmatchpatch"
@@ -1753,6 +2583,265 @@
         "asm_linux_riscv64.s",
         "asm_linux_s390x.s"
       ]
+    },
+    {
+      "path":  "modernc.org/libc",
+      "ignoredFiles":  [
+        "addport.go",
+        "all_non_musl_test.go",
+        "atomic32.go",
+        "builtin32.go",
+        "capi_darwin_amd64.go",
+        "capi_darwin_arm64.go",
+        "capi_freebsd_386.go",
+        "capi_freebsd_amd64.go",
+        "capi_freebsd_arm.go",
+        "capi_freebsd_arm64.go",
+        "capi_illumos_amd64.go",
+        "capi_linux_386.go",
+        "capi_linux_arm.go",
+        "capi_linux_arm64.go",
+        "capi_linux_loong64.go",
+        "capi_linux_mips64le.go",
+        "capi_linux_ppc64le.go",
+        "capi_linux_riscv64.go",
+        "capi_linux_s390x.go",
+        "capi_netbsd_amd64.go",
+        "capi_netbsd_arm.go",
+        "capi_openbsd_386.go",
+        "capi_openbsd_amd64.go",
+        "capi_openbsd_arm64.go",
+        "capi_windows_386.go",
+        "capi_windows_amd64.go",
+        "capi_windows_arm64.go",
+        "ccgo.go",
+        "ccgo_linux_386.go",
+        "ccgo_linux_arm.go",
+        "ccgo_linux_arm64.go",
+        "ccgo_linux_loong64.go",
+        "ccgo_linux_ppc64le.go",
+        "ccgo_linux_riscv64.go",
+        "ccgo_linux_s390x.go",
+        "dmesg.go",
+        "etc.go",
+        "generate.go",
+        "generator.go",
+        "genheaders.go",
+        "ioutil_darwin.go",
+        "ioutil_freebsd.go",
+        "ioutil_illumos.go",
+        "ioutil_linux.go",
+        "ioutil_netbsd.go",
+        "ioutil_openbsd.go",
+        "libc.go",
+        "libc32.go",
+        "libc64.go",
+        "libc_386.go",
+        "libc_amd64.go",
+        "libc_arm.go",
+        "libc_arm64.go",
+        "libc_darwin.go",
+        "libc_darwin_amd64.go",
+        "libc_darwin_arm64.go",
+        "libc_freebsd.go",
+        "libc_freebsd_386.go",
+        "libc_freebsd_amd64.go",
+        "libc_freebsd_arm.go",
+        "libc_freebsd_arm64.go",
+        "libc_illumos.go",
+        "libc_illumos_amd64.go",
+        "libc_linux_amd64.go",
+        "libc_linux_mips64le.go",
+        "libc_mips64le.go",
+        "libc_musl_linux_386.go",
+        "libc_musl_linux_arm.go",
+        "libc_musl_linux_arm64.go",
+        "libc_musl_linux_loong64.go",
+        "libc_musl_linux_ppc64le.go",
+        "libc_musl_linux_riscv64.go",
+        "libc_musl_linux_s390x.go",
+        "libc_netbsd.go",
+        "libc_netbsd_amd64.go",
+        "libc_netbsd_arm.go",
+        "libc_openbsd.go",
+        "libc_openbsd_386.go",
+        "libc_openbsd_amd64.go",
+        "libc_openbsd_arm64.go",
+        "libc_unix.go",
+        "libc_unix1.go",
+        "libc_unix2.go",
+        "libc_unix3.go",
+        "libc_windows.go",
+        "libc_windows_386.go",
+        "libc_windows_amd64.go",
+        "libc_windows_arm64.go",
+        "mem.go",
+        "mem_brk.go",
+        "mem_brk_musl.go",
+        "mem_expvar.go",
+        "memgrind.go",
+        "memgrind_musl.go",
+        "memgrind_test.go",
+        "musl_darwin_amd64.go",
+        "musl_darwin_arm64.go",
+        "musl_freebsd_386.go",
+        "musl_freebsd_amd64.go",
+        "musl_freebsd_arm.go",
+        "musl_freebsd_arm64.go",
+        "musl_illumos_amd64.go",
+        "musl_linux_mips64le.go",
+        "musl_netbsd_amd64.go",
+        "musl_netbsd_arm.go",
+        "musl_openbsd_386.go",
+        "musl_openbsd_amd64.go",
+        "musl_openbsd_arm64.go",
+        "musl_windows_386.go",
+        "musl_windows_amd64.go",
+        "musl_windows_arm64.go",
+        "nofsync.go",
+        "printf.go",
+        "pthread.go",
+        "pthread_all.go",
+        "scanf.go",
+        "strace.go",
+        "straceon.go",
+        "sync.go",
+        "asm_386.s",
+        "libc_windows_386.s",
+        "libc_windows_arm64.s"
+      ]
+    },
+    {
+      "path":  "modernc.org/libc/sys/types",
+      "ignoredFiles":  [
+        "capi_darwin_amd64.go",
+        "capi_darwin_arm64.go",
+        "capi_freebsd_386.go",
+        "capi_freebsd_amd64.go",
+        "capi_freebsd_arm.go",
+        "capi_freebsd_arm64.go",
+        "capi_illumos_amd64.go",
+        "capi_linux_386.go",
+        "capi_linux_arm.go",
+        "capi_linux_arm64.go",
+        "capi_linux_loong64.go",
+        "capi_linux_mips64le.go",
+        "capi_linux_ppc64le.go",
+        "capi_linux_riscv64.go",
+        "capi_linux_s390x.go",
+        "capi_netbsd_amd64.go",
+        "capi_netbsd_arm.go",
+        "capi_openbsd_386.go",
+        "capi_openbsd_amd64.go",
+        "capi_openbsd_arm64.go",
+        "capi_windows_386.go",
+        "capi_windows_amd64.go",
+        "capi_windows_arm64.go",
+        "types_darwin_amd64.go",
+        "types_darwin_arm64.go",
+        "types_freebsd_386.go",
+        "types_freebsd_amd64.go",
+        "types_freebsd_arm.go",
+        "types_freebsd_arm64.go",
+        "types_illumos_amd64.go",
+        "types_linux_386.go",
+        "types_linux_arm.go",
+        "types_linux_arm64.go",
+        "types_linux_loong64.go",
+        "types_linux_mips64le.go",
+        "types_linux_ppc64le.go",
+        "types_linux_riscv64.go",
+        "types_linux_s390x.go",
+        "types_netbsd_amd64.go",
+        "types_netbsd_arm.go",
+        "types_openbsd_386.go",
+        "types_openbsd_amd64.go",
+        "types_openbsd_arm64.go",
+        "types_windows_386.go",
+        "types_windows_amd64.go",
+        "types_windows_arm64.go"
+      ]
+    },
+    {
+      "path":  "modernc.org/libc/uuid/uuid",
+      "ignoredFiles":  [
+        "capi_darwin_amd64.go",
+        "capi_darwin_arm64.go",
+        "capi_illumos_amd64.go",
+        "capi_linux_386.go",
+        "capi_linux_arm.go",
+        "capi_linux_arm64.go",
+        "capi_linux_loong64.go",
+        "capi_linux_mips64le.go",
+        "capi_linux_ppc64le.go",
+        "capi_linux_riscv64.go",
+        "capi_linux_s390x.go",
+        "uuid_darwin_amd64.go",
+        "uuid_darwin_arm64.go",
+        "uuid_illumos_amd64.go",
+        "uuid_linux_386.go",
+        "uuid_linux_arm.go",
+        "uuid_linux_arm64.go",
+        "uuid_linux_loong64.go",
+        "uuid_linux_mips64le.go",
+        "uuid_linux_ppc64le.go",
+        "uuid_linux_riscv64.go",
+        "uuid_linux_s390x.go"
+      ]
+    },
+    {
+      "path":  "modernc.org/mathutil",
+      "ignoredFiles":  [
+        "sqr_std.go"
+      ]
+    },
+    {
+      "path":  "modernc.org/memory",
+      "ignoredFiles":  [
+        "counters.go",
+        "memory32.go",
+        "mmap_windows.go",
+        "trace_enabled.go"
+      ]
+    },
+    {
+      "path":  "modernc.org/sqlite",
+      "ignoredFiles":  [
+        "addport.go",
+        "dmesg.go",
+        "norlimit.go",
+        "rlimit.go"
+      ]
+    },
+    {
+      "path":  "modernc.org/sqlite/lib",
+      "ignoredFiles":  [
+        "hooks_linux_arm64.go",
+        "libsqlite3_freebsd.go",
+        "libsqlite3_windows.go",
+        "mutex.go",
+        "sqlite_darwin_amd64.go",
+        "sqlite_darwin_arm64.go",
+        "sqlite_freebsd_386.go",
+        "sqlite_freebsd_amd64.go",
+        "sqlite_freebsd_arm.go",
+        "sqlite_freebsd_arm64.go",
+        "sqlite_linux_386.go",
+        "sqlite_linux_arm.go",
+        "sqlite_linux_arm64.go",
+        "sqlite_linux_loong64.go",
+        "sqlite_linux_ppc64le.go",
+        "sqlite_linux_riscv64.go",
+        "sqlite_linux_s390x.go",
+        "sqlite_netbsd_amd64.go",
+        "sqlite_openbsd_amd64.go",
+        "sqlite_openbsd_arm64.go",
+        "sqlite_windows.go",
+        "sqlite_windows_386.go"
+      ]
+    },
+    {
+      "path":  "modernc.org/sqlite/vtab"
     }
   ]
 }

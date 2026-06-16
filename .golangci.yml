@@ -1,6 +1,12 @@
 version: "2"
 
 linters:
+  settings:
+    ireturn:
+      allow:
+        - error
+        - stdlib
+        - github.com/gliderlabs/ssh.Signer
   enable:
     - gocritic
     - gocognit

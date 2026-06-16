@@ -366,4 +366,12 @@ serve-and-HTTP-clone milestone deviations:
 
 - testscript scaffolding builds the `silo` binary once at repo root and prepends its dir to PATH in `Setup`, rather than using `testscript.RunMain`: the RunMain re-exec runs from `$WORK` where there is no `go.mod`, so `go build` inside it fails. `gittuf` will be built the same way for the verification milestone.
 - `01_clone.txtar` asserts `'only git-upload-pack'` for the HTTP push refusal, since git first issues `GET info/refs?service=git-receive-pack` and that handler's message is what surfaces.
+SSH-push milestone deviations:
+
+- `unpack` no longer closes its reader: over SSH `req.Packfile` is the session itself, and closing it before writing report-status disconnected the client (`send-pack: unexpected disconnect while reading sideband packet`). The session lifecycle is the caller's.
+- `internal/ssh` unit coverage is 33.3%. `parseExec`, `loader.Load`, and `publicKeyHandler` are at 100%; `Serve`/`handler`/`serveUploadPack` require a live `gssh.Session` (15-method interface) and are exercised by `02_push.txtar` against a real `git push`/`git clone` over SSH instead, which covers receive-pack, upload-pack via clone of the pushed repo, unknown-key rejection, and bad-exec rejection. Mocking `Session` would duplicate that with weaker evidence. Total internal coverage is 77.4%.
+- testscript `env` splits on spaces; `GIT_SSH_COMMAND` is set with `env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice ...'` (single-quoted segments around the literal parts).
+- Security checklist for `internal/ssh`: `parseExec` rejects anything but `git-upload-pack`/`git-receive-pack` followed by exactly one `owner/name` path (no `..`, no nested `/`); `gitstore.Path` independently validates names against `[A-Za-z0-9][A-Za-z0-9._-]*` so traversal is refused at both layers.
+- capcheck: new capability EXEC, transitive via `modernc.org/sqlite` → `modernc.org/libc` (the cgo-free libc shim has exec syscall stubs). silo's own code does not call `exec.Command`. Baseline updated to 11 capabilities.
+
 - capcheck invocation is `go run github.com/git-pkgs/capcheck/cmd/capcheck@latest` (binary lives under `cmd/`). Baseline at this milestone (capcheck.lock.json): NETWORK (HTTP listener), FILES (`$SILO_DATA`), READ_SYSTEM_STATE/OPERATING_SYSTEM (os/signal, env), REFLECT/UNSAFE_POINTER/RUNTIME/SYSTEM_CALLS (transitive via go-git and stdlib net), ARBITRARY_EXECUTION and MODIFY_SYSTEM_STATE (transitive via go-git's ssh transport which can exec ssh-agent; not reachable from silo's code paths yet). No exec from silo itself; no cgo.

@@ -15,6 +15,9 @@ import (
 	"github.com/git-pkgs/silo/internal/config"
 	"github.com/git-pkgs/silo/internal/gitstore"
 	githttp "github.com/git-pkgs/silo/internal/http/git"
+	"github.com/git-pkgs/silo/internal/receive"
+	siloSSH "github.com/git-pkgs/silo/internal/ssh"
+	"github.com/git-pkgs/silo/internal/store"
 )
 
 func newServeCmd(cfg *config.Config) *cobra.Command {
@@ -46,22 +49,31 @@ func serve(ctx context.Context, cfg config.Config) error {
 	if err != nil {
 		return err
 	}
+	st, err := store.Open(cfg.DataDir)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = st.Close() }()
+	hostKey, err := loadOrCreateHostKey(cfg.DataDir)
+	if err != nil {
+		return err
+	}
 
 	mux := http.NewServeMux()
 	mux.Handle("/", githttp.Handler(gst))
-
-	srv := &http.Server{
-		Handler:           mux,
-		ReadHeaderTimeout: readHeaderTimeout,
-	}
+	srv := &http.Server{Handler: mux, ReadHeaderTimeout: readHeaderTimeout}
 	ln, err := net.Listen("tcp", cfg.HTTPAddr)
 	if err != nil {
 		return err
 	}
 	slog.Info("http listening", "addr", ln.Addr().String(), "data", cfg.DataDir)
 
-	errc := make(chan error, 1)
+	const numServers = 2
+	errc := make(chan error, numServers)
 	go func() { errc <- srv.Serve(ln) }()
+	go func() {
+		errc <- siloSSH.Serve(ctx, cfg.SSHAddr, hostKey, st, gst, receive.NoopHooks{}, receive.DefaultLimits())
+	}()
 
 	select {
 	case <-ctx.Done():

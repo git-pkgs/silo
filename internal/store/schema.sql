@@ -1,0 +1,50 @@
+PRAGMA journal_mode = WAL;
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS users (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  name       TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS ssh_keys (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  fingerprint TEXT NOT NULL UNIQUE,
+  pubkey      TEXT NOT NULL,
+  created_at  TIMESTAMP NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_ssh_keys_user ON ssh_keys(user_id);
+
+CREATE TABLE IF NOT EXISTS tokens (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  hash       TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS repos (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  owner      TEXT NOT NULL,
+  name       TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  UNIQUE (owner, name)
+);
+
+CREATE TABLE IF NOT EXISTS repo_members (
+  repo_id INTEGER NOT NULL REFERENCES repos(id) ON DELETE CASCADE,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  role    TEXT NOT NULL,
+  PRIMARY KEY (repo_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS jobs (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  repo_id    INTEGER REFERENCES repos(id) ON DELETE CASCADE,
+  kind       TEXT NOT NULL,
+  state      TEXT NOT NULL DEFAULT 'pending',
+  payload    TEXT NOT NULL DEFAULT '',
+  attempts   INTEGER NOT NULL DEFAULT 0,
+  updated_at TIMESTAMP NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_jobs_state ON jobs(state);

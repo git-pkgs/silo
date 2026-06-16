@@ -1,0 +1,25 @@
+# 02_push: SSH push lands, HTTP clone sees it
+exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
+exec silo admin repo create alice/demo --data $SILO_DATA
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH &
+waitfor $SILO_SSH
+
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+exec git init -b main repo
+exec git -C repo commit --allow-empty -m one
+exec git -C repo remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
+exec git -C repo push origin main
+stderr 'main -> main'
+
+exec git clone http://$SILO_HTTP/alice/demo.git out
+exec git -C out log --oneline
+stdout 'one'
+
+# unknown key rejected
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/mallory -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+! exec git -C repo push origin main:refs/heads/x
+stderr 'Permission denied|publickey'
+
+# bad exec command rejected
+! exec ssh -i $WORK/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p $SILO_SSH_PORT git@127.0.0.1 'ls /'
+stderr 'only git-upload-pack'

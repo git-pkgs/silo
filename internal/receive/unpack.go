@@ -24,11 +24,9 @@ const (
 )
 
 // unpack streams a packfile into st, enforcing the byte and object-count
-// limits. The reader is fully consumed (or closed) before returning so the
-// protocol stream is left at the report-status position.
-func unpack(st storer.Storer, r io.ReadCloser, limits Limits) error {
-	defer func() { _ = r.Close() }()
-
+// limits. The reader is left open: over SSH it is the session itself and the
+// caller still needs to write report-status on it.
+func unpack(st storer.Storer, r io.Reader, limits Limits) error {
 	lr := &capReader{r: r, remaining: limits.MaxPackBytes}
 
 	hdr := make([]byte, packHeaderLen)

@@ -3,7 +3,6 @@ package receive
 import (
 	"bytes"
 	"errors"
-	"io"
 	"testing"
 
 	"github.com/go-git/go-git/v5/storage/memory"
@@ -11,7 +10,7 @@ import (
 
 func TestUnpack_BadHeader(t *testing.T) {
 	st := memory.NewStorage()
-	err := unpack(st, io.NopCloser(bytes.NewReader([]byte("not a packfile"))), DefaultLimits())
+	err := unpack(st, bytes.NewReader([]byte("not a packfile")), DefaultLimits())
 	if !errors.Is(err, errBadPackHeader) {
 		t.Errorf("err = %v, want errBadPackHeader", err)
 	}
@@ -19,7 +18,7 @@ func TestUnpack_BadHeader(t *testing.T) {
 
 func TestUnpack_ShortHeader(t *testing.T) {
 	st := memory.NewStorage()
-	err := unpack(st, io.NopCloser(bytes.NewReader([]byte("PACK"))), DefaultLimits())
+	err := unpack(st, bytes.NewReader([]byte("PACK")), DefaultLimits())
 	if !errors.Is(err, errBadPackHeader) {
 		t.Errorf("err = %v, want errBadPackHeader", err)
 	}
