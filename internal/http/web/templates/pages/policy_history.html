@@ -1,0 +1,30 @@
+{{template "base" .}}
+{{define "title"}}policy history · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Policy history</h1>
+<p class="subhead">{{len .Changes}} change{{if ne (len .Changes) 1}}s{{end}} on <a class="mono" href="/{{.Repo}}/log/refs/gittuf/policy">refs/gittuf/policy</a></p>
+
+{{range .Changes}}
+<div class="card">
+  <header>
+    <h2>{{.Subject}}</h2>
+    <p class="muted small">
+      <span class="mono">{{slice .Hash 0 12}}</span> ·
+      signed by {{if .SignerName}}<b>{{.SignerName}}</b>{{else}}<span class="signer-unknown">{{.SignerKeyID}}</span>{{end}} ·
+      {{.Age}}
+      {{if .Files}}· {{range $i, $f := .Files}}{{if $i}}, {{end}}<span class="mono xsmall">{{$f}}</span>{{end}}{{end}}
+    </p>
+  </header>
+  {{if .Diff}}
+  <section>
+    <details>
+      <summary class="small">show metadata diff</summary>
+      <div class="panel"><pre class="diff">{{.Diff}}</pre></div>
+    </details>
+  </section>
+  {{end}}
+</div>
+{{else}}
+<p class="muted">no policy ref</p>
+{{end}}
+{{end}}

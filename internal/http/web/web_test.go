@@ -67,6 +67,7 @@ func TestHandler_Routes(t *testing.T) {
 		{"/alice/demo/compare/main...nope", http.StatusNotFound, ""},
 		{"/alice/demo/branches", http.StatusOK, "main"},
 		{"/alice/demo/tags", http.StatusOK, "Tags"},
+		{"/alice/demo/policy/history", http.StatusOK, "Policy history"},
 		{"/nobody/nothing", http.StatusNotFound, ""},
 		{"/alice/demo/log/refs/heads/absent", http.StatusNotFound, ""},
 		{"/alice/demo/commit/0000000000000000000000000000000000000000", http.StatusNotFound, ""},

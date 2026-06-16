@@ -52,6 +52,13 @@ stdout 'protect-main'
 stdout 'git:refs/heads/main'
 stdout 'alice'
 
+# policy history shows each policy commit with signer name and a metadata diff
+exec curl -fsS http://$SILO_HTTP/alice/demo/policy/history
+stdout 'protect-main'
+stdout 'signed by .*alice'
+stdout 'metadata/targets.json'
+stdout 'show metadata diff'
+
 # log page shows the commit
 exec curl -fsS http://$SILO_HTTP/alice/demo/log/refs/heads/main
 stdout 'one'

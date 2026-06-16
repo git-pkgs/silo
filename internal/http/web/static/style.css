@@ -128,3 +128,6 @@ pre.blob {
 .prose a { color: var(--primary); }
 .prose blockquote { border-left: 3px solid var(--border); padding-left: 1rem; color: var(--muted-foreground); }
 .prose table th, .prose table td { border: 1px solid var(--border); padding: 0.4rem 0.6rem; }
+
+.card { margin-bottom: 1rem; }
+details > summary { cursor: pointer; color: var(--muted-foreground); }
