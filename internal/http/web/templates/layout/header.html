@@ -5,7 +5,7 @@
     <a href="/activity" class="muted small">activity</a>
     {{if .Repo}}
     <form method="get" action="/{{.Repo}}/search/{{if .Ref}}{{.Ref}}{{else}}HEAD{{end}}" class="nav-search">
-      <input class="input" name="q" placeholder="find file in {{.Repo}}">
+      <input type="search" name="q" placeholder="find file in {{.Repo}}">
     </form>
     {{end}}
   </div>

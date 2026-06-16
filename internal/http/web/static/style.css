@@ -34,7 +34,18 @@ main { flex: 1; padding-block: 1.5rem; }
   height: 2rem;
   width: 16rem;
   max-width: 40vw;
+  padding: 0 0.75rem;
   font-size: 0.8125rem;
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+}
+.nav-search input::placeholder { color: var(--muted-foreground); }
+.nav-search input:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 30%, transparent);
 }
 
 .repo-nav { border-bottom: 1px solid var(--border); background: color-mix(in oklab, var(--muted) 35%, transparent); }
@@ -112,8 +123,19 @@ pre.readme { white-space: pre-wrap; font-size: 0.875rem; margin: 0; }
 .diff .a { color: oklch(0.55 0.14 150); }
 .diff .d { color: oklch(0.55 0.18 25); }
 
-.clonebox { padding: 0.75rem 1rem; font-size: 0.8125rem; }
-.clonebox div + div { margin-top: 0.375rem; color: var(--muted-foreground); }
+.clonebox { padding: 0.75rem 1rem; }
+.clonebox-row { display: flex; align-items: center; gap: 0.75rem; min-width: 0; }
+.clonebox-cmd {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  background: var(--muted);
+  border-radius: var(--radius);
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.clonebox-hint { margin-top: 0.5rem; overflow-x: auto; white-space: nowrap; }
 
 .diff-add { color: oklch(0.55 0.14 150); }
 .diff-del { color: oklch(0.55 0.18 25); }

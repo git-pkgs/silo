@@ -2,9 +2,13 @@
 {{define "title"}}{{.Repo}} · silo{{end}}
 {{define "content"}}
 <div class="clonebox panel">
-  <div><code class="mono">git clone {{.BaseURL}}/{{.Repo}}.git</code></div>
-  <div><code class="mono">git -C {{.Repo}} fetch origin '+refs/gittuf/*:refs/gittuf/*' &amp;&amp; gittuf -C {{.Repo}} verify-ref {{.DefaultRef}}</code></div>
-  <div><a class="btn-sm-outline" href="/{{.Repo}}/archive/{{.DefaultRef}}.tar.gz"><i data-lucide="download"></i> {{.DefaultRef}}.tar.gz</a></div>
+  <div class="clonebox-row">
+    <code class="clonebox-cmd mono">git clone {{.BaseURL}}/{{.Repo}}.git</code>
+    <a class="btn-sm-outline" href="/{{.Repo}}/archive/{{.DefaultRef}}.tar.gz"><i data-lucide="download"></i>tar.gz</a>
+  </div>
+  <div class="clonebox-hint muted mono xsmall">
+    git -C {{.Repo}} fetch origin '+refs/gittuf/*:refs/gittuf/*' &amp;&amp; gittuf -C {{.Repo}} verify-ref {{.DefaultRef}}
+  </div>
 </div>
 
 <h2 class="section">References</h2>
