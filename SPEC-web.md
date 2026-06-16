@@ -1,16 +1,22 @@
 # silo spec — web UI
 
-Goal: a read-only HTML view of repos and their gittuf state, enough to see what the receive path is doing without reading server logs. Server-rendered `html/template`, one CSS file, no JavaScript.
+Goal: a read-only HTML view of repos and their gittuf state, enough to see what the receive path is doing without reading server logs. Server-rendered `html/template` styled with Tailwind utility classes, following the same asset layout as `git-pkgs/proxy`.
 
 Conventions and quality bar inherited from `SPEC.md`.
 
 ## Deliverables
 
-`internal/http/web/`:
+`internal/http/web/` mirrors `proxy/internal/server/`:
 
-- `web.go` — `Handler(st *store.Store, gst *gitstore.Store, baseURL string) http.Handler` mounting the routes below.
-- `templates/*.tmpl` — one base layout, one template per page, embedded via `embed.FS`.
-- `static/style.css` — embedded; monospace, table-heavy, no framework.
+- `web.go` — `Handler(st *store.Store, gst *gitstore.Store, baseURL string) http.Handler` mounting the routes below plus `/static/*`.
+- `templates.go` — `//go:embed templates/**/*.html`; parse into one `*template.Template` per page composed with the layout.
+- `static.go` — `//go:embed static/*`; `http.FileServer(http.FS(sub))` at `/static/`.
+- `templates/layout/{base,header,footer}.html` — same block structure as proxy (`{{define "base"}}` with `{{block "title"}}`, `{{block "content"}}`).
+- `templates/pages/{index,repo,log,commit,rsl,policy}.html` — one per route.
+- `static/vendor/tailwind.js` — the Tailwind Play CDN script, vendored (copy from `proxy/internal/server/static/vendor/tailwind.js`). Loaded via `<script src="/static/vendor/tailwind.js">` in `base.html`; no build step.
+- `static/style.css` — only for the handful of things Tailwind utilities don't cover cleanly (the RSL row pass/fail tint, monospace tables).
+
+Styling: Tailwind utility classes inline on elements, dark-mode aware (`dark:` variants), same grey palette as proxy. Tables use `text-sm font-mono`; the RSL pass/fail tint is `bg-green-50 dark:bg-green-950` / `bg-red-50 dark:bg-red-950` on the `<tr>`.
 
 `internal/gittuf/` additions:
 

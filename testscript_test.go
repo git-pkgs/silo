@@ -19,7 +19,10 @@ import (
 func TestScript(t *testing.T) {
 	binDir := t.TempDir()
 	build(t, filepath.Join(binDir, "silo"), "./cmd/silo")
-	buildIn(t, filepath.Join(binDir, "gittuf"), "../gittuf-fork", ".")
+	// gittuf is built through silo's own module so the replace directive
+	// (gittuf => git-pkgs/gittuf) applies; go install can't be used because
+	// the fork's go.mod still declares module github.com/gittuf/gittuf.
+	build(t, filepath.Join(binDir, "gittuf"), "github.com/gittuf/gittuf")
 
 	testscript.Run(t, testscript.Params{
 		Dir:                 "testdata/testscript",
@@ -37,22 +40,13 @@ func TestScript(t *testing.T) {
 
 func build(t *testing.T, out, pkg string) {
 	t.Helper()
-	buildIn(t, out, ".", pkg)
-}
-
-func buildIn(t *testing.T, out, dir, pkg string) {
-	t.Helper()
-	abs, err := filepath.Abs(out)
-	if err != nil {
-		t.Fatal(err)
-	}
-	cmd := exec.Command("go", "build", "-o", abs, pkg)
-	cmd.Dir = dir
+	cmd := exec.Command("go", "build", "-o", out, pkg)
 	cmd.Stderr = os.Stderr
 	if err := cmd.Run(); err != nil {
-		t.Fatalf("build %s in %s: %v", pkg, dir, err)
+		t.Fatalf("build %s: %v", pkg, err)
 	}
 }
+
 
 func setupEnv(e *testscript.Env) error {
 	e.Vars = append(e.Vars,

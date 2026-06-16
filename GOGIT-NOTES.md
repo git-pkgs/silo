@@ -77,6 +77,12 @@ gittuf's `pkg/gitinterface` shells out for the operations below. The right colum
 
 ---
 
+## `Worktree.Commit` reads global `commit.gpgSign` and errors without a plugin
+
+`worktree_commit.go` calls `ConfigScoped(SystemScope)` and, if `commit.gpgSign` is true anywhere in the scope chain (including the user's `~/.gitconfig`), fails with `cannot auto-sign commit: disable commit.gpgSign or register an ObjectSigner plugin` when no `Signer` is passed and no plugin is registered. There is no `CommitOptions` field to opt out. Tests using in-memory repos on a host with `commit.gpgSign = true` globally fail; the workaround is to set `cfg.Commit.GpgSign = config.NewOptBool(false)` on the test repo. A `CommitOptions.NoSign bool` (or treating an explicit nil `Signer` as "don't sign") would let callers opt out without touching repo config.
+
+---
+
 ## Fixed on main since v5.19.1
 
 These were issues against v5 that are resolved on main; listed so they don't get re-filed.

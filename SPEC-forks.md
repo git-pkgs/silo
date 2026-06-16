@@ -116,6 +116,6 @@ silo deltas: `internal/receive` collapsed from ~260 to 121 lines (adapter over `
 
 Verified: all three txtar pass, `-race -shuffle=on` green, lint/govulncheck/deadcode/gosec clean, `go version -m` on the binary shows exactly `go-git/v6 => git-pkgs/go-git/v6` and `gittuf => git-pkgs/gittuf`, no v5.
 
-Incidental: gittuf's `TestCanSign/explicit_ssh,_no_key` fails on hosts with a global `user.signingKey` set (test isolation leak, pre-existing, not caused by these changes). go-git v6's `Worktree.Commit` reads global `commit.gpgSign` and errors without an `ObjectSigner` plugin; silo's test helpers set `cfg.Commit.GpgSign = NewOptBool(false)` locally.
+Two incidental test-isolation findings filed in `GITTUF-NOTES.md` (`TestCanSign` leaks global `user.signingKey`) and `GOGIT-NOTES.md` (`Worktree.Commit` reads global `commit.gpgSign`).
 
-Not yet done: upstream PRs (waiting on ask). `testscript_test.go` still builds the gittuf CLI from `../gittuf-fork`; works while the sibling checkout exists, swap to `go install github.com/git-pkgs/gittuf@silo` for full portability.
+Not yet done: upstream PRs (waiting on ask). gittuf is declared as a `tool` in silo's `go.mod` so `go build github.com/gittuf/gittuf` works through the replace without a local checkout; `go install github.com/git-pkgs/gittuf@silo` can't be used because the fork's `module` line is still `github.com/gittuf/gittuf` (changing it would mean rewriting every internal import and break upstreamability).

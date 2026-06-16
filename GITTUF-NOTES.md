@@ -46,6 +46,12 @@ The `os.Chdir` race specifically is fixed on `git-pkgs/gittuf@silo` by adding `e
 
 ---
 
+## `TestCanSign` leaks the host's global git config
+
+`pkg/gitinterface/signature_test.go` `TestCanSign/explicit_ssh,_no_key` sets `gpg.format=ssh` in a temp repo and expects `CanSign()` to fail because no `user.signingKey` is set. On a host with `user.signingKey` in `~/.gitconfig`, the temp repo inherits it via scoped config and the test passes `CanSign()` unexpectedly. The test should set `GIT_CONFIG_GLOBAL=/dev/null` (or unset the key in the temp repo) to isolate. Pre-existing; surfaced while running the fork's suite.
+
+---
+
 ## Related upstream
 
 Key rotation across many repos (a forge key in N policies needing N owner re-signs) overlaps open [#1297](https://github.com/gittuf/gittuf/issues/1297) on TAP-8 self-rotation; same friction, different angle.
