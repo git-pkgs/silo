@@ -107,7 +107,7 @@ func (h *handler) tree(w http.ResponseWriter, r *http.Request) {
 	if p == "" {
 		readme = readReadme(gr)
 	}
-	h.render(w, "tree", struct {
+	h.render(w, r, "tree", struct {
 		page
 		Path    string
 		Crumbs  []crumb
@@ -150,7 +150,7 @@ func (h *handler) blob(w http.ResponseWriter, r *http.Request) {
 	if !binary && !truncated {
 		rendered = renderMarkup(p, data)
 	}
-	h.render(w, "blob", struct {
+	h.render(w, r, "blob", struct {
 		page
 		Path       string
 		Crumbs     []crumb
@@ -226,7 +226,7 @@ func (h *handler) blame(w http.ResponseWriter, r *http.Request) {
 			When: l.Date.Format(time.DateOnly), Text: l.Text,
 		})
 	}
-	h.render(w, "blame", struct {
+	h.render(w, r, "blame", struct {
 		page
 		Path   string
 		Crumbs []crumb
@@ -320,7 +320,7 @@ func (h *handler) contributors(w http.ResponseWriter, r *http.Request) {
 		rows = append(rows, *v)
 	}
 	sort.Slice(rows, func(i, j int) bool { return rows[i].Commits > rows[j].Commits })
-	h.render(w, "contributors", struct {
+	h.render(w, r, "contributors", struct {
 		page
 		Rows  []contributor
 		Total int
@@ -352,7 +352,7 @@ func (h *handler) search(w http.ResponseWriter, r *http.Request) {
 			return nil
 		})
 	}
-	h.render(w, "search", struct {
+	h.render(w, r, "search", struct {
 		page
 		Q    string
 		Hits []searchHit

@@ -3,6 +3,7 @@
 package web
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -92,7 +93,12 @@ func (h *handler) page(r *http.Request, gr *git.Repository, repoPath, fsPath, ac
 	}
 }
 
-func (h *handler) render(w http.ResponseWriter, name string, data any) {
+func (h *handler) render(w http.ResponseWriter, r *http.Request, name string, data any) {
+	if r.URL.Query().Get("format") == "json" || strings.Contains(r.Header.Get("Accept"), "application/json") {
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		_ = json.NewEncoder(w).Encode(data)
+		return
+	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	if err := h.t[name].ExecuteTemplate(w, "base", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -116,7 +122,7 @@ type repoRow struct {
 	LastRSL  string
 }
 
-func (h *handler) index(w http.ResponseWriter, _ *http.Request) {
+func (h *handler) index(w http.ResponseWriter, r *http.Request) {
 	repos, err := h.st.ListRepos()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -138,7 +144,7 @@ func (h *handler) index(w http.ResponseWriter, _ *http.Request) {
 		}
 		rows = append(rows, row)
 	}
-	h.render(w, "index", struct {
+	h.render(w, r, "index", struct {
 		page
 		Repos []repoRow
 	}{page{BaseURL: h.baseURL}, rows})
@@ -170,7 +176,7 @@ func (h *handler) repo(w http.ResponseWriter, r *http.Request) {
 	if head, err := gr.Head(); err == nil {
 		defaultRef = head.Name().String()
 	}
-	h.render(w, "repo", struct {
+	h.render(w, r, "repo", struct {
 		page
 		DefaultRef string
 		Readme     template.HTML
@@ -223,7 +229,7 @@ func (h *handler) log(w http.ResponseWriter, r *http.Request) {
 		})
 		return nil
 	})
-	h.render(w, "log", struct {
+	h.render(w, r, "log", struct {
 		page
 		Commits []commitRow
 		Next    string
@@ -250,7 +256,7 @@ func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
 			files = append(files, fileStat{Name: f.Name, Add: f.Addition, Del: f.Deletion})
 		}
 	}
-	h.render(w, "commit", struct {
+	h.render(w, r, "commit", struct {
 		page
 		Hash, Author, When, Message, Signer string
 		Parents                             []string
@@ -417,7 +423,7 @@ func (h *handler) rsl(w http.ResponseWriter, r *http.Request) {
 		}
 		rows = append(rows, row)
 	}
-	h.render(w, "rsl", struct {
+	h.render(w, r, "rsl", struct {
 		page
 		Entries []rslRow
 		Filter  string
@@ -438,7 +444,7 @@ func (h *handler) policy(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		ps = &gt.PolicySummary{}
 	}
-	h.render(w, "policy", struct {
+	h.render(w, r, "policy", struct {
 		page
 		Policy *gt.PolicySummary
 	}{h.page(r, gr, repoPath, fsPath, "policy", ""), ps})

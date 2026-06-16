@@ -28,7 +28,7 @@ func (h *handler) branches(w http.ResponseWriter, r *http.Request) {
 	}
 	def := defaultBranch(gr)
 	rows := h.refDetails(r.Context(), gr, fsPath, "refs/heads/", def)
-	h.render(w, "branches", struct {
+	h.render(w, r, "branches", struct {
 		page
 		Default string
 		Rows    []refDetail
@@ -42,7 +42,7 @@ func (h *handler) tags(w http.ResponseWriter, r *http.Request) {
 	}
 	rows := h.refDetails(r.Context(), gr, fsPath, "refs/tags/", "")
 	sort.Slice(rows, func(i, j int) bool { return rows[i].When > rows[j].When })
-	h.render(w, "tags", struct {
+	h.render(w, r, "tags", struct {
 		page
 		Rows []refDetail
 	}{h.page(r, gr, repoPath, fsPath, "tags", ""), rows})

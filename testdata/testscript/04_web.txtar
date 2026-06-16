@@ -86,6 +86,11 @@ stdout 'alice/demo'
 stdout 'refs/heads/main'
 stdout '"signer-known">alice<'
 
+# JSON variant
+exec curl -fsS -H 'Accept: application/json' http://$SILO_HTTP/alice/demo/rsl
+stdout '"Kind":"reference"'
+stdout '"SignerName":"alice"'
+
 # log page shows the commit
 exec curl -fsS http://$SILO_HTTP/alice/demo/log/refs/heads/main
 stdout 'one'

@@ -58,7 +58,7 @@ func (h *handler) verify(w http.ResponseWriter, r *http.Request) {
 	}
 	gtr, _ := gt.Open(fsPath)
 	rows, bad := verifyRefs(r.Context(), gr, gtr)
-	h.render(w, "verify", struct {
+	h.render(w, r, "verify", struct {
 		page
 		Rows []verifyRow
 		Bad  int

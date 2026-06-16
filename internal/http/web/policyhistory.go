@@ -45,7 +45,7 @@ func (h *handler) policyHistory(w http.ResponseWriter, r *http.Request) {
 			return nil
 		})
 	}
-	h.render(w, "policy_history", struct {
+	h.render(w, r, "policy_history", struct {
 		page
 		Changes []policyChange
 	}{h.page(r, gr, repoPath, fsPath, "policy", ""), changes})

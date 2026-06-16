@@ -3,6 +3,7 @@ package web
 import (
 	"archive/tar"
 	"compress/gzip"
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -137,6 +138,33 @@ func TestArchive(t *testing.T) {
 	b, _ := io.ReadAll(tr)
 	if string(b) != "# hello\n" {
 		t.Errorf("content = %q", b)
+	}
+}
+
+func TestJSONFormat(t *testing.T) {
+	dir := t.TempDir()
+	st, _ := store.Open(dir)
+	t.Cleanup(func() { _ = st.Close() })
+	gst, _ := gitstore.Open(dir)
+	_, _ = st.CreateRepo("a", "r")
+	repo, _ := gst.Init("a", "r")
+	seedCommit(t, repo)
+	srv := httptest.NewServer(Handler(st, gst, "http://x", ""))
+	t.Cleanup(srv.Close)
+
+	for _, p := range []string{"/?format=json", "/a/r/rsl?format=json", "/a/r/tree/HEAD?format=json"} {
+		resp, err := srv.Client().Get(srv.URL + p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if ct := resp.Header.Get("Content-Type"); !strings.HasPrefix(ct, "application/json") {
+			t.Errorf("%s: Content-Type = %q", p, ct)
+		}
+		var v map[string]any
+		if err := json.NewDecoder(resp.Body).Decode(&v); err != nil {
+			t.Errorf("%s: decode: %v", p, err)
+		}
+		_ = resp.Body.Close()
 	}
 }
 

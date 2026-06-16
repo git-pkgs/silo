@@ -65,7 +65,7 @@ func (h *handler) compare(w http.ResponseWriter, r *http.Request) {
 	}
 	v.MergeSteps = mergeSteps(h.baseURL, repoPath, base, head)
 
-	h.render(w, "compare", struct {
+	h.render(w, r, "compare", struct {
 		page
 		compareView
 	}{h.page(r, gr, repoPath, fsPath, "compare", head), v})

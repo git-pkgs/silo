@@ -52,7 +52,7 @@ func (h *handler) rslRef(w http.ResponseWriter, r *http.Request) {
 		}
 		rows = append(rows, row)
 	}
-	h.render(w, "rsl", struct {
+	h.render(w, r, "rsl", struct {
 		page
 		Entries []rslRow
 		Filter  string
@@ -110,7 +110,7 @@ func (h *handler) principal(w http.ResponseWriter, r *http.Request) {
 		keyList = append(keyList, k)
 	}
 	sort.Strings(keyList)
-	h.render(w, "principal", struct {
+	h.render(w, r, "principal", struct {
 		page
 		ID     string
 		Keys   []string
@@ -137,7 +137,7 @@ func (h *handler) attestations(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	h.render(w, "attestations", struct {
+	h.render(w, r, "attestations", struct {
 		page
 		Rows []att
 	}{h.page(r, gr, repoPath, fsPath, "rsl", ""), rows})
@@ -161,7 +161,7 @@ func (h *handler) hooks(w http.ResponseWriter, r *http.Request) {
 		}
 		return hs[i].Name < hs[j].Name
 	})
-	h.render(w, "hooks", struct {
+	h.render(w, r, "hooks", struct {
 		page
 		Hooks []gt.Hook
 	}{h.page(r, gr, repoPath, fsPath, "policy", ""), hs})
@@ -204,7 +204,7 @@ func (h *handler) activity(w http.ResponseWriter, r *http.Request) {
 	if len(rows) > limit {
 		rows = rows[:limit]
 	}
-	h.render(w, "activity", struct {
+	h.render(w, r, "activity", struct {
 		page
 		Rows []activityRow
 	}{page{BaseURL: h.baseURL}, rows})
