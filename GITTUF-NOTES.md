@@ -34,7 +34,7 @@ The `os.Chdir` race specifically is fixed on `git-pkgs/gittuf@silo` by adding `e
 
 `experimental/gittuf/rsl.go:39-45` takes `signCommit bool` and reads `user.signingKey`/`gpg.format` from the repo's git config via `r.r.CanSign()`. There is no parameter or option for a `dsse.SignerVerifier`, unlike every other policy-mutating function (`InitializeRoot`, `AddDelegation`, …). A forge wanting to witness with its own key has to write that key's path into each bare repo's git config.
 
-**Fix:** a `rslopts.WithSigner(s dsse.SignerVerifier)` option; when present, use it instead of git config.
+**Fix:** a record/annotate option carrying the signer; when present, skip `CanSign()` and use the existing `CommitUsingSpecificKey` path. Applied on `git-pkgs/gittuf@silo` as `WithRecordSigningKeyBytes` / `WithAnnotateSigningKeyBytes` taking PEM bytes (matching what `CommitUsingSpecificKey` already accepts); a `dsse.SignerVerifier` variant would be cleaner long-term but needs the commit-signing path to accept an interface instead of raw key material.
 
 ---
 

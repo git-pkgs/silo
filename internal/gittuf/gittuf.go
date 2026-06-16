@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	expgittuf "github.com/gittuf/gittuf/experimental/gittuf"
+	rslopts "github.com/gittuf/gittuf/experimental/gittuf/options/rsl"
 )
 
 // Ref names under refs/gittuf/ that gittuf manages.
@@ -55,6 +56,30 @@ func (r *Repo) VerifyRef(ctx context.Context, refName string) (err error) {
 		}
 	}()
 	return r.r.VerifyRef(ctx, refName)
+}
+
+// RSLTip returns the current tip of refs/gittuf/reference-state-log, or empty
+// if the RSL doesn't exist yet.
+func (r *Repo) RSLTip() string {
+	h, err := r.r.GetGitRepository().GetReference(RSLRef)
+	if err != nil {
+		return ""
+	}
+	return h.String()
+}
+
+// Witness appends a forge-signed annotation to the RSL entry at entryID,
+// recording who silo authenticated for the push. The forge key signs the
+// annotation; it does not authorise the underlying ref movement.
+func (r *Repo) Witness(ctx context.Context, entryID, message string, signingKeyPEM []byte) error {
+	if entryID == "" {
+		return nil
+	}
+	return r.r.RecordRSLAnnotation(ctx, []string{entryID}, false, message,
+		true,
+		rslopts.WithAnnotateLocalOnly(),
+		rslopts.WithAnnotateSigningKeyBytes(signingKeyPEM),
+	)
 }
 
 // Rule describes the policy rule governing a ref pattern.

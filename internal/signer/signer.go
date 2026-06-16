@@ -26,7 +26,16 @@ type Signer interface {
 	Sign(data []byte) ([]byte, error)
 	PublicKey() crypto.PublicKey
 	ID() string
+	// KeyBytes returns the PEM-encoded private key, for callers that need to
+	// hand the key material to a library that does its own signing (gittuf's
+	// CommitUsingSpecificKey). Backends without exportable key material
+	// (agent, sigstore) return ErrKeyNotExportable.
+	KeyBytes() ([]byte, error)
 }
+
+// ErrKeyNotExportable is returned by KeyBytes for backends that cannot export
+// raw key material.
+var ErrKeyNotExportable = errors.New("signer: key material not exportable for this backend")
 
 // ErrKeyNotFound is returned when no forge key exists yet.
 var ErrKeyNotFound = errors.New("signer: forge key not found; run `silo keygen`")
@@ -98,6 +107,14 @@ func (s *ed25519Signer) ID() string {
 		return ""
 	}
 	return ssh.FingerprintSHA256(pk)
+}
+
+func (s *ed25519Signer) KeyBytes() ([]byte, error) {
+	block, err := ssh.MarshalPrivateKey(s.priv, "")
+	if err != nil {
+		return nil, err
+	}
+	return pem.EncodeToMemory(block), nil
 }
 
 // AuthorizedKey returns the public key in SSH authorized_keys format.

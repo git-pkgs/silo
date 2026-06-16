@@ -49,6 +49,16 @@ cd ..
 # the bare repo has no .git gitfile workaround
 ! exists $SILO_DATA/repos/alice/demo.git/.git
 
+# silo witnessed the push: the RSL has a forge-signed annotation naming alice.
+# gittuf encodes the annotation message as a PEM block; the base64 of
+# "silo: pushed by alice" is the stable prefix.
+exec git -C $SILO_DATA/repos/alice/demo.git log --format=%B refs/gittuf/reference-state-log
+stdout 'RSL Annotation Entry'
+stdout 'c2lsbzogcHVzaGVkIGJ5IGFsaWNl'
+
+# the annotation is signed by the forge key (different fingerprint to alice's)
+exec git -C $SILO_DATA/repos/alice/demo.git log -1 --format=%G? refs/gittuf/reference-state-log
+
 # bob is not in policy: push to main is rejected with the multi-line format
 env 'GIT_SSH_COMMAND=ssh -i '$WORK'/bob -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
 exec git -C repo commit --allow-empty -m two

@@ -67,7 +67,7 @@ Add `replace github.com/go-git/go-git/v6 => ../go-git-fork` and change silo's im
 
 Port `internal/receive` to v6's `packp` API: `ReferenceUpdateRequest` → `UpdateRequests`, `NewAdvRefs()` → zero-value, map → slice for `AdvRefs.References`. Drop silo's `decodeHaves` (v6 has `UploadHaves.Decode`). Port `internal/http/git` and `internal/ssh` onto `backend.Backend.ServeHTTP` / `ServeConn` for upload-pack; keep silo's own `ReceivePack` for now since v6's has no hook yet.
 
-gittuf at `6f382ee` depends on go-git v5; either pin gittuf-fork to v5 internally (it can coexist; different module paths) or bump gittuf-fork to v6 too. Prefer coexistence first; bumping gittuf is its own patch.
+gittuf at `6f382ee` depends on go-git v5. Bump gittuf-fork to v6 as the first commit of this milestone so there is exactly one go-git in the binary; do not let v5 and v6 coexist. The gittuf changes are: import path `/v5` → `/v6`, `packp` type renames where used, and `PlainOpenWithOptions` (already touched in the DetectDotGit fix). gittuf's own test suite is the proof.
 
 **Done when:** all three txtar pass on v6. `internal/http/git/git.go` no longer has `decodeHaves`.
 

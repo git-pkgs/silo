@@ -5,6 +5,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"syscall"
@@ -33,7 +34,9 @@ type Builtin struct {
 	BaseURL string
 	Signer  signer.Signer
 
-	lock *os.File
+	lock   *os.File
+	gtr    *gt.Repo
+	rslTip string
 }
 
 const lockPerm = 0o600
@@ -91,14 +94,34 @@ func (b *Builtin) PreReceive(ctx context.Context, repo *git.Repository, updates 
 		}
 	}
 
+	b.gtr = gtr
+	b.rslTip = gtr.RSLTip()
 	return nil
 }
 
-// PostReceive runs after refs are committed. It releases the lock taken in
-// PreReceive. Witness signing of RSL entries is recorded here once the
-// signer-to-gittuf adapter exists; see GITTUF-NOTES.md.
-func (b *Builtin) PostReceive(_ context.Context, _ *git.Repository, _ []receive.RefUpdate) {
-	b.releaseLock()
+// PostReceive appends a forge-signed witness annotation to the RSL entry the
+// client pushed, recording who silo authenticated the push as, then releases
+// the lock taken in PreReceive.
+func (b *Builtin) PostReceive(ctx context.Context, _ *git.Repository, updates []receive.RefUpdate) {
+	defer b.releaseLock()
+
+	if b.gtr == nil || b.rslTip == "" || b.Signer == nil {
+		return
+	}
+	_, refUpdates := partition(updates)
+	if len(refUpdates) == 0 {
+		return
+	}
+	keyPEM, err := b.Signer.KeyBytes()
+	if err != nil {
+		slog.Warn("witness: signer key not exportable", "err", err)
+		return
+	}
+	pusher, _ := receive.PusherFrom(ctx)
+	msg := fmt.Sprintf("silo: pushed by %s via %s", pusher.User, pusher.KeyFingerprint)
+	if err := b.gtr.Witness(ctx, b.rslTip, msg, keyPEM); err != nil {
+		slog.Warn("witness: annotation failed", "err", err)
+	}
 }
 
 func (b *Builtin) buildRejection(ctx context.Context, gtr *gt.Repo, u receive.RefUpdate, verifyErr error) *receive.RejectionError {
