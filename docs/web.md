@@ -31,7 +31,16 @@ All paths are `GET`. Append `?format=json` (or send `Accept: application/json`) 
 /<o>/<r>/verify                       every non-gittuf ref's VerifyRef result + RSL coverage
 /<o>/<r>/attestations                 contents of refs/gittuf/attestations
 /<o>/<r>/hooks                        in-policy Lua hooks via ListHooks
+
+/<o>/<r>/dependencies                 dependency snapshot at the default branch
+/<o>/<r>/dependencies/blame           commit that introduced each current requirement
+/<o>/<r>/dependencies/stats           aggregated counts by ecosystem and change type
+/<o>/<r>/dependencies/<purl>          per-package history (PURL is URL-escaped)
 ```
+
+Commit, compare, blob, and tree pages render manifest changes as a +/-/~ table via `templates/layout/depviews.html` instead of the raw text diff for files that parse as a known manifest. The raw diff stays available behind a `<details>`. Blob pages on manifests open on the Dependencies tab by default; pass `?view=source` to force the source view.
+
+The JSON surface for the same data lives under `/api/v1/repos/{o}/{r}/pkgs/*`. See [api.md](api.md).
 
 Signer fingerprints in RSL tables resolve to the principal name from policy when the key matches, or `silo` when it's the forge witness key; an unrecognised fingerprint is shown raw and tinted so it stands out.
 

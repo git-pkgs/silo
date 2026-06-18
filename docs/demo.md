@@ -155,6 +155,22 @@ git -C ../../data/repos/alice/demo.git update-ref refs/heads/rogue HEAD
 
 **Browser:** every tab now shows a red **1** badge on **verify**. Click it: `refs/heads/rogue` is listed red with "no RSL entry for this tip" and a verify failure. This is what a compromised forge writing refs out-of-band looks like to anyone watching.
 
+## The dependencies tab
+
+**Browser:** click the **dependencies** tab on `alice/demo`.
+
+Two rows, `github.com/spf13/cobra` and `github.com/stretchr/testify`, parsed from the `go.mod` the demo script committed. The blame view shows which commit set each requirement. Each row's name links to a per-package history page keyed by PURL.
+
+The same data is on `/api/v1/repos/alice/demo/pkgs/list?ref=main` as JSON. `pkgs/sbom?ref=main&format=cyclonedx` returns a CycloneDX SBOM for the snapshot.
+
+```sh
+curl -s http://127.0.0.1:8080/api/v1/repos/alice/demo/pkgs/list?ref=main
+```
+
+The reindex ran in the background after the `add go.mod with two deps` push. While a job is pending or running for a repo, the API sets `X-Pkgs-Indexing: true` and the UI shows a banner.
+
+Click into the **commit** for `add go.mod with two deps` and the changed files section renders the manifest as a +2 table rather than a raw line diff. Click into the **blob** view of `go.mod` and the default view is the parsed dependency table; `?view=source` shows the file as text.
+
 ## Verifying without the forge
 
 **CLI:**

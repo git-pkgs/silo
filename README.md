@@ -84,6 +84,12 @@ The gittuf-specific pages are what you can't get elsewhere. The RSL viewer lists
 
 Every page also responds with JSON when `?format=json` is appended or `Accept: application/json` is sent. It's read-only; there is no merge button by design. [docs/web.md](docs/web.md) has the full route list.
 
+## Dependency index
+
+silo reads supported manifests (`go.mod`, `package.json`, `package-lock.json`, `pom.xml`, `Gemfile.lock`, and the rest of the [git-pkgs/manifests](https://github.com/git-pkgs/manifests) set) on push and writes a `pkgs.sqlite3` next to each bare repo. The reindex runs in a background worker so the receive path stays cheap. Each repo gets a **dependencies** tab with list, blame, stats, and a per-package history page keyed by PURL. Commit, compare, blob, and tree pages render manifest changes as +/-/~ tables instead of raw line diffs.
+
+The same data is on `/api/v1/repos/{owner}/{repo}/pkgs/{list,blame,history,diff,show,stats,sbom}`. SBOM serves CycloneDX (JSON or XML) and SPDX. Field shapes match `git pkgs <cmd> --format=json`. [docs/api.md](docs/api.md) has the endpoint list with curl examples.
+
 ## Commands
 
 ```
@@ -105,6 +111,6 @@ silo admin repo create  create a bare repository
 
 ## More
 
-[docs/architecture.md](docs/architecture.md) covers the receive pipeline and disk layout. [docs/trust-model.md](docs/trust-model.md) explains why the owner signs root and the forge only witnesses. [docs/web.md](docs/web.md) lists every route. [docs/demo.md](docs/demo.md) is the show-and-tell script. The fork patches are catalogued in [GITTUF-NOTES.md](GITTUF-NOTES.md) and [GOGIT-NOTES.md](GOGIT-NOTES.md), each written as a standalone upstream issue.
+[docs/architecture.md](docs/architecture.md) covers the receive pipeline and disk layout. [docs/trust-model.md](docs/trust-model.md) explains why the owner signs root and the forge only witnesses. [docs/web.md](docs/web.md) lists every route. [docs/api.md](docs/api.md) lists the JSON endpoints. [docs/demo.md](docs/demo.md) is the show-and-tell script. The fork patches are catalogued in [GITTUF-NOTES.md](GITTUF-NOTES.md) and [GOGIT-NOTES.md](GOGIT-NOTES.md), each written as a standalone upstream issue.
 
 MIT licensed.

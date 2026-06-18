@@ -8,7 +8,7 @@ reused as the response payloads.
 Every dependency endpoint resolves the repo by URL path. Unknown owner or
 repo returns 404. While a `pkgs-reindex` job is pending or running for the
 repo, responses carry the header `X-Pkgs-Indexing: true`. Index errors
-(corrupt or absent db) surface as 503 with a JSON `{"error": ...}` body —
+(corrupt or absent db) surface as 503 with a JSON `{"error": ...}` body.
 silo never returns 5xx HTML for these endpoints.
 
 All endpoints accept `ref` for branch selection. `ref` may be a branch name
@@ -173,5 +173,5 @@ need provenance fields beyond name/version/purl.
 - These endpoints do not require authentication; they expose the same data
   the read-only web UI does.
 - silo also serves `/api/v1/repos/{owner}/{repo}/pkgs/list` with no
-  `ref` — that returns the dependency snapshot for the most recent commit
+  `ref`. That returns the dependency snapshot for the most recent commit
   the worker has indexed on `main`.
