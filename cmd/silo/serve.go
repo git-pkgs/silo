@@ -14,11 +14,16 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/git-pkgs/git-pkgs/index"
+
 	"github.com/git-pkgs/silo/internal/config"
 	"github.com/git-pkgs/silo/internal/gitstore"
 	"github.com/git-pkgs/silo/internal/hooks"
+	"github.com/git-pkgs/silo/internal/http/api"
 	githttp "github.com/git-pkgs/silo/internal/http/git"
 	"github.com/git-pkgs/silo/internal/http/web"
+	"github.com/git-pkgs/silo/internal/jobs"
+	"github.com/git-pkgs/silo/internal/pkgs"
 	"github.com/git-pkgs/silo/internal/receive"
 	"github.com/git-pkgs/silo/internal/signer"
 	siloSSH "github.com/git-pkgs/silo/internal/ssh"
@@ -76,16 +81,37 @@ func serve(ctx context.Context, cfg config.Config) error {
 	if err != nil {
 		return err
 	}
-	h := func() receive.Hooks { return &hooks.Builtin{BaseURL: cfg.BaseURL, Signer: sgn} }
+
+	ps := pkgs.Open(index.Options{
+		MaxDepsPerManifest:    50_000,
+		MaxManifestsPerCommit: 5_000,
+	})
+	defer ps.Close()
+	worker := jobs.New(st)
+	worker.Register(pkgs.JobKind, pkgs.ReindexHandler(ps, gst))
+	go worker.Run(ctx)
+
+	h := func() receive.Hooks {
+		return &hooks.Builtin{
+			BaseURL: cfg.BaseURL,
+			Signer:  sgn,
+			Store:   st,
+			Nudge:   worker.Nudge,
+		}
+	}
 
 	gitH := githttp.Handler(gst)
-	webH := web.Handler(st, gst, cfg.BaseURL, sgn.ID())
+	webH := web.Handler(st, gst, cfg.BaseURL, sgn.ID(), web.WithPkgsStore(ps))
 	staticH := http.StripPrefix("/static/", web.StaticHandler())
+	pkgsAPI := api.Handler(st, gst, ps)
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		switch {
 		case strings.HasPrefix(r.URL.Path, "/static/"):
 			staticH.ServeHTTP(w, r)
+			return
+		case strings.HasPrefix(r.URL.Path, "/api/v1/repos/"):
+			pkgsAPI.ServeHTTP(w, r)
 			return
 		case isGitTransportPath(r.URL.Path):
 			gitH.ServeHTTP(w, r)

@@ -1,0 +1,137 @@
+# 06_pkgs: pushing a manifest enqueues a pkgs-reindex job; the worker writes
+# pkgs.sqlite3 and the stub API surfaces list/show.
+exec silo keygen --data $SILO_DATA
+exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
+exec silo admin repo create alice/demo --data $SILO_DATA
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH --base-url http://$SILO_HTTP &
+waitfor $SILO_SSH
+
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+
+# alice sets up gittuf policy protecting main, identical to 03_gittuf.
+exec git init -b main repo
+cd repo
+exec git config user.signingKey $WORK/alice
+exec git config gpg.format ssh
+exec git commit --allow-empty -m bootstrap
+exec git remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
+
+exec gittuf trust init -k $WORK/alice
+exec gittuf trust add-policy-key -k $WORK/alice --policy-key $WORK/alice.pub
+exec gittuf policy init -k $WORK/alice --policy-name targets
+exec gittuf policy add-person -k $WORK/alice --person-ID alice --public-key $WORK/alice.pub
+exec gittuf policy add-rule -k $WORK/alice --rule-name protect-main --rule-pattern 'git:refs/heads/main' --authorize alice
+exec gittuf policy stage --local-only
+exec gittuf policy apply --local-only
+
+# Add a manifest with two requires, RSL-record, push.
+cp $WORK/go.mod.1 go.mod
+exec git add go.mod
+exec git commit -m 'add deps'
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+gitsha . SHA1
+
+# wait for the reindex job; then the list endpoint shows cobra.
+waitjson http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/list?ref=main '. | length >= 2'
+exec curl -fsS http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/list?ref=main
+stdout 'pkg:golang/github.com/spf13/cobra'
+
+# pkgs.sqlite3 lives inside the bare repo so it replicates with repos/.
+exists $SILO_DATA/repos/alice/demo.git/pkgs.sqlite3
+
+# Pull the witnessed RSL down before the next push so the local RSL is
+# fast-forward against the remote.
+exec git fetch origin 'refs/gittuf/*:refs/gittuf/*'
+
+# Bump cobra: show returns one updated change.
+cp $WORK/go.mod.2 go.mod
+exec git commit -am 'bump cobra'
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+gitsha . SHA2
+
+waitjson http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/show/$SHA2 '. | length == 1'
+exec curl -fsS http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/show/$SHA2
+stdout '"change_type":"modified"'
+
+# Rich rendering on the commit page: +0 -0 ~1, cobra updated v1.8.0 → v1.9.0.
+exec curl -fsS http://$SILO_HTTP/alice/demo/commit/$SHA2
+stdout 'Dependency changes'
+stdout 'go.mod'
+stdout 'golang'
+stdout 'cobra'
+stdout 'v1.8.0'
+stdout 'v1.9.0'
+stdout 'dep-updated'
+
+# Blob page renders the manifest as a dep table with a tabs control.
+exec curl -fsS http://$SILO_HTTP/alice/demo/blob/main/go.mod
+stdout 'role="tablist"'
+stdout 'golang manifest · 2 dependencies'
+stdout 'github.com/spf13/cobra'
+exec curl -fsS http://$SILO_HTTP/alice/demo/blob/main/go.mod?view=source
+stdout 'require \('
+
+# Tree page annotates manifest rows with "golang · 2 deps".
+exec curl -fsS http://$SILO_HTTP/alice/demo/tree/main
+stdout 'go.mod'
+stdout 'golang · 2 deps'
+
+# Hostile pom: page renders, no crash, no host filename leaks into dep table.
+exec git fetch origin 'refs/gittuf/*:refs/gittuf/*'
+cp $WORK/pom.evil pom.xml
+exec git add pom.xml
+exec git commit -m 'pom'
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+gitsha . SHA3
+waitjson http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/show/$SHA3 '. | length >= 1'
+exec curl -fsS http://$SILO_HTTP/alice/demo/commit/$SHA3
+stdout 'pom.xml'
+stdout 'maven'
+# The parser must surface the pom's own deps without consulting the host
+# filesystem reachable through the traversal path. junit is the only real dep.
+stdout 'junit'
+
+cd ..
+
+-- go.mod.1 --
+module example.com/demo
+
+go 1.26
+
+require (
+	github.com/spf13/cobra v1.8.0
+	github.com/stretchr/testify v1.9.0
+)
+-- go.mod.2 --
+module example.com/demo
+
+go 1.26
+
+require (
+	github.com/spf13/cobra v1.9.0
+	github.com/stretchr/testify v1.9.0
+)
+-- pom.evil --
+<?xml version="1.0"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>x</groupId>
+  <artifactId>x</artifactId>
+  <version>1</version>
+  <parent>
+    <groupId>p</groupId>
+    <artifactId>p</artifactId>
+    <version>1</version>
+    <relativePath>../../../../etc/hostname</relativePath>
+  </parent>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13</version>
+    </dependency>
+  </dependencies>
+</project>

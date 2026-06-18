@@ -1,0 +1,90 @@
+# 07_pkgs_ui: Dependencies tab, per-package history, the full /api/v1
+# surface, and the indexing banner / X-Pkgs-Indexing header.
+exec silo keygen --data $SILO_DATA
+exec silo admin user create alice --ssh-key $WORK/alice.pub --data $SILO_DATA
+exec silo admin repo create alice/demo --data $SILO_DATA
+exec silo serve --data $SILO_DATA --http $SILO_HTTP --ssh $SILO_SSH --base-url http://$SILO_HTTP &
+waitfor $SILO_SSH
+
+env 'GIT_SSH_COMMAND=ssh -i '$WORK'/alice -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p '$SILO_SSH_PORT
+
+exec git init -b main repo
+cd repo
+exec git config user.signingKey $WORK/alice
+exec git config gpg.format ssh
+exec git commit --allow-empty -m bootstrap
+exec git remote add origin ssh://git@127.0.0.1:$SILO_SSH_PORT/alice/demo.git
+
+exec gittuf trust init -k $WORK/alice
+exec gittuf trust add-policy-key -k $WORK/alice --policy-key $WORK/alice.pub
+exec gittuf policy init -k $WORK/alice --policy-name targets
+exec gittuf policy add-person -k $WORK/alice --person-ID alice --public-key $WORK/alice.pub
+exec gittuf policy add-rule -k $WORK/alice --rule-name protect-main --rule-pattern 'git:refs/heads/main' --authorize alice
+exec gittuf policy stage --local-only
+exec gittuf policy apply --local-only
+
+cp $WORK/go.mod.1 go.mod
+exec git add go.mod
+exec git commit -m 'add deps'
+exec gittuf rsl record main --local-only
+exec git push origin 'refs/gittuf/*:refs/gittuf/*' main
+
+waitjson http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/list?ref=main '. | length >= 2'
+
+# Dependencies tab linked from the repo header.
+exec curl -fsS http://$SILO_HTTP/alice/demo
+stdout 'href="/alice/demo/dependencies"'
+
+# Dependencies list page.
+exec curl -fsS http://$SILO_HTTP/alice/demo/dependencies
+stdout 'github.com/spf13/cobra'
+stdout 'class="table"'
+
+
+
+# Blame page shows the commit and author for cobra.
+exec curl -fsS http://$SILO_HTTP/alice/demo/dependencies/blame
+stdout 'cobra'
+stdout 'test'
+
+# Stats page renders commit counts.
+exec curl -fsS http://$SILO_HTTP/alice/demo/dependencies/stats
+stdout 'commits analyzed'
+
+# Per-package history page using URL-escaped PURL.
+exec curl -fsS http://$SILO_HTTP/alice/demo/dependencies/pkg:golang/github.com%2Fspf13%2Fcobra
+stdout 'cobra'
+stdout 'v1.8.0'
+
+# Full API surface.
+exec curl -fsS http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/stats?ref=main
+stdout 'commits_analyzed'
+
+exec curl -fsS http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/blame?ref=main
+stdout 'cobra'
+
+exec curl -fsS http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/sbom?ref=main&format=cyclonedx
+stdout '"bomFormat": ?"CycloneDX"'
+
+exec curl -fsS http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/sbom?ref=main&format=spdx
+stdout 'SPDX'
+
+# Unindexed branch returns empty (the branch row is absent in the index db).
+exec curl -fsSi http://$SILO_HTTP/api/v1/repos/alice/demo/pkgs/list?ref=refs/heads/nope
+stdout '\[\]'
+
+# Unknown repo → 404 (not 500).
+exec curl -s -o /dev/null -w '%{http_code}\n' http://$SILO_HTTP/api/v1/repos/alice/missing/pkgs/list?ref=main
+stdout '404'
+
+cd ..
+
+-- go.mod.1 --
+module example.com/demo
+
+go 1.26
+
+require (
+	github.com/spf13/cobra v1.8.0
+	github.com/stretchr/testify v1.9.0
+)

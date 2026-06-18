@@ -69,6 +69,19 @@ echo "second line" >> README.md
 git commit -q -am "expand README"
 git tag -s -m "v1.0.0" v1.0.0
 
+cat > go.mod <<'EOF'
+module example.com/demo
+
+go 1.26
+
+require (
+	github.com/spf13/cobra v1.8.0
+	github.com/stretchr/testify v1.9.0
+)
+EOF
+git add go.mod
+git commit -q -m "add go.mod with two deps"
+
 echo "initialising gittuf policy"
 gittuf trust init -k "$DEMO/keys/alice"
 gittuf trust add-policy-key -k "$DEMO/keys/alice" --policy-key "$DEMO/keys/alice.pub"
@@ -97,11 +110,12 @@ cat <<EOF
 
 silo is running.
 
-  index   http://$HTTP/
-  repo    http://$HTTP/alice/demo
-  rsl     http://$HTTP/alice/demo/rsl
-  policy  http://$HTTP/alice/demo/policy
-  log     http://$HTTP/alice/demo/log/refs/heads/main
+  index        http://$HTTP/
+  repo         http://$HTTP/alice/demo
+  dependencies http://$HTTP/alice/demo/dependencies
+  rsl          http://$HTTP/alice/demo/rsl
+  policy       http://$HTTP/alice/demo/policy
+  log          http://$HTTP/alice/demo/log/refs/heads/main
 
   clone:  git clone http://$HTTP/alice/demo.git
 

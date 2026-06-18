@@ -3,12 +3,17 @@ package main_test
 import (
 	"crypto/ed25519"
 	"crypto/rand"
+	"encoding/json"
 	"encoding/pem"
+	"fmt"
+	"io"
 	"net"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -33,6 +38,8 @@ func TestScript(t *testing.T) {
 		},
 		Cmds: map[string]func(*testscript.TestScript, bool, []string){
 			"waitfor":        cmdWaitfor,
+			"waitjson":       cmdWaitjson,
+			"gitsha":         cmdGitsha,
 			"silo-test-seed": cmdSeed,
 		},
 	})
@@ -160,4 +167,119 @@ func run(name string, args ...string) error {
 	cmd := exec.Command(name, args...)
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+// cmdWaitjson polls a URL, decodes the JSON body, and asserts a simple
+// `length OP N` expression (OP in {==, >=}). Used by 06_pkgs.txtar to wait
+// for an async pkgs-reindex job to finish.
+//
+//	waitjson <url> '. | length >= 2'
+//	waitjson <url> '. | length == 1'
+func cmdWaitjson(ts *testscript.TestScript, neg bool, args []string) {
+	if neg {
+		ts.Fatalf("waitjson: ! not supported")
+	}
+	if len(args) != 2 {
+		ts.Fatalf("usage: waitjson <url> '. | length OP N'")
+	}
+	url, expr := args[0], args[1]
+	op, n, err := parseLenExpr(expr)
+	if err != nil {
+		ts.Fatalf("waitjson: %v", err)
+	}
+	deadline := time.Now().Add(10 * time.Second)
+	var last error
+	for time.Now().Before(deadline) {
+		resp, gerr := http.Get(url) //nolint:noctx,gosec
+		if gerr != nil {
+			last = gerr
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		body, rerr := io.ReadAll(resp.Body)
+		_ = resp.Body.Close()
+		if rerr != nil {
+			last = rerr
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		if resp.StatusCode >= 500 {
+			last = fmt.Errorf("status %d body=%s", resp.StatusCode, string(body))
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		var v any
+		if uerr := json.Unmarshal(body, &v); uerr != nil {
+			last = fmt.Errorf("decode: %w (body=%s)", uerr, string(body))
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		arr, ok := v.([]any)
+		if !ok {
+			last = fmt.Errorf("body not an array: %T", v)
+			time.Sleep(100 * time.Millisecond)
+			continue
+		}
+		if matchLen(len(arr), op, n) {
+			return
+		}
+		last = fmt.Errorf("length %d does not match %s %d", len(arr), op, n)
+		time.Sleep(100 * time.Millisecond)
+	}
+	ts.Fatalf("waitjson: timed out: %v", last)
+}
+
+func parseLenExpr(expr string) (op string, n int, err error) {
+	// strip leading ". | length " (relaxed: also accept just "length ...")
+	s := strings.TrimSpace(expr)
+	s = strings.TrimPrefix(s, ". |")
+	s = strings.TrimSpace(s)
+	s = strings.TrimPrefix(s, "length")
+	s = strings.TrimSpace(s)
+	for _, op := range []string{">=", "==", "<=", ">", "<"} {
+		if rest, ok := strings.CutPrefix(s, op); ok {
+			rest = strings.TrimSpace(rest)
+			n, err := strconv.Atoi(rest)
+			if err != nil {
+				return "", 0, fmt.Errorf("bad number %q", rest)
+			}
+			return op, n, nil
+		}
+	}
+	return "", 0, fmt.Errorf("unrecognised expression %q", expr)
+}
+
+func matchLen(got int, op string, want int) bool {
+	switch op {
+	case "==":
+		return got == want
+	case ">=":
+		return got >= want
+	case "<=":
+		return got <= want
+	case ">":
+		return got > want
+	case "<":
+		return got < want
+	}
+	return false
+}
+
+// cmdGitsha sets <var> to the resolved SHA of HEAD in <dir>.
+//
+//	gitsha <dir> <var>
+func cmdGitsha(ts *testscript.TestScript, neg bool, args []string) {
+	if neg {
+		ts.Fatalf("gitsha: ! not supported")
+	}
+	if len(args) != 2 {
+		ts.Fatalf("usage: gitsha <dir> <var>")
+	}
+	dir := ts.MkAbs(args[0])
+	cmd := exec.Command("git", "-C", dir, "rev-parse", "HEAD")
+	out, err := cmd.Output()
+	if err != nil {
+		ts.Fatalf("gitsha: %v", err)
+	}
+	ts.Setenv(args[1], strings.TrimSpace(string(out)))
 }
