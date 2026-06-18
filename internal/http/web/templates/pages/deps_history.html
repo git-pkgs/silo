@@ -1,0 +1,30 @@
+{{template "base" .}}
+{{define "title"}}{{.Name}} · {{.Repo}}{{end}}
+{{define "content"}}
+<h1 class="mono">{{.Name}}</h1>
+<p class="subhead">
+  <a href="/{{.Repo}}/dependencies">deps</a>
+  · on <a href="/{{.Repo}}/log/{{.Branch}}">{{.Branch}}</a>
+  · <code class="xsmall">{{.PURL}}</code>
+</p>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>commit</th><th>change</th><th>requirement</th><th>author</th><th>when</th></tr></thead>
+  <tbody>
+  {{range .Entries}}
+    <tr>
+      <td><a class="mono xsmall" href="/{{$.Repo}}/commit/{{.SHA}}">{{slice .SHA 0 12}}</a></td>
+      <td>{{.ChangeType}}</td>
+      <td>
+        {{if .PreviousRequirement}}{{.PreviousRequirement}} →{{end}} {{.Requirement}}
+      </td>
+      <td class="muted">{{.AuthorName}}</td>
+      <td class="muted xsmall">{{.CommittedAt}}</td>
+    </tr>
+  {{else}}
+    <tr><td colspan="5" class="muted">no recorded changes for this package.</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

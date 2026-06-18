@@ -1,0 +1,44 @@
+{{template "base" .}}
+{{define "title"}}dependency stats · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Dependency stats</h1>
+<p class="subhead">
+  <a href="/{{.Repo}}/dependencies">deps</a>
+  · on <a href="/{{.Repo}}/log/{{.Branch}}">{{.Branch}}</a>
+  · <a href="/{{.Repo}}/dependencies/blame">blame</a>
+</p>
+<dl class="kv">
+  <dt>commits analyzed</dt><dd>{{.Stats.CommitsAnalyzed}}</dd>
+  <dt>commits with changes</dt><dd>{{.Stats.CommitsWithChanges}}</dd>
+  <dt>current dependencies</dt><dd>{{.Stats.CurrentDeps}}</dd>
+  <dt>total changes</dt><dd>{{.Stats.TotalChanges}}</dd>
+</dl>
+
+{{if .Stats.DepsByEcosystem}}
+<h2 class="section">By ecosystem</h2>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>ecosystem</th><th>count</th></tr></thead>
+  <tbody>
+  {{range $eco, $n := .Stats.DepsByEcosystem}}
+    <tr><td>{{$eco}}</td><td>{{$n}}</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}
+
+{{if .Stats.TopChanged}}
+<h2 class="section">Top changed</h2>
+<div class="panel">
+<table class="table">
+  <thead><tr><th>name</th><th>changes</th></tr></thead>
+  <tbody>
+  {{range .Stats.TopChanged}}
+    <tr><td>{{.Name}}</td><td>{{.Count}}</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}
+{{end}}

@@ -10,12 +10,14 @@
     <tr><td><a href="/{{$.Repo}}/tree/{{$.Ref}}/{{dir .Path}}">..</a></td><td></td><td></td><td></td></tr>
   {{end}}
   {{range .Entries}}
+    {{$ann := index $.Annotations .Name}}
     <tr>
       <td>
         {{if .IsDir}}
           <a href="/{{$.Repo}}/tree/{{$.Ref}}/{{join $.Path .Name}}">{{.Name}}/</a>
         {{else}}
           <a href="/{{$.Repo}}/blob/{{$.Ref}}/{{join $.Path .Name}}">{{.Name}}</a>
+          {{if $ann.Ecosystem}}<span class="muted xsmall">· {{$ann.Ecosystem}} · {{$ann.Total}} deps</span>{{end}}
         {{end}}
       </td>
       <td class="muted">{{.Mode}}</td>

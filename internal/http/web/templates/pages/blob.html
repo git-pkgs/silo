@@ -9,7 +9,19 @@
   · <a href="/{{.Repo}}/history/{{.Ref}}/{{.Path}}">history</a>
 </p>
 
-{{if .Binary}}
+{{if and .DepView (ne .ViewMode "source")}}
+<div role="tablist" class="tabs">
+  <a role="tab" aria-selected="true" href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}">Dependencies</a>
+  <a role="tab" aria-selected="false" href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}?view=source">Source</a>
+</div>
+{{template "depview" .DepView}}
+{{else if and .DepView (eq .ViewMode "source")}}
+<div role="tablist" class="tabs">
+  <a role="tab" aria-selected="false" href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}">Dependencies</a>
+  <a role="tab" aria-selected="true" href="/{{.Repo}}/blob/{{.Ref}}/{{.Path}}?view=source">Source</a>
+</div>
+<div class="panel"><pre class="blob">{{.Content}}</pre></div>
+{{else if .Binary}}
   <div class="panel"><pre class="diff">binary file — <a href="/{{.Repo}}/raw/{{.Ref}}/{{.Path}}">download</a></pre></div>
 {{else if .Rendered}}
   <div class="card"><section class="prose">{{.Rendered}}</section></div>

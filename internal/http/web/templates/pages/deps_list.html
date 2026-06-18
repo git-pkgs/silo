@@ -1,0 +1,31 @@
+{{template "base" .}}
+{{define "title"}}dependencies · {{.Repo}}{{end}}
+{{define "content"}}
+<h1>Dependencies</h1>
+<p class="subhead">
+  on <a href="/{{.Repo}}/log/{{.Branch}}">{{.Branch}}</a>
+  · <a href="/{{.Repo}}/dependencies/blame">blame</a>
+  · <a href="/{{.Repo}}/dependencies/stats">stats</a>
+</p>
+{{if .Indexing}}
+<div class="panel"><p class="muted">indexing… the worker is rebuilding pkgs.sqlite3 for the latest push.</p></div>
+{{end}}
+<div class="panel">
+<table class="table">
+  <thead><tr><th>name</th><th>ecosystem</th><th>requirement</th><th>scope</th><th>manifest</th></tr></thead>
+  <tbody>
+  {{range .Deps}}
+    <tr>
+      <td><a href="/{{$.Repo}}/dependencies/{{.PURL}}">{{.Name}}</a></td>
+      <td class="muted">{{.Ecosystem}}</td>
+      <td>{{.Requirement}}</td>
+      <td class="muted">{{.DependencyType}}</td>
+      <td class="muted xsmall"><a href="/{{$.Repo}}/blob/{{$.Branch}}/{{.ManifestPath}}">{{.ManifestPath}}</a></td>
+    </tr>
+  {{else}}
+    <tr><td colspan="5" class="muted">no dependencies indexed yet.</td></tr>
+  {{end}}
+  </tbody>
+</table>
+</div>
+{{end}}

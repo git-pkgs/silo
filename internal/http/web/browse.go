@@ -19,6 +19,8 @@ import (
 	"github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/filemode"
 	"github.com/go-git/go-git/v6/plumbing/object"
+
+	"github.com/git-pkgs/silo/internal/pkgs"
 )
 
 // splitRefPath resolves the longest prefix of rest that names a revision in
@@ -108,17 +110,19 @@ func (h *handler) tree(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	entries := treeEntries(t)
+	annotations := annotateTreeEntries(t, entries)
 	var readme template.HTML
 	if p == "" {
 		readme = readReadme(gr)
 	}
 	h.render(w, r, "tree", struct {
 		page
-		Path    string
-		Crumbs  []crumb
-		Entries []treeEntry
-		Readme  template.HTML
-	}{h.page(r, gr, repoPath, fsPath, "code", ref), p, crumbs(p), entries, readme})
+		Path        string
+		Crumbs      []crumb
+		Entries     []treeEntry
+		Readme      template.HTML
+		Annotations map[string]treeAnnotation
+	}{h.page(r, gr, repoPath, fsPath, "code", ref), p, crumbs(p), entries, readme, annotations})
 }
 
 const blobMaxBytes = 512 << 10
@@ -155,22 +159,30 @@ func (h *handler) blob(w http.ResponseWriter, r *http.Request) {
 	if !binary && !truncated {
 		rendered = renderMarkup(p, data)
 	}
+	view := r.URL.Query().Get("view")
+	var depView *pkgs.FileView
+	if !truncated && pkgs.IsManifest(p) {
+		depView, _ = pkgs.Render(p, data)
+	}
 	h.render(w, r, "blob", struct {
 		page
-		Path       string
-		Crumbs     []crumb
-		Dir        string
-		Size       string
-		Mode       string
-		Binary     bool
-		Truncated  bool
-		Rendered   template.HTML
-		Content    string
-		LineCount  int
+		Path      string
+		Crumbs    []crumb
+		Dir       string
+		Size      string
+		Mode      string
+		Binary    bool
+		Truncated bool
+		Rendered  template.HTML
+		Content   string
+		LineCount int
+		DepView   *pkgs.FileView
+		ViewMode  string // "deps" (default when DepView != nil) or "source"
 	}{
 		h.page(r, gr, repoPath, fsPath, "code", ref),
 		p, crumbs(p), path.Dir(p), humanSize(f.Size), f.Mode.String(),
 		binary, truncated, rendered, string(data), countLines(data),
+		depView, view,
 	})
 }
 

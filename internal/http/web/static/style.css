@@ -198,3 +198,14 @@ a.repo-card:hover { border-color: var(--ring); text-decoration: none; }
 .table.blame th, .table.blame td { padding: 0.125rem 0.75rem; }
 .blame-meta { white-space: nowrap; border-right: 1px solid var(--border); }
 .blame-code { white-space: pre; font-size: 0.8125rem; }
+
+.deps-delta { margin-block: 0.75rem; }
+.deps-delta-head { font-size: 0.875rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+.deps-view { margin-block: 0.75rem; }
+.deps-view-head { font-weight: 600; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+tr.dep-added { background: color-mix(in oklch, oklch(0.55 0.14 150) 8%, transparent); }
+tr.dep-removed { background: color-mix(in oklch, oklch(0.55 0.18 25) 8%, transparent); }
+tr.dep-updated { background: color-mix(in oklch, oklch(0.55 0.12 60) 8%, transparent); }
+.dep-added { color: oklch(0.55 0.14 150); }
+.dep-removed { color: oklch(0.55 0.18 25); }
+.dep-updated { color: oklch(0.55 0.12 60); }

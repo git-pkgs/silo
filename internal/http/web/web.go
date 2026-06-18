@@ -17,20 +17,29 @@ import (
 	"github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/object"
 
+	"github.com/git-pkgs/git-pkgs/index"
+
 	"github.com/git-pkgs/silo/internal/gitstore"
 	gt "github.com/git-pkgs/silo/internal/gittuf"
+	"github.com/git-pkgs/silo/internal/pkgs"
 	"github.com/git-pkgs/silo/internal/store"
 )
 
 // Handler returns the web UI router. It does not handle the *.git/ transport
 // paths; mount it after the git handler in serve.go. forgeKeyID is the SHA256
 // fingerprint of silo's witness key, used to label forge-signed RSL entries.
-func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) http.Handler {
+func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string, opts ...HandlerOption) http.Handler {
 	tmpl, err := loadTemplates()
 	if err != nil {
 		panic(fmt.Sprintf("web: parse templates: %v", err))
 	}
-	h := &handler{st: st, gst: gst, baseURL: baseURL, forgeKeyID: forgeKeyID, t: tmpl}
+	h := &handler{st: st, gst: gst, baseURL: baseURL, forgeKeyID: forgeKeyID, t: tmpl, deltaCache: pkgs.NewDeltaCache()}
+	for _, o := range opts {
+		o(h)
+	}
+	if h.ps == nil {
+		h.ps = pkgs.Open(index.Options{})
+	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", h.index)
@@ -58,6 +67,10 @@ func Handler(st *store.Store, gst *gitstore.Store, baseURL, forgeKeyID string) h
 	mux.HandleFunc("GET /{owner}/{repo}/verify", h.verify)
 	mux.HandleFunc("GET /{owner}/{repo}/branches", h.branches)
 	mux.HandleFunc("GET /{owner}/{repo}/tags", h.tags)
+	mux.HandleFunc("GET /{owner}/{repo}/dependencies", h.dependenciesList)
+	mux.HandleFunc("GET /{owner}/{repo}/dependencies/blame", h.dependenciesBlame)
+	mux.HandleFunc("GET /{owner}/{repo}/dependencies/stats", h.dependenciesStats)
+	mux.HandleFunc("GET /{owner}/{repo}/dependencies/{purl...}", h.dependenciesPackage)
 	return mux
 }
 
@@ -70,6 +83,18 @@ type handler struct {
 	forgeKeyID string
 	t          map[string]*template.Template
 	vc         verifyCache
+	deltaCache *pkgs.DeltaCache
+	ps         *pkgs.Store
+}
+
+// HandlerOption tunes web.Handler. The serve command passes WithPkgsStore so
+// the Dependencies tab queries the same per-repo index the worker writes.
+type HandlerOption func(*handler)
+
+// WithPkgsStore injects the pkgs.Store used by the worker so the Dependencies
+// tab and the rich rendering share a cache.
+func WithPkgsStore(ps *pkgs.Store) HandlerOption {
+	return func(h *handler) { h.ps = ps }
 }
 
 type navLink struct{ Label, Href, Icon string }
@@ -335,6 +360,14 @@ func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
 			files = append(files, fileStat{Name: f.Name, Add: f.Addition, Del: f.Deletion})
 		}
 	}
+	curTree, _ := c.Tree()
+	var parentTree *object.Tree
+	if p, perr := c.Parent(0); perr == nil {
+		parentTree, _ = p.Tree()
+	}
+	deltas := manifestDeltas(parentTree, curTree, h.deltaCache)
+	depsAdded, depsRemoved, depsUpdated := commitDeltaSummary(deltas)
+	manifestPaths := manifestPathSet(deltas)
 	h.render(w, r, "commit", struct {
 		page
 		Hash, Author, When, Message, Signer string
@@ -342,13 +375,25 @@ func (h *handler) commit(w http.ResponseWriter, r *http.Request) {
 		Files                               []fileStat
 		RSL                                 []rslRow
 		Diff                                template.HTML
+		Deps                                []*pkgs.FileDelta
+		DepsAdded, DepsRemoved, DepsUpdated int
+		ManifestPaths                       map[string]bool
 	}{
 		h.page(r, gr, repoPath, fsPath, "commits/log", ""),
 		c.Hash.String(), c.Author.String(), c.Author.When.Format(time.RFC1123),
 		c.Message, gt.SignerFingerprint(c.Signature), parents, files,
 		h.rslForCommit(r, gr, fsPath, c.Hash.String()),
 		commitDiff(c),
+		deltas, depsAdded, depsRemoved, depsUpdated, manifestPaths,
 	})
+}
+
+func manifestPathSet(d []*pkgs.FileDelta) map[string]bool {
+	out := make(map[string]bool, len(d))
+	for _, x := range d {
+		out[x.Path] = true
+	}
+	return out
 }
 
 const diffMaxBytes = 256 << 10

@@ -57,6 +57,12 @@
 </div>
 {{end}}
 
+{{if .Deps}}
+<h2 class="section">Dependency changes</h2>
+<p class="subhead">+{{.DepsAdded}} added · −{{.DepsRemoved}} removed · ~{{.DepsUpdated}} updated</p>
+{{range .Deps}}{{template "depdelta" .}}{{end}}
+{{end}}
+
 {{if .Diff}}
 <h2 class="section">Diff</h2>
 <div class="panel"><pre class="diff">{{.Diff}}</pre></div>

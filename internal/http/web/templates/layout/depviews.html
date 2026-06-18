@@ -1,0 +1,46 @@
+{{define "depdelta"}}
+<div class="panel deps-delta">
+  <div class="deps-delta-head">
+    {{.Path}} · <span class="muted">{{.Ecosystem}} {{.Kind}}</span> ·
+    <span class="dep-added">+{{len .Added}}</span>
+    <span class="dep-removed">−{{len .Removed}}</span>
+    <span class="dep-updated">~{{len .Updated}}</span>
+  </div>
+  <table class="table">
+    <thead><tr><th>name</th><th>change</th><th>requirement</th><th>scope</th></tr></thead>
+    <tbody>
+    {{range .Added}}
+      <tr class="dep-added"><td>{{.Name}}</td><td>added</td><td>{{.Version}}</td><td>{{.Scope}}</td></tr>
+    {{end}}
+    {{range .Updated}}
+      <tr class="dep-updated"><td>{{.Name}}</td><td>updated</td><td>{{.From}} → {{.To}}</td><td></td></tr>
+    {{end}}
+    {{range .Removed}}
+      <tr class="dep-removed"><td>{{.Name}}</td><td>removed</td><td>{{.Version}}</td><td>{{.Scope}}</td></tr>
+    {{end}}
+    </tbody>
+  </table>
+</div>
+{{end}}
+
+{{define "depview"}}
+<p class="subhead">{{.Ecosystem}} {{.Kind}} · {{.Total}} dependencies ({{.Direct}} direct)</p>
+{{range .Groups}}
+<div class="panel deps-view">
+  <div class="deps-view-head">{{.Scope}} · {{len .Deps}}</div>
+  <table class="table">
+    <thead><tr><th>name</th><th>requirement</th><th>scope</th><th>integrity</th></tr></thead>
+    <tbody>
+    {{range .Deps}}
+      <tr>
+        <td>{{.Name}}</td>
+        <td>{{.Version}}</td>
+        <td>{{.Scope}}</td>
+        <td class="muted xsmall" title="{{.Integrity}}">{{if .Integrity}}{{slice .Integrity 0 16}}…{{end}}</td>
+      </tr>
+    {{end}}
+    </tbody>
+  </table>
+</div>
+{{end}}
+{{end}}

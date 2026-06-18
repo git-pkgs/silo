@@ -10,16 +10,19 @@ import (
 	"github.com/go-git/go-git/v6/plumbing/object"
 
 	gt "github.com/git-pkgs/silo/internal/gittuf"
+	"github.com/git-pkgs/silo/internal/pkgs"
 )
 
 type compareView struct {
-	Base, Head           string
-	BaseHash, HeadHash   string
-	Ahead, Files         int
-	Diff                 template.HTML
-	Rule                 *gt.Rule
-	Mergeable, NeedRSL   bool
-	MergeErr, MergeSteps string
+	Base, Head                          string
+	BaseHash, HeadHash                  string
+	Ahead, Files                        int
+	Diff                                template.HTML
+	Rule                                *gt.Rule
+	Mergeable, NeedRSL                  bool
+	MergeErr, MergeSteps                string
+	Deps                                []*pkgs.FileDelta
+	DepsAdded, DepsRemoved, DepsUpdated int
 }
 
 func (h *handler) compare(w http.ResponseWriter, r *http.Request) {
@@ -52,6 +55,8 @@ func (h *handler) compare(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+	v.Deps = manifestDeltas(bt, ht, h.deltaCache)
+	v.DepsAdded, v.DepsRemoved, v.DepsUpdated = commitDeltaSummary(v.Deps)
 	v.Ahead = countAhead(gr, bc.Hash, hc.Hash)
 
 	if gtr, err := gt.Open(fsPath); err == nil {
