@@ -4,6 +4,7 @@ package hooks
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log/slog"
 	"os"
@@ -16,6 +17,7 @@ import (
 	gt "github.com/git-pkgs/silo/internal/gittuf"
 	"github.com/git-pkgs/silo/internal/receive"
 	"github.com/git-pkgs/silo/internal/signer"
+	"github.com/git-pkgs/silo/internal/store"
 )
 
 // Verdict records the policy outcome for one ref update.
@@ -29,15 +31,24 @@ type Verdict struct {
 
 // Builtin is silo's standard receive hook chain. It takes the per-repo flock,
 // gates pushes on the presence of a signed root and on gittuf VerifyRef, and
-// (in PostReceive) witnesses accepted updates.
+// (in PostReceive) witnesses accepted updates and enqueues per-branch
+// pkgs-reindex jobs.
 type Builtin struct {
 	BaseURL string
 	Signer  signer.Signer
+
+	// Store, when non-nil, is used by PostReceive to enqueue pkgs-reindex
+	// jobs for branch updates. Nudge, when non-nil, is called after a
+	// successful enqueue so the worker reacts immediately.
+	Store *store.Store
+	Nudge func()
 
 	lock   *os.File
 	gtr    *gt.Repo
 	rslTip string
 }
+
+const pkgsReindexKind = "pkgs-reindex"
 
 const lockPerm = 0o600
 
@@ -104,28 +115,92 @@ func (b *Builtin) PreReceive(ctx context.Context, repo *git.Repository, updates 
 }
 
 // PostReceive appends a forge-signed witness annotation to the RSL entry the
-// client pushed, recording who silo authenticated the push as, then releases
-// the lock taken in PreReceive.
+// client pushed, recording who silo authenticated the push as. After
+// witnessing, it enqueues a pkgs-reindex job for each branch update so the
+// background worker rebuilds pkgs.sqlite3 against the new tip. The lock
+// taken in PreReceive is always released, including on early return.
 func (b *Builtin) PostReceive(ctx context.Context, _ *git.Repository, updates []receive.RefUpdate) {
 	defer b.releaseLock()
 
-	if b.gtr == nil || b.rslTip == "" || b.Signer == nil {
-		return
-	}
 	_, refUpdates := partition(updates)
-	if len(refUpdates) == 0 {
+
+	if b.gtr != nil && b.rslTip != "" && b.Signer != nil && len(refUpdates) > 0 {
+		if keyPEM, err := b.Signer.KeyBytes(); err == nil {
+			pusher, _ := receive.PusherFrom(ctx)
+			msg := fmt.Sprintf("silo: pushed by %s via %s", pusher.User, pusher.KeyFingerprint)
+			if err := b.gtr.Witness(ctx, b.rslTip, msg, keyPEM); err != nil {
+				slog.Warn("witness: annotation failed", "err", err)
+			}
+		} else {
+			slog.Warn("witness: signer key not exportable", "err", err)
+		}
+	}
+
+	b.enqueueReindex(ctx, refUpdates)
+}
+
+func (b *Builtin) enqueueReindex(ctx context.Context, refUpdates []receive.RefUpdate) {
+	if b.Store == nil {
 		return
 	}
-	keyPEM, err := b.Signer.KeyBytes()
+	repoPath, ok := receive.RepoPathFrom(ctx)
+	if !ok {
+		return
+	}
+	owner, repo, ok := splitOwnerRepo(repoPath)
+	if !ok {
+		return
+	}
+	r, err := b.Store.RepoByPath(owner, repo)
 	if err != nil {
-		slog.Warn("witness: signer key not exportable", "err", err)
+		slog.Warn("pkgs: lookup repo for reindex", "owner", owner, "repo", repo, "err", err)
 		return
 	}
-	pusher, _ := receive.PusherFrom(ctx)
-	msg := fmt.Sprintf("silo: pushed by %s via %s", pusher.User, pusher.KeyFingerprint)
-	if err := b.gtr.Witness(ctx, b.rslTip, msg, keyPEM); err != nil {
-		slog.Warn("witness: annotation failed", "err", err)
+
+	var enqueued bool
+	for _, u := range refUpdates {
+		if !u.Name.IsBranch() {
+			continue
+		}
+		payload := map[string]string{
+			"owner":  owner,
+			"repo":   repo,
+			"branch": u.Name.Short(),
+			"old":    u.Old.String(),
+			"new":    u.New.String(),
+		}
+		buf, err := json.Marshal(payload)
+		if err != nil {
+			slog.Warn("pkgs: marshal reindex payload", "err", err)
+			continue
+		}
+		if _, err := b.Store.EnqueueJob(r.ID, pkgsReindexKind, string(buf)); err != nil {
+			slog.Warn("pkgs: enqueue reindex", "err", err)
+			continue
+		}
+		enqueued = true
 	}
+	if enqueued && b.Nudge != nil {
+		b.Nudge()
+	}
+}
+
+// splitOwnerRepo extracts "alice", "demo" from "<root>/repos/alice/demo.git".
+// Returns ok=false when the suffix or shape is unexpected.
+func splitOwnerRepo(bareRepoPath string) (owner, repo string, ok bool) {
+	name := filepath.Base(bareRepoPath)
+	if !filepath.IsAbs(bareRepoPath) && !filepath.IsLocal(bareRepoPath) {
+		return "", "", false
+	}
+	if !hasSuffix(name, ".git") {
+		return "", "", false
+	}
+	owner = filepath.Base(filepath.Dir(bareRepoPath))
+	return owner, name[:len(name)-len(".git")], true
+}
+
+func hasSuffix(s, suffix string) bool {
+	return len(s) >= len(suffix) && s[len(s)-len(suffix):] == suffix
 }
 
 func (b *Builtin) buildRejection(ctx context.Context, gtr *gt.Repo, u receive.RefUpdate, verifyErr error) *receive.RejectionError {
