@@ -3,13 +3,12 @@ module github.com/git-pkgs/silo
 go 1.26.0
 
 replace (
-	github.com/git-pkgs/git-pkgs => ../git-pkgs
 	github.com/gittuf/gittuf => github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565
 	github.com/go-git/go-git/v6 => github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8
 )
 
 require (
-	github.com/git-pkgs/git-pkgs v0.0.0-00010101000000-000000000000
+	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
 	github.com/git-pkgs/manifests v0.5.0
 	github.com/git-pkgs/markup v0.1.0
 	github.com/git-pkgs/sbom v0.1.2

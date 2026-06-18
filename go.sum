@@ -194,6 +194,8 @@ github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4
 github.com/fsnotify/fsnotify v1.5.4/go.mod h1:OVB6XrOHzAwXMpEM7uPOzcehqUV2UqJxmVXmkdnm1bU=
 github.com/fsnotify/fsnotify v1.10.1 h1:b0/UzAf9yR5rhf3RPm9gf3ehBPpf0oZKIjtpKrx59Ho=
 github.com/fsnotify/fsnotify v1.10.1/go.mod h1:TLheqan6HD6GBK6PrDWyDPBaEV8LspOxvPSjC+bVfgo=
+github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2 h1:Ay9ZTPvIFhvWmGhEdczSbjn0ENByxW0fW4YrNdGtlb4=
+github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2/go.mod h1:EF0T70KuE4sXQcP1cgesIDfB8ExBqG+SPraMV33tODQ=
 github.com/git-pkgs/gitignore v1.2.0 h1:7vdR8/SvF31dvXqIdC1bKgCvyySefXuN8aY3xJLuFaM=
 github.com/git-pkgs/gitignore v1.2.0/go.mod h1:Lr0XwhbvP071rZF/zIIhkY1gEhFDoWHH91lngwLpeUg=
 github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565 h1:xvGwpNMbD1BjesWUL7O0GRMjGIYZNzfIBdMMyFTzyF8=
