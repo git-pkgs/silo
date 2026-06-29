@@ -42,30 +42,30 @@ type handler struct {
 	ps  *pkgs.Store
 }
 
-func (h *handler) resolve(w http.ResponseWriter, r *http.Request) (*index.Index, *store.Repo, string, bool) {
+func (h *handler) resolve(w http.ResponseWriter, r *http.Request) (*index.Index, *store.Repo, bool) {
 	owner, repo := r.PathValue("owner"), r.PathValue("repo")
 	repoPath, err := h.gst.Path(owner, repo)
 	if err != nil {
 		http.Error(w, "not found", http.StatusNotFound)
-		return nil, nil, "", false
+		return nil, nil, false
 	}
 	if _, err := h.gst.Repo(owner, repo); err != nil {
 		http.Error(w, "not found", http.StatusNotFound)
-		return nil, nil, "", false
+		return nil, nil, false
 	}
 	dbRepo, err := h.st.RepoByPath(owner, repo)
 	if err != nil {
 		if errors.Is(err, store.ErrNotFound) {
 			http.Error(w, "not found", http.StatusNotFound)
-			return nil, nil, "", false
+			return nil, nil, false
 		}
 	}
 	idx, err := h.ps.Index(repoPath)
 	if err != nil {
 		writeServiceUnavailable(w, "open index")
-		return nil, nil, "", false
+		return nil, nil, false
 	}
-	return idx, dbRepo, owner + "/" + repo, true
+	return idx, dbRepo, true
 }
 
 func (h *handler) maybeMarkIndexing(w http.ResponseWriter, dbRepo *store.Repo) {
@@ -79,7 +79,7 @@ func (h *handler) maybeMarkIndexing(w http.ResponseWriter, dbRepo *store.Repo) {
 }
 
 func (h *handler) list(w http.ResponseWriter, r *http.Request) {
-	idx, dbRepo, _, ok := h.resolve(w, r)
+	idx, dbRepo, ok := h.resolve(w, r)
 	if !ok {
 		return
 	}
@@ -123,7 +123,7 @@ func filterDeps(deps []index.Dependency, q url.Values) []index.Dependency {
 }
 
 func (h *handler) blame(w http.ResponseWriter, r *http.Request) {
-	idx, dbRepo, _, ok := h.resolve(w, r)
+	idx, dbRepo, ok := h.resolve(w, r)
 	if !ok {
 		return
 	}
@@ -146,7 +146,7 @@ func (h *handler) blame(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) history(w http.ResponseWriter, r *http.Request) {
-	idx, dbRepo, _, ok := h.resolve(w, r)
+	idx, dbRepo, ok := h.resolve(w, r)
 	if !ok {
 		return
 	}
@@ -196,7 +196,7 @@ type DiffResult struct {
 }
 
 func (h *handler) diff(w http.ResponseWriter, r *http.Request) {
-	idx, dbRepo, _, ok := h.resolve(w, r)
+	idx, dbRepo, ok := h.resolve(w, r)
 	if !ok {
 		return
 	}
@@ -266,7 +266,7 @@ func computeDiff(from, to []index.Dependency) DiffResult {
 }
 
 func (h *handler) show(w http.ResponseWriter, r *http.Request) {
-	idx, dbRepo, _, ok := h.resolve(w, r)
+	idx, dbRepo, ok := h.resolve(w, r)
 	if !ok {
 		return
 	}
@@ -285,7 +285,7 @@ func (h *handler) show(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) stats(w http.ResponseWriter, r *http.Request) {
-	idx, dbRepo, _, ok := h.resolve(w, r)
+	idx, dbRepo, ok := h.resolve(w, r)
 	if !ok {
 		return
 	}
@@ -308,7 +308,7 @@ func (h *handler) stats(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) sbom(w http.ResponseWriter, r *http.Request) {
-	idx, dbRepo, _, ok := h.resolve(w, r)
+	idx, dbRepo, ok := h.resolve(w, r)
 	if !ok {
 		return
 	}

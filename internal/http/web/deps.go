@@ -86,16 +86,6 @@ func readBlobAt(t *object.Tree, path string) ([]byte, string) {
 	return b, f.Hash.String()
 }
 
-// manifestViewForBlob returns the parsed dependency view for path in tree, or
-// nil when the path isn't a manifest, the blob is too large, or parsing fails.
-func manifestViewForBlob(t *object.Tree, path string, blob []byte) *pkgs.FileView {
-	if !pkgs.IsManifest(path) || t == nil {
-		return nil
-	}
-	v, _ := pkgs.Render(path, blob)
-	return v
-}
-
 // treeAnnotation is the per-row "ecosystem · N deps" tag for the tree page.
 type treeAnnotation struct {
 	Ecosystem string

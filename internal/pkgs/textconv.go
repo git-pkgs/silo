@@ -186,20 +186,21 @@ func groupByScope(deps []manifests.Dependency) []DepGroup {
 	return out
 }
 
+var scopeOrder = []manifests.Scope{
+	manifests.Runtime,
+	manifests.Development,
+	manifests.Test,
+	manifests.Build,
+	manifests.Optional,
+}
+
 func scopeRank(s manifests.Scope) int {
-	switch s {
-	case manifests.Runtime:
-		return 0
-	case manifests.Development:
-		return 1
-	case manifests.Test:
-		return 2
-	case manifests.Build:
-		return 3
-	case manifests.Optional:
-		return 4
+	for i, v := range scopeOrder {
+		if v == s {
+			return i
+		}
 	}
-	return 5
+	return len(scopeOrder)
 }
 
 // safeParse wraps manifests.Parse so a panic from a parser becomes

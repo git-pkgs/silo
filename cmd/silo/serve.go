@@ -30,6 +30,11 @@ import (
 	"github.com/git-pkgs/silo/internal/store"
 )
 
+const (
+	defaultMaxDepsPerManifest    = 50_000
+	defaultMaxManifestsPerCommit = 5_000
+)
+
 func newServeCmd(cfg *config.Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "serve",
@@ -83,8 +88,8 @@ func serve(ctx context.Context, cfg config.Config) error {
 	}
 
 	ps := pkgs.Open(index.Options{
-		MaxDepsPerManifest:    50_000,
-		MaxManifestsPerCommit: 5_000,
+		MaxDepsPerManifest:    defaultMaxDepsPerManifest,
+		MaxManifestsPerCommit: defaultMaxManifestsPerCommit,
 	})
 	defer ps.Close()
 	worker := jobs.New(st)

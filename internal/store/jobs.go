@@ -91,7 +91,7 @@ func (s *Store) ClaimJob(kinds ...string) (*Job, error) {
 		RETURNING id, repo_id, kind, state, payload, attempts, updated_at`,
 		placeholders)
 
-	finalArgs := make([]any, 0, len(kinds)+2)
+	finalArgs := make([]any, 0, len(kinds)+2) //nolint:mnd // now + MaxJobAttempts + kinds
 	finalArgs = append(finalArgs, now, MaxJobAttempts)
 	for _, k := range kinds {
 		finalArgs = append(finalArgs, k)
