@@ -2,6 +2,7 @@ package jobs_test
 
 import (
 	"context"
+	"errors"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -100,5 +101,76 @@ func TestWorker_Recover(t *testing.T) {
 	}
 	if !seenSecond.Load() {
 		t.Fatal("worker stopped after panic")
+	}
+}
+
+func TestWorker_RetryThenFail(t *testing.T) {
+	s, repoID := newStore(t)
+	if _, err := s.EnqueueJob(repoID, "flaky", `{}`); err != nil {
+		t.Fatal(err)
+	}
+
+	var calls atomic.Int32
+	w := jobs.New(s)
+	w.PollInterval = 10 * time.Millisecond
+	w.Register("flaky", func(_ context.Context, _ store.Job) error {
+		calls.Add(1)
+		return errors.New("transient")
+	})
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go w.Run(ctx)
+	w.Nudge()
+
+	deadline := time.Now().Add(2 * time.Second)
+	for time.Now().Before(deadline) {
+		js, _ := s.JobsForRepo(repoID, "flaky")
+		if len(js) == 1 && js[0].State == store.JobFailed {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	if got := calls.Load(); got != int32(store.MaxJobAttempts) {
+		t.Fatalf("handler called %d times, want %d", got, store.MaxJobAttempts)
+	}
+	js, _ := s.JobsForRepo(repoID, "flaky")
+	if len(js) != 1 || js[0].State != store.JobFailed {
+		t.Fatalf("final job state = %+v", js)
+	}
+}
+
+func TestWorker_RetryThenSucceed(t *testing.T) {
+	s, repoID := newStore(t)
+	if _, err := s.EnqueueJob(repoID, "flaky", `{}`); err != nil {
+		t.Fatal(err)
+	}
+
+	var calls atomic.Int32
+	w := jobs.New(s)
+	w.PollInterval = 10 * time.Millisecond
+	w.Register("flaky", func(_ context.Context, _ store.Job) error {
+		if calls.Add(1) == 1 {
+			return errors.New("transient")
+		}
+		return nil
+	})
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go w.Run(ctx)
+	w.Nudge()
+
+	deadline := time.Now().Add(2 * time.Second)
+	for time.Now().Before(deadline) {
+		js, _ := s.JobsForRepo(repoID, "flaky")
+		if len(js) == 1 && js[0].State == store.JobDone {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	js, _ := s.JobsForRepo(repoID, "flaky")
+	if len(js) != 1 || js[0].State != store.JobDone || js[0].Attempts != 2 {
+		t.Fatalf("final job = %+v, want done after 2 attempts", js)
 	}
 }
