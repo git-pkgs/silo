@@ -7,6 +7,7 @@ import (
 	"github.com/go-git/go-git/v6/plumbing"
 
 	"github.com/git-pkgs/git-pkgs/index"
+	"github.com/git-pkgs/purl"
 	"github.com/git-pkgs/silo/internal/pkgs"
 	"github.com/git-pkgs/silo/internal/store"
 )
@@ -135,8 +136,8 @@ func (h *handler) dependenciesPackage(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "dependencies unavailable", http.StatusServiceUnavailable)
 		return
 	}
-	purl, perr := url.PathUnescape(r.PathValue("purl"))
-	if perr != nil || purl == "" {
+	raw, perr := url.PathUnescape(r.PathValue("purl"))
+	if perr != nil || raw == "" {
 		http.NotFound(w, r)
 		return
 	}
@@ -144,8 +145,7 @@ func (h *handler) dependenciesPackage(w http.ResponseWriter, r *http.Request) {
 	if branch == "" {
 		branch = "main"
 	}
-	// Derive the package name from the purl. Format: pkg:<eco>/<name>@<v>.
-	name := purlPackageName(purl)
+	name := purlPackageName(raw)
 	var entries []index.HistoryEntry
 	if info, ierr := idx.Branch(branch); ierr == nil {
 		entries, _ = idx.History(index.HistoryOptions{
@@ -160,33 +160,19 @@ func (h *handler) dependenciesPackage(w http.ResponseWriter, r *http.Request) {
 		Entries []index.HistoryEntry
 	}{
 		depsBaseData{h.page(r, gr, repoPath, fsPath, "dependencies", branch), branch, h.indexingFor(owner, repo), ""},
-		purl, name, entries,
+		raw, name, entries,
 	})
 }
 
-func purlPackageName(purl string) string {
-	// pkg:<eco>/<name>[@version]
-	const prefix = "pkg:"
-	if len(purl) < len(prefix) || purl[:len(prefix)] != prefix {
-		return purl
+// purlPackageName extracts the index PackageName from a purl string. Returns
+// the input unchanged when it doesn't parse as a purl so a bare name still
+// works as a path segment.
+func purlPackageName(s string) string {
+	p, err := purl.Parse(s)
+	if err != nil {
+		return s
 	}
-	rest := purl[len(prefix):]
-	if i := indexByteFrom(rest, '/'); i >= 0 {
-		rest = rest[i+1:]
-	}
-	if i := indexByteFrom(rest, '@'); i >= 0 {
-		rest = rest[:i]
-	}
-	return rest
-}
-
-func indexByteFrom(s string, c byte) int {
-	for i := range len(s) {
-		if s[i] == c {
-			return i
-		}
-	}
-	return -1
+	return p.FullName()
 }
 
 func (h *handler) indexingFor(owner, repo string) bool {

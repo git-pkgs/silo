@@ -166,8 +166,10 @@ func TestPurlPackageName(t *testing.T) {
 		"pkg:golang/github.com/spf13/cobra@v1.9.0": "github.com/spf13/cobra",
 		"pkg:golang/github.com/spf13/cobra":        "github.com/spf13/cobra",
 		"pkg:npm/lodash@4.17.21":                   "lodash",
+		"pkg:npm/%40babel/core@7.24.0":             "@babel/core",
+		"pkg:maven/org.junit/junit@4.13":           "org.junit:junit",
 		"not-a-purl":                               "not-a-purl",
-		"pkg:":                                     "",
+		"pkg:":                                     "pkg:",
 	}
 	for in, want := range cases {
 		if got := purlPackageName(in); got != want {
