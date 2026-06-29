@@ -9,7 +9,7 @@ replace (
 
 require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
-	github.com/git-pkgs/manifests v0.5.0
+	github.com/git-pkgs/manifests v0.5.1
 	github.com/git-pkgs/markup v0.1.0
 	github.com/git-pkgs/sbom v0.1.2
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
@@ -63,7 +63,7 @@ require (
 	github.com/aws/smithy-go v1.25.1 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/bazelbuild/buildtools v0.0.0-20260319080235-05d2ebe49b0f // indirect
+	github.com/bazelbuild/buildtools v0.0.0-20260622120422-77b9b380c0a4 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
@@ -92,7 +92,7 @@ require (
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/git-pkgs/gitignore v1.2.0 // indirect
-	github.com/git-pkgs/pom v0.1.4 // indirect
+	github.com/git-pkgs/pom v0.1.5 // indirect
 	github.com/git-pkgs/purl v0.1.12 // indirect
 	github.com/git-pkgs/vers v0.2.6 // indirect
 	github.com/github/smimesign v0.2.0 // indirect

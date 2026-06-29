@@ -94,8 +94,8 @@ github.com/aymanbagabas/go-udiff v0.3.1 h1:LV+qyBQ2pqe0u42ZsUEtPiCaUoqgA9gYRDs3v
 github.com/aymanbagabas/go-udiff v0.3.1/go.mod h1:G0fsKmG+P6ylD0r6N/KgQD/nWzgfnl8ZBcNLgcbrw8E=
 github.com/aymerick/douceur v0.2.0 h1:Mv+mAeH1Q+n9Fr+oyamOlAkUNPWPlA8PPGR0QAaYuPk=
 github.com/aymerick/douceur v0.2.0/go.mod h1:wlT5vV2O3h55X9m7iVYN0TBM0NH/MmbLnd30/FjWUq4=
-github.com/bazelbuild/buildtools v0.0.0-20260319080235-05d2ebe49b0f h1:khsR2MoXO+WButt3L5nnkAOGO17BAr0G/pGHZczF5/E=
-github.com/bazelbuild/buildtools v0.0.0-20260319080235-05d2ebe49b0f/go.mod h1:PLNUetjLa77TCCziPsz0EI8a6CUxgC+1jgmWv0H25tg=
+github.com/bazelbuild/buildtools v0.0.0-20260622120422-77b9b380c0a4 h1:zeHhy1A/3rpHyenrSFE6TgQixKDzw9ZNM1dEHwAdN4I=
+github.com/bazelbuild/buildtools v0.0.0-20260622120422-77b9b380c0a4/go.mod h1:PLNUetjLa77TCCziPsz0EI8a6CUxgC+1jgmWv0H25tg=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
@@ -202,12 +202,12 @@ github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565 h1:xvGwpNMbD1Bj
 github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565/go.mod h1:sLVsOgnZmGamM4jJuRPYIu/ZaJxKiFEe68lKiEnpJO4=
 github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8 h1:6GMqtI6YYfV6UabYfx4kpRrjMP2iYVJPoKPOy5+9Srg=
 github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8/go.mod h1:4ODa/G7hPWrh4Y+7lmt59Ij3zW38IEfvRoAZxLYYBhc=
-github.com/git-pkgs/manifests v0.5.0 h1:1w+mDqU8IfJ9ojCJaZZv3Zij5cyQMuMT+6pOIND/KAE=
-github.com/git-pkgs/manifests v0.5.0/go.mod h1:s0Bky+73EXicySAIQ1XEnLF5sWShZYrsKOt7dM3htaA=
+github.com/git-pkgs/manifests v0.5.1 h1:c2IF1RMKvrT7gD9JhjLHgViZ7dTejn5JnBhtrW9dRdE=
+github.com/git-pkgs/manifests v0.5.1/go.mod h1:ngooeMMKiS3YtTJGx3RstMV0dQlFh5Wj0S47YG9n95g=
 github.com/git-pkgs/markup v0.1.0 h1:y4MB7bWE6Txz68c0WnR0UykV5NxCDXMgrgdIEuukYUU=
 github.com/git-pkgs/markup v0.1.0/go.mod h1:301O9D4beTPZjJMxMfRsLrk2cUzNoPPBj8bmLdhRaZU=
-github.com/git-pkgs/pom v0.1.4 h1:C6st+XSbF75eKuwfdkDZZtYHoTcaWRIEQYar5VtszUo=
-github.com/git-pkgs/pom v0.1.4/go.mod h1:ufdMBe1lKzqOeP9IUb9NPZ458xKV8E8NvuyBMxOfwIk=
+github.com/git-pkgs/pom v0.1.5 h1:TGT8Az2OMxGWsXnSagtUMGzZm7Oax8HrSCteA+mi0qY=
+github.com/git-pkgs/pom v0.1.5/go.mod h1:ufdMBe1lKzqOeP9IUb9NPZ458xKV8E8NvuyBMxOfwIk=
 github.com/git-pkgs/purl v0.1.12 h1:qCskrEU1LWQhCkIVZd992W5++Bsxazvx2Cx1/65qCvU=
 github.com/git-pkgs/purl v0.1.12/go.mod h1:ofp4mHsR0cUeVONQaf33n6Wxg2QTEvtUdRfCedI8ouA=
 github.com/git-pkgs/sbom v0.1.2 h1:18LkdFRBG8jkWf5cclGvwam5GwM3o3lK9/qUmup15+0=
