@@ -129,7 +129,10 @@ func (w *Worker) run(parent context.Context, j store.Job) {
 	state := store.JobDone
 	if err != nil {
 		state = store.JobFailed
-		slog.Warn("jobs: handler failed", "kind", j.Kind, "id", j.ID, "err", err)
+		if j.Attempts < store.MaxJobAttempts {
+			state = store.JobPending
+		}
+		slog.Warn("jobs: handler failed", "kind", j.Kind, "id", j.ID, "attempt", j.Attempts, "err", err)
 	}
 	if cerr := w.Store.CompleteJob(j.ID, state); cerr != nil {
 		slog.Warn("jobs: complete", "id", j.ID, "err", cerr)

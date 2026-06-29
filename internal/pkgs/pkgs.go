@@ -53,7 +53,6 @@ type Store struct {
 type cacheEntry struct {
 	path string
 	idx  *index.Index
-	mu   sync.Mutex // serialise Reindex against List on the same db handle
 }
 
 // Open returns a new Store with DefaultCacheSize entries.

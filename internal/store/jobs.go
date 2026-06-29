@@ -91,7 +91,7 @@ func (s *Store) ClaimJob(kinds ...string) (*Job, error) {
 		RETURNING id, repo_id, kind, state, payload, attempts, updated_at`,
 		placeholders)
 
-	finalArgs := make([]any, 0, len(kinds)+2)
+	finalArgs := make([]any, 0, len(kinds)+2) //nolint:mnd // now + MaxJobAttempts + kinds
 	finalArgs = append(finalArgs, now, MaxJobAttempts)
 	for _, k := range kinds {
 		finalArgs = append(finalArgs, k)
@@ -114,9 +114,11 @@ func (s *Store) ClaimJob(kinds ...string) (*Job, error) {
 	return &j, nil
 }
 
-// CompleteJob marks a job done or failed and stamps updated_at.
+// CompleteJob records the outcome of a claimed job. JobDone and JobFailed are
+// terminal; JobPending returns the job to the queue so ClaimJob picks it up
+// again until attempts reaches MaxJobAttempts.
 func (s *Store) CompleteJob(id int64, state string) error {
-	if state != JobDone && state != JobFailed {
+	if state != JobDone && state != JobFailed && state != JobPending {
 		return fmt.Errorf("store: invalid completion state %q", state)
 	}
 	_, err := s.db.Exec(

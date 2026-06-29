@@ -2,6 +2,9 @@ version: "2"
 
 linters:
   settings:
+    goconst:
+      ignore-string-values:
+        - main
     ireturn:
       allow:
         - error
