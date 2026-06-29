@@ -1,8 +1,10 @@
 # gittuf integration notes
 
-Findings from embedding `github.com/gittuf/gittuf/experimental/gittuf` server-side, against bare repositories, at commit `6f382ee`. silo implements [GAP-2 "gittuf on the Forge"](https://github.com/gittuf/gittuf/blob/main/docs/gaps/2/README.md) Configuration A; that GAP is currently marked "Prototype Implementation: None yet".
+Findings from embedding `github.com/gittuf/gittuf/experimental/gittuf` server-side, against bare repositories. silo implements [GAP-2 "gittuf on the Forge"](https://github.com/gittuf/gittuf/blob/main/docs/gaps/2/README.md) Configuration A; that GAP is currently marked "Prototype Implementation: None yet".
 
-Four items. The first is a one-line fix. The second subsumes what were three separate bugs by replacing the layer they live in. The last two are API shape, independent of the git layer.
+Four code items and two API-shape items. The first is a one-line fix. The second subsumes what were three separate bugs by replacing the layer they live in. The fifth is a test-isolation issue surfaced while running the fork's suite.
+
+Submitted upstream: [#1462](https://github.com/gittuf/gittuf/pull/1462), [#1463](https://github.com/gittuf/gittuf/pull/1463), [#1464](https://github.com/gittuf/gittuf/pull/1464), [#1465](https://github.com/gittuf/gittuf/pull/1465).
 
 ---
 
@@ -10,7 +12,7 @@ Four items. The first is a one-line fix. The second subsumes what were three sep
 
 `pkg/gitinterface/repository.go:39` opens with `git.PlainOpenWithOptions(r.gitDirPath, &git.PlainOpenOptions{DetectDotGit: true})`. `gitDirPath` is already the resolved git dir; `DetectDotGit: true` makes go-git look for a `.git` entry inside it, which a bare repo doesn't have, so it returns `ErrRepositoryNotExists`. Every caller (`verifyCommitSignature`, tag verification) then fails on bare repos with the generic `verifying Git namespace policies failed`.
 
-**Fix:** change `true` to `false`. The path is always already the git dir; `false` opens both layouts. Applied on `git-pkgs/gittuf@silo`.
+**Fix:** change `true` to `false`. The path is always already the git dir; `false` opens both layouts. Submitted as [#1462](https://github.com/gittuf/gittuf/pull/1462) with tests covering bare and `<name>.git`-suffixed bare layouts.
 
 ---
 
@@ -22,11 +24,11 @@ Three separate problems all come from `pkg/gitinterface` shelling to the `git` b
 - `IsBare()` (`repository.go:48-52`) returns `!strings.HasSuffix(gitDirPath, ".git")`, which is backwards for the `name.git` bare-repo convention.
 - `LoadRepository` does `exec.LookPath("git")` and fails without it; embedders can't ship a single binary.
 
-go-git on main covers every read operation `gitinterface` shells out for except `merge-tree` — see the inventory table in `GOGIT-NOTES.md`. A go-git backend for the read path (`cat-file`, `ls-tree`, `diff-tree`, `rev-parse`, `update-ref`, `merge-base`, `config`, `for-each-ref`, `log`) holds one `*git.Repository` opened with `DetectDotGit: false`, needs no `os.Chdir`, knows bare-ness from `Config().Core.IsBare`, and needs no binary. The worktree operations (`status`, `restore`) and `merge-tree` can keep shelling out; a forge doesn't reach them.
+go-git on main covers every read operation `gitinterface` shells out for except `merge-tree`; see the inventory table in `GOGIT-NOTES.md`. A go-git backend for the read path (`cat-file`, `ls-tree`, `diff-tree`, `rev-parse`, `update-ref`, `merge-base`, `config`, `for-each-ref`, `log`) holds one `*git.Repository` opened with `DetectDotGit: false`, needs no `os.Chdir`, knows bare-ness from `Config().Core.IsBare`, and needs no binary. The worktree operations (`status`, `restore`) and `merge-tree` can keep shelling out; a forge doesn't reach them.
 
 `GetGoGitRepository()` already exists; routing the reads through it is the change.
 
-The `os.Chdir` race specifically is fixed on `git-pkgs/gittuf@silo` by adding `executor.withDir` (sets `cmd.Dir`) and switching `LoadRepository` to `rev-parse --absolute-git-dir`; the binary requirement and `IsBare` remain until the broader backend change.
+The `os.Chdir` race specifically is submitted as [#1463](https://github.com/gittuf/gittuf/pull/1463) by adding `executor.withDir` (sets `cmd.Dir`) and switching `LoadRepository` to `rev-parse --absolute-git-dir`; the binary requirement and `IsBare` remain until the broader backend change.
 
 ---
 
@@ -34,7 +36,7 @@ The `os.Chdir` race specifically is fixed on `git-pkgs/gittuf@silo` by adding `e
 
 `experimental/gittuf/rsl.go:39-45` takes `signCommit bool` and reads `user.signingKey`/`gpg.format` from the repo's git config via `r.r.CanSign()`. There is no parameter or option for a `dsse.SignerVerifier`, unlike every other policy-mutating function (`InitializeRoot`, `AddDelegation`, …). A forge wanting to witness with its own key has to write that key's path into each bare repo's git config.
 
-**Fix:** a record/annotate option carrying the signer; when present, skip `CanSign()` and use the existing `CommitUsingSpecificKey` path. Applied on `git-pkgs/gittuf@silo` as `WithRecordSigningKeyBytes` / `WithAnnotateSigningKeyBytes` taking PEM bytes (matching what `CommitUsingSpecificKey` already accepts); a `dsse.SignerVerifier` variant would be cleaner long-term but needs the commit-signing path to accept an interface instead of raw key material.
+**Fix:** a record/annotate option carrying the signer; when present, skip `CanSign()` and use the existing `CommitUsingSpecificKey` path. Submitted as [#1464](https://github.com/gittuf/gittuf/pull/1464); the option pair is `WithRecordSigningKeyBytes` / `WithAnnotateSigningKeyBytes` taking PEM bytes, matching what `CommitUsingSpecificKey` already accepts and what `RecordRSLEntryForReferenceAtTarget` already takes. A `dsse.SignerVerifier` variant would be cleaner long-term but needs the commit-signing path to accept an interface instead of raw key material.
 
 ---
 
@@ -48,7 +50,7 @@ The `os.Chdir` race specifically is fixed on `git-pkgs/gittuf@silo` by adding `e
 
 ## `TestCanSign` leaks the host's global git config
 
-`pkg/gitinterface/signature_test.go` `TestCanSign/explicit_ssh,_no_key` sets `gpg.format=ssh` in a temp repo and expects `CanSign()` to fail because no `user.signingKey` is set. On a host with `user.signingKey` in `~/.gitconfig`, the temp repo inherits it via scoped config and the test passes `CanSign()` unexpectedly. The test should set `GIT_CONFIG_GLOBAL=/dev/null` (or unset the key in the temp repo) to isolate. Pre-existing; surfaced while running the fork's suite.
+`pkg/gitinterface/signature_test.go` `TestCanSign/explicit_ssh,_no_key` sets `gpg.format=ssh` in a temp repo and expects `CanSign()` to fail because no `user.signingKey` is set. On a host with `user.signingKey` in `~/.gitconfig`, the temp repo inherits it via scoped config and the test passes `CanSign()` unexpectedly. Submitted as [#1465](https://github.com/gittuf/gittuf/pull/1465); the fix sets `GIT_CONFIG_GLOBAL=/dev/null` and `GIT_CONFIG_SYSTEM=/dev/null` for the duration of the test via `t.Setenv`. Pre-existing; surfaced while running the fork's suite.
 
 ---
 
