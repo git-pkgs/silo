@@ -9,7 +9,7 @@ replace (
 
 require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
-	github.com/git-pkgs/manifests v0.5.1
+	github.com/git-pkgs/manifests v0.6.0
 	github.com/git-pkgs/markup v0.1.0
 	github.com/git-pkgs/purl v0.1.12
 	github.com/git-pkgs/sbom v0.1.2

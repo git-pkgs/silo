@@ -202,8 +202,8 @@ github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565 h1:xvGwpNMbD1Bj
 github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565/go.mod h1:sLVsOgnZmGamM4jJuRPYIu/ZaJxKiFEe68lKiEnpJO4=
 github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8 h1:6GMqtI6YYfV6UabYfx4kpRrjMP2iYVJPoKPOy5+9Srg=
 github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8/go.mod h1:4ODa/G7hPWrh4Y+7lmt59Ij3zW38IEfvRoAZxLYYBhc=
-github.com/git-pkgs/manifests v0.5.1 h1:c2IF1RMKvrT7gD9JhjLHgViZ7dTejn5JnBhtrW9dRdE=
-github.com/git-pkgs/manifests v0.5.1/go.mod h1:ngooeMMKiS3YtTJGx3RstMV0dQlFh5Wj0S47YG9n95g=
+github.com/git-pkgs/manifests v0.6.0 h1:9FpVsHWtXvRo/uGTv2KPFQ3Ijl7ucfIXmmLi/r7cxOU=
+github.com/git-pkgs/manifests v0.6.0/go.mod h1:ngooeMMKiS3YtTJGx3RstMV0dQlFh5Wj0S47YG9n95g=
 github.com/git-pkgs/markup v0.1.0 h1:y4MB7bWE6Txz68c0WnR0UykV5NxCDXMgrgdIEuukYUU=
 github.com/git-pkgs/markup v0.1.0/go.mod h1:301O9D4beTPZjJMxMfRsLrk2cUzNoPPBj8bmLdhRaZU=
 github.com/git-pkgs/pom v0.1.5 h1:TGT8Az2OMxGWsXnSagtUMGzZm7Oax8HrSCteA+mi0qY=
