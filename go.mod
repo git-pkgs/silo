@@ -1,6 +1,6 @@
 module github.com/git-pkgs/silo
 
-go 1.26.4
+go 1.26.5
 
 replace (
 	github.com/gittuf/gittuf => github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565
@@ -11,8 +11,8 @@ require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
 	github.com/git-pkgs/manifests v0.6.0
 	github.com/git-pkgs/markup v0.1.0
-	github.com/git-pkgs/purl v0.1.13
-	github.com/git-pkgs/sbom v0.1.2
+	github.com/git-pkgs/purl v0.1.14
+	github.com/git-pkgs/sbom v0.1.3
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
 	github.com/gliderlabs/ssh v0.3.8
 	github.com/go-git/go-git/v5 v5.19.1
@@ -20,7 +20,7 @@ require (
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/rogpeppe/go-internal v1.15.0
 	github.com/spf13/cobra v1.10.2
-	golang.org/x/crypto v0.53.0
+	golang.org/x/crypto v0.54.0
 	modernc.org/sqlite v1.53.0
 )
 
@@ -237,15 +237,15 @@ require (
 	go.uber.org/zap v1.28.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/mod v0.36.0 // indirect
-	golang.org/x/net v0.55.0 // indirect
+	golang.org/x/mod v0.37.0 // indirect
+	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
-	golang.org/x/sync v0.21.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/term v0.44.0 // indirect
-	golang.org/x/text v0.38.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/term v0.45.0 // indirect
+	golang.org/x/text v0.40.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
-	golang.org/x/tools v0.45.0 // indirect
+	golang.org/x/tools v0.47.0 // indirect
 	google.golang.org/api v0.280.0 // indirect
 	google.golang.org/genproto v0.0.0-20260406210006-6f92a3bedf2d // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
