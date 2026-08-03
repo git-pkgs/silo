@@ -15,7 +15,7 @@ require (
 	github.com/git-pkgs/sbom v0.1.3
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
 	github.com/gliderlabs/ssh v0.3.8
-	github.com/go-git/go-git/v5 v5.19.1
+	github.com/go-git/go-git/v5 v5.19.2
 	github.com/go-git/go-git/v6 v6.0.0-alpha.4
 	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/rogpeppe/go-internal v1.15.0
