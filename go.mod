@@ -18,7 +18,7 @@ require (
 	github.com/go-git/go-git/v5 v5.19.2
 	github.com/go-git/go-git/v6 v6.0.0-alpha.4
 	github.com/microcosm-cc/bluemonday v1.0.27
-	github.com/rogpeppe/go-internal v1.15.0
+	github.com/rogpeppe/go-internal v1.16.0
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/crypto v0.54.0
 	modernc.org/sqlite v1.56.0
