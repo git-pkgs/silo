@@ -10,7 +10,7 @@ replace (
 require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
 	github.com/git-pkgs/manifests v0.7.0
-	github.com/git-pkgs/markup v0.1.0
+	github.com/git-pkgs/markup v0.1.1
 	github.com/git-pkgs/purl v0.1.15
 	github.com/git-pkgs/sbom v0.1.5
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
@@ -224,7 +224,7 @@ require (
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
-	github.com/yuin/goldmark v1.8.2 // indirect
+	github.com/yuin/goldmark v1.8.5 // indirect
 	github.com/yuin/gopher-lua v1.1.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.68.0 // indirect
