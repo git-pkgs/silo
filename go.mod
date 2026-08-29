@@ -11,7 +11,7 @@ require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
 	github.com/git-pkgs/manifests v0.8.0
 	github.com/git-pkgs/markup v0.1.1
-	github.com/git-pkgs/purl v0.1.16
+	github.com/git-pkgs/purl v0.1.17
 	github.com/git-pkgs/sbom v0.1.5
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
 	github.com/gliderlabs/ssh v0.3.8
