@@ -9,7 +9,7 @@ replace (
 
 require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
-	github.com/git-pkgs/manifests v0.8.0
+	github.com/git-pkgs/manifests v0.10.0
 	github.com/git-pkgs/markup v0.1.1
 	github.com/git-pkgs/purl v0.1.17
 	github.com/git-pkgs/sbom v0.1.5
@@ -94,7 +94,7 @@ require (
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/git-pkgs/gitignore v1.2.0 // indirect
-	github.com/git-pkgs/pom v0.1.6 // indirect
+	github.com/git-pkgs/pom v0.1.7 // indirect
 	github.com/git-pkgs/vers v0.3.1 // indirect
 	github.com/github/smimesign v0.2.0 // indirect
 	github.com/go-chi/chi/v5 v5.3.0 // indirect
