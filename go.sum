@@ -202,8 +202,8 @@ github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2 h1:Ay9ZTPvIFh
 github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2/go.mod h1:EF0T70KuE4sXQcP1cgesIDfB8ExBqG+SPraMV33tODQ=
 github.com/git-pkgs/gitignore v1.2.0 h1:7vdR8/SvF31dvXqIdC1bKgCvyySefXuN8aY3xJLuFaM=
 github.com/git-pkgs/gitignore v1.2.0/go.mod h1:Lr0XwhbvP071rZF/zIIhkY1gEhFDoWHH91lngwLpeUg=
-github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565 h1:xvGwpNMbD1BjesWUL7O0GRMjGIYZNzfIBdMMyFTzyF8=
-github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565/go.mod h1:sLVsOgnZmGamM4jJuRPYIu/ZaJxKiFEe68lKiEnpJO4=
+github.com/git-pkgs/gittuf v0.14.2-0.20260829093243-4ef544965d1c h1:DVDJMvrY3CAfZj/oHFzALFR723Y4CjOCFkySZ/VMgX4=
+github.com/git-pkgs/gittuf v0.14.2-0.20260829093243-4ef544965d1c/go.mod h1:ZQjrQlKQo4c3/ulEQm1ktl7Hx9S/0dw0ADybbjg1I+o=
 github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8 h1:6GMqtI6YYfV6UabYfx4kpRrjMP2iYVJPoKPOy5+9Srg=
 github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8/go.mod h1:4ODa/G7hPWrh4Y+7lmt59Ij3zW38IEfvRoAZxLYYBhc=
 github.com/git-pkgs/manifests v0.8.0 h1:7Fc9wfXj+e0sTAyEYflVT65GkYKwJ1jrxPX1v4XO/Kk=
@@ -557,8 +557,8 @@ github.com/sigstore/rekor-tiles/v2 v2.2.2-0.20260601073857-5d098a2b6443 h1:/CO8F
 github.com/sigstore/rekor-tiles/v2 v2.2.2-0.20260601073857-5d098a2b6443/go.mod h1:w1h8wF8vq9lHjmtRdwJiEaoVxhP+WHIMpj4M39pkzp0=
 github.com/sigstore/sigstore v1.10.8 h1:1Mgkxvkw4AXMfIP1DOjc6kw0GkUgA8pGVpveN/EfOq4=
 github.com/sigstore/sigstore v1.10.8/go.mod h1:f9+B/4iaYimvUkySyb2mvc73n3RLqNn24grHZM/ET8M=
-github.com/sigstore/sigstore-go v1.2.0 h1:8k8sGMVUUWwZ/KA+s4Q66yEPEzcC1xZ8UsTgI46J9Fc=
-github.com/sigstore/sigstore-go v1.2.0/go.mod h1:I8BqVwAb/SaQJ5pBu5IDFY+ksq8O/1/kCag8XUgrsko=
+github.com/sigstore/sigstore-go v1.2.1 h1:YWP/rDbBaEBvtbkj6xtwsSj38ZCFEhTVVadNOXjVe3A=
+github.com/sigstore/sigstore-go v1.2.1/go.mod h1:I8BqVwAb/SaQJ5pBu5IDFY+ksq8O/1/kCag8XUgrsko=
 github.com/sigstore/sigstore/pkg/signature/kms/aws v1.10.8 h1:tofVQ+UWJgad/69I5zbqxdFCN5gpIn9tRQP7iBzIpBw=
 github.com/sigstore/sigstore/pkg/signature/kms/aws v1.10.8/go.mod h1:73AfJE8H6w5KGCFPBu4x/OG+i1Yxgmh0L/FtV7prd88=
 github.com/sigstore/sigstore/pkg/signature/kms/azure v1.10.8 h1:8Mt7J36GcUEmbiJaiFhz2tud5ZIgkfVVCe2H/WJCHmw=

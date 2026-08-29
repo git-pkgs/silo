@@ -3,7 +3,7 @@ module github.com/git-pkgs/silo
 go 1.26.6
 
 replace (
-	github.com/gittuf/gittuf => github.com/git-pkgs/gittuf v0.14.2-0.20260616104449-95fbb82e2565
+	github.com/gittuf/gittuf => github.com/git-pkgs/gittuf v0.14.2-0.20260829093243-4ef544965d1c
 	github.com/go-git/go-git/v6 => github.com/git-pkgs/go-git/v6 v6.0.0-alpha.4.0.20260616095141-9661cc6ee6c8
 )
 
@@ -203,7 +203,7 @@ require (
 	github.com/sigstore/rekor v1.5.2 // indirect
 	github.com/sigstore/rekor-tiles/v2 v2.2.2-0.20260601073857-5d098a2b6443 // indirect
 	github.com/sigstore/sigstore v1.10.8 // indirect
-	github.com/sigstore/sigstore-go v1.2.0 // indirect
+	github.com/sigstore/sigstore-go v1.2.1 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/aws v1.10.8 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/azure v1.10.8 // indirect
 	github.com/sigstore/sigstore/pkg/signature/kms/gcp v1.10.8 // indirect
