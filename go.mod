@@ -11,7 +11,7 @@ require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
 	github.com/git-pkgs/manifests v0.10.1
 	github.com/git-pkgs/markup v0.1.1
-	github.com/git-pkgs/purl v0.1.17
+	github.com/git-pkgs/purl v0.1.19
 	github.com/git-pkgs/sbom v0.1.6
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
 	github.com/gliderlabs/ssh v0.3.8
@@ -95,7 +95,7 @@ require (
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/git-pkgs/gitignore v1.2.0 // indirect
 	github.com/git-pkgs/pom v0.1.7 // indirect
-	github.com/git-pkgs/vers v0.3.1 // indirect
+	github.com/git-pkgs/vers v0.6.0 // indirect
 	github.com/github/smimesign v0.2.0 // indirect
 	github.com/go-chi/chi/v5 v5.3.0 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
@@ -183,7 +183,7 @@ require (
 	github.com/oklog/ulid/v2 v2.1.1 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
-	github.com/package-url/packageurl-go v0.1.6 // indirect
+	github.com/package-url/packageurl-go v0.1.7 // indirect
 	github.com/pjbgf/sha1cd v0.6.0 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/pkg/errors v0.9.1 // indirect
