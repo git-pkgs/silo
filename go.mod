@@ -1,6 +1,6 @@
 module github.com/git-pkgs/silo
 
-go 1.26.6
+go 1.26.7
 
 replace (
 	github.com/gittuf/gittuf => github.com/git-pkgs/gittuf v0.14.2-0.20260829093243-4ef544965d1c
@@ -12,7 +12,7 @@ require (
 	github.com/git-pkgs/manifests v0.10.1
 	github.com/git-pkgs/markup v0.1.1
 	github.com/git-pkgs/purl v0.1.17
-	github.com/git-pkgs/sbom v0.1.5
+	github.com/git-pkgs/sbom v0.1.6
 	github.com/gittuf/gittuf v0.14.2-0.20260614183827-6f382ee5c029
 	github.com/gliderlabs/ssh v0.3.8
 	github.com/go-git/go-git/v5 v5.19.2
