@@ -9,7 +9,7 @@ replace (
 
 require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
-	github.com/git-pkgs/manifests v0.12.0
+	github.com/git-pkgs/manifests v0.12.1
 	github.com/git-pkgs/markup v0.1.1
 	github.com/git-pkgs/purl v0.1.20
 	github.com/git-pkgs/sbom v0.1.6
@@ -237,7 +237,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
-	go.yaml.in/yaml/v3 v3.0.4 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/mod v0.41.0 // indirect
 	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
