@@ -113,4 +113,6 @@ silo admin repo create  create a bare repository
 
 [docs/architecture.md](docs/architecture.md) covers the receive pipeline and disk layout. [docs/trust-model.md](docs/trust-model.md) explains why the owner signs root and the forge only witnesses. [docs/web.md](docs/web.md) lists every route. [docs/api.md](docs/api.md) lists the JSON endpoints. [docs/demo.md](docs/demo.md) is the show-and-tell script. The fork patches are catalogued in [GITTUF-NOTES.md](GITTUF-NOTES.md) and [GOGIT-NOTES.md](GOGIT-NOTES.md), each written as a standalone upstream issue.
 
-MIT licensed.
+## License
+
+[MIT](LICENSE).
