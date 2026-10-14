@@ -1,7 +1,6 @@
 package pkgs
 
 import (
-	"errors"
 	"sort"
 
 	"github.com/git-pkgs/manifests"
@@ -217,11 +216,7 @@ func safeParse(path string, blob []byte) (res *manifests.ParseResult, err error)
 	}()
 	res, err = manifests.Parse(path, blob)
 	if err != nil {
-		var pe *manifests.ParseError
-		if errors.As(err, &pe) {
-			return nil, nil
-		}
-		// UnknownFileError or anything else: treat as non-renderable.
+		// Parse and unknown-file errors alike mean non-renderable.
 		return nil, nil
 	}
 	return res, nil
