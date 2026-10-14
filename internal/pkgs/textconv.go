@@ -3,7 +3,6 @@ package pkgs
 import (
 	"errors"
 	"sort"
-	"strings"
 
 	"github.com/git-pkgs/manifests"
 )
@@ -226,13 +225,4 @@ func safeParse(path string, blob []byte) (res *manifests.ParseResult, err error)
 		return nil, nil
 	}
 	return res, nil
-}
-
-// PathExtBase is a tiny helper around strings.HasSuffix, kept here so the
-// commit-page renderer doesn't need to grow an extra import.
-func PathExtBase(name string) string {
-	if i := strings.LastIndex(name, "/"); i >= 0 {
-		name = name[i+1:]
-	}
-	return name
 }
