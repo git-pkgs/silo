@@ -12,8 +12,8 @@ import (
 	"github.com/go-git/go-git/v6/plumbing"
 	"github.com/go-git/go-git/v6/plumbing/object"
 
-	gtw "github.com/git-pkgs/silo/internal/gittuf"
 	"github.com/git-pkgs/silo/internal/gitstore"
+	gtw "github.com/git-pkgs/silo/internal/gittuf"
 	"github.com/git-pkgs/silo/internal/store"
 )
 
@@ -103,29 +103,50 @@ func benchGet(b *testing.B, srv *httptest.Server, path string) {
 
 const benchN = 200
 
-func BenchmarkWeb_Index(b *testing.B)   { srv, _ := benchFixture(b, benchN); benchGet(b, srv, "/") }
+func BenchmarkWeb_Index(b *testing.B) { srv, _ := benchFixture(b, benchN); benchGet(b, srv, "/") }
 func BenchmarkWeb_Activity(b *testing.B) {
 	srv, _ := benchFixture(b, benchN)
 	benchGet(b, srv, "/activity")
 }
-func BenchmarkWeb_Repo(b *testing.B)   { srv, p := benchFixture(b, benchN); benchGet(b, srv, p) }
-func BenchmarkWeb_Tree(b *testing.B)   { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/tree/refs/heads/main") }
-func BenchmarkWeb_Blob(b *testing.B)   { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/blob/refs/heads/main/README.md") }
-func BenchmarkWeb_Log(b *testing.B)    { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/log/refs/heads/main") }
+func BenchmarkWeb_Repo(b *testing.B) { srv, p := benchFixture(b, benchN); benchGet(b, srv, p) }
+func BenchmarkWeb_Tree(b *testing.B) {
+	srv, p := benchFixture(b, benchN)
+	benchGet(b, srv, p+"/tree/refs/heads/main")
+}
+func BenchmarkWeb_Blob(b *testing.B) {
+	srv, p := benchFixture(b, benchN)
+	benchGet(b, srv, p+"/blob/refs/heads/main/README.md")
+}
+func BenchmarkWeb_Log(b *testing.B) {
+	srv, p := benchFixture(b, benchN)
+	benchGet(b, srv, p+"/log/refs/heads/main")
+}
 func BenchmarkWeb_LogJSON(b *testing.B) {
 	srv, p := benchFixture(b, benchN)
 	benchGet(b, srv, p+"/log/refs/heads/main?format=json")
 }
-func BenchmarkWeb_RSL(b *testing.B)      { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/rsl") }
-func BenchmarkWeb_RSLRef(b *testing.B)   { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/rsl/refs/heads/main") }
-func BenchmarkWeb_Policy(b *testing.B)   { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/policy") }
+func BenchmarkWeb_RSL(b *testing.B) { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/rsl") }
+func BenchmarkWeb_RSLRef(b *testing.B) {
+	srv, p := benchFixture(b, benchN)
+	benchGet(b, srv, p+"/rsl/refs/heads/main")
+}
+func BenchmarkWeb_Policy(b *testing.B) {
+	srv, p := benchFixture(b, benchN)
+	benchGet(b, srv, p+"/policy")
+}
 func BenchmarkWeb_PolicyHist(b *testing.B) {
 	srv, p := benchFixture(b, benchN)
 	benchGet(b, srv, p+"/policy/history")
 }
-func BenchmarkWeb_Verify(b *testing.B)   { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/verify") }
-func BenchmarkWeb_Branches(b *testing.B) { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/branches") }
-func BenchmarkWeb_Tags(b *testing.B)     { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/tags") }
+func BenchmarkWeb_Verify(b *testing.B) {
+	srv, p := benchFixture(b, benchN)
+	benchGet(b, srv, p+"/verify")
+}
+func BenchmarkWeb_Branches(b *testing.B) {
+	srv, p := benchFixture(b, benchN)
+	benchGet(b, srv, p+"/branches")
+}
+func BenchmarkWeb_Tags(b *testing.B) { srv, p := benchFixture(b, benchN); benchGet(b, srv, p+"/tags") }
 func BenchmarkWeb_Compare(b *testing.B) {
 	srv, p := benchFixture(b, benchN)
 	benchGet(b, srv, p+"/compare/refs/heads/main...refs/heads/dev")

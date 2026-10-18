@@ -54,7 +54,6 @@ func build(t *testing.T, out, pkg string) {
 	}
 }
 
-
 func setupEnv(e *testscript.Env) error {
 	e.Vars = append(e.Vars,
 		"GIT_CONFIG_NOSYSTEM=1",
