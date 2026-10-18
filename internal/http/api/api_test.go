@@ -287,3 +287,14 @@ func TestComputeDiff(t *testing.T) {
 		t.Errorf("modified = %+v", d.Modified)
 	}
 }
+
+func TestBuildSBOMKeepsSameNameAcrossEcosystems(t *testing.T) {
+	doc := api.BuildSBOM([]index.Dependency{
+		{Name: "foo", Requirement: "1.0.0", PURL: "pkg:npm/foo@1.0.0"},
+		{Name: "foo", Requirement: "1.0.0", PURL: "pkg:pypi/foo@1.0.0"},
+		{Name: "foo", Requirement: "1.0.0", PURL: "pkg:npm/foo@1.0.0"},
+	})
+	if len(doc.Packages) != 2 {
+		t.Fatalf("want 2 packages, got %d: %+v", len(doc.Packages), doc.Packages)
+	}
+}

@@ -4,4 +4,5 @@ package api
 var (
 	FilterDeps  = filterDeps
 	ComputeDiff = computeDiff
+	BuildSBOM   = buildSBOM
 )
