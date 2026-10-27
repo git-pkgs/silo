@@ -1,6 +1,6 @@
 module github.com/git-pkgs/silo
 
-go 1.27.2
+go 1.27.3
 
 replace (
 	github.com/gittuf/gittuf => github.com/git-pkgs/gittuf v0.14.2-0.20260829093243-4ef544965d1c
