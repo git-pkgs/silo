@@ -9,7 +9,7 @@ replace (
 
 require (
 	github.com/git-pkgs/git-pkgs v0.16.3-0.20260616222849-2ff8b4c9b7f2
-	github.com/git-pkgs/manifests v0.12.3
+	github.com/git-pkgs/manifests v0.12.4
 	github.com/git-pkgs/markup v0.1.2
 	github.com/git-pkgs/purl v0.1.24
 	github.com/git-pkgs/sbom v0.1.7
@@ -66,7 +66,7 @@ require (
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bazelbuild/buildtools v0.0.0-20260716142318-04cf7de1434f // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
-	github.com/bmatcuk/doublestar/v4 v4.10.2 // indirect
+	github.com/bmatcuk/doublestar/v4 v4.10.3 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -94,7 +94,7 @@ require (
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/git-pkgs/gitignore v1.2.0 // indirect
-	github.com/git-pkgs/pom v0.1.7 // indirect
+	github.com/git-pkgs/pom v0.1.8 // indirect
 	github.com/git-pkgs/vers v0.7.2 // indirect
 	github.com/github/smimesign v0.2.0 // indirect
 	github.com/go-chi/chi/v5 v5.3.0 // indirect
